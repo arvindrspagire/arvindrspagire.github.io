@@ -112,7 +112,7 @@ p { margin: 0 0 .9em; }
 .profile-links.on-dark .pl:hover { background: #fff; color: var(--brand); }
 .profile-links.compact { margin: 0; }
 .profile-links.compact .pl { padding: 6px; }
-.profile-links.compact .pl span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.profile-links.compact .pl span:not(.x-ico) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
 /* ---------- stats ---------- */
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: -26px 28px 0; position: relative; z-index: 2; }
