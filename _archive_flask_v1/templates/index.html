@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display: flex; flex-direction: column; align-items: center; position: relative; min-height: 50vh;">
+
+    <!-- Profile Photo (corner) -->
+    <div style="position: left; top: 20px; left: 80px;">
+        <img src="{{ url_for('static', filename='images/profile.jpg') }}" 
+             alt="Arvind R. Pagire" 
+             style="width: 160px; height: 160px; border-radius: 50%; box-shadow: 0 4px 8px rgba(121, 168, 207, 0.3);">
+    </div>
+
+    <!-- Name at Top -->
+    <h1 style="margin-top: 40px; color: #0d47a1; font-size: 2rem; font-weight: bold; text-align: center;">
+        Arvind R Pagire
+    </h1>
+
+
+
+        <!-- Info in Center -->
+    <div style="background-color: lightgrey; width: 300px; border: 15px solid rgb(191, 198, 233); padding: 80px; margin: 50px; text-align: center;">
+        <p>
+            I am a <strong>Project Scientist-II</strong> at the <strong>Regional Meteorological Centre, Nagpur</strong>.
+        </p>
+        <p>
+            With over 5 years of experience in climate sciences, I work on short-range predictions and 
+            AI/ML applications for weather and climate research.
+        </p>
+    </div>
+
+    </div>
+
+{% endblock %}
+

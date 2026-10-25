@@ -1,0 +1,117 @@
+# ------------------------------------------------------------------
+# संकेतस्थळाची माहिती (Site profile) — फक्त ही फाइल बदलून प्रोफाइल अद्ययावत करा.
+# बदलानंतर:  python build.py
+# ------------------------------------------------------------------
+
+site_title: "अरविंद पागिरे | हवामान, संशोधन आणि इशारे"
+site_url: "https://arvindrspagire.github.io"            # उदा. https://arvindpagire.github.io  (RSS/शेअर लिंकसाठी; रिकामे चालेल)
+
+name_mr: "अरविंद राजेंद्र पागिरे"
+name_en: "Arvind R. Pagire"
+tagline: "हवामानशास्त्रज्ञ · संशोधक · हवामान अंदाज"
+photo: "static/images/profile.jpg"   # तुमचा फोटो या नावाने ठेवा; नसल्यास आद्याक्षरे दिसतील
+
+position: "प्रकल्प शास्त्रज्ञ-II"
+organisation: "प्रादेशिक हवामान केंद्र, नागपूर (भारतीय हवामान विभाग)"
+location: "नागपूर, महाराष्ट्र"
+
+bio:
+  - "मी भारतीय हवामान विभागाच्या प्रादेशिक हवामान केंद्र, नागपूर येथे प्रकल्प शास्त्रज्ञ-II म्हणून कार्यरत आहे. हवामान विज्ञानातील पाच वर्षांहून अधिक अनुभवासह मी अल्पकालीन हवामान अंदाज, अतिवृष्टीच्या घटना आणि हवामान संशोधनात कृत्रिम बुद्धिमत्ता व मशीन लर्निंगच्या वापरावर काम करतो."
+  - "सावित्रीबाई फुले पुणे विद्यापीठातून वातावरणशास्त्र व तंत्रज्ञान या विषयात माझे पीएच.डी. संशोधन सुरू आहे. या संकेतस्थळावर मी हवामानविषयक लेख आणि दैनंदिन हवामान इशारे मराठीत प्रसिद्ध करतो."
+
+interests:
+  - "अल्पकालीन हवामान अंदाज (Short-range prediction)"
+  - "दूरसंबंध अभ्यास — एल निनो (ENSO), हिंदी महासागर द्विध्रुव (IOD) व MJO यांचा अतिवृष्टीवरील प्रभाव"
+  - "उपग्रह पर्जन्य माहितीचे (IMERG) मूल्यमापन आणि भूप्रदेशाचा प्रभाव"
+  - "हवामान विज्ञानात AI/ML चा वापर"
+
+experience:
+  - role: "प्रकल्प शास्त्रज्ञ-II"
+    org: "प्रादेशिक हवामान केंद्र, नागपूर"
+    period: "जानेवारी २०२५ – सध्या"
+    detail: "विदर्भासाठी दैनंदिन हवामान अंदाज, मानक कार्यपद्धती (SOP) तयार करणे, PET साठी ग्रिडेड माहितीसंच आणि CMIP6 मॉडेल वापरून हवामान बदल अभ्यास."
+  - role: "पीएच.डी. संशोधक"
+    org: "भारतीय हवामान विभाग, पुणे"
+    period: "मे २०२३ – सध्या"
+    detail: "ENSO, IOD आणि MJO यांसारख्या मोठ्या हवामान घटकांचा अतिवृष्टीच्या परिवर्तनशीलतेवरील प्रभाव."
+  - role: "कनिष्ठ संशोधन अधिछात्र (JRF)"
+    org: "भारतीय सुदूर संवेदन संस्था (IIRS), देहरादून"
+    period: "जानेवारी २०२२ – मे २०२३"
+    detail: "वायव्य हिमालयातील अतिवृष्टीचे उपग्रह-आधारित विश्लेषण आणि WRF सिम्युलेशन."
+  - role: "कनिष्ठ संशोधन अधिछात्र (JRF)"
+    org: "भारतीय हवामान विभाग, पुणे"
+    period: "जुलै २०२० – जानेवारी २०२२"
+    detail: "MMCFS मॉडेल अंदाजांचे कौशल्य-पडताळणी विश्लेषण; RCC पुणेसाठी पडताळणी उत्पादन विकसित केले."
+  - role: "उन्हाळी प्रशिक्षणार्थी"
+    org: "भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे"
+    period: "मे – जुलै २०१७"
+    detail: "भारतीय उन्हाळी मान्सूनमधील मोठ्या वातावरणीय अभिसरणाची उप-ऋतुकालीन परिवर्तनशीलता."
+
+education:
+  - degree: "पीएच.डी. (सुरू, मे २०२३ पासून)"
+    field: "वातावरणशास्त्र व तंत्रज्ञान"
+    place: "सावित्रीबाई फुले पुणे विद्यापीठ"
+  - degree: "एम.एस्सी."
+    field: "वातावरणशास्त्र"
+    place: "NIT राउरकेला · CGPA ७.४१"
+  - degree: "बी.एस्सी."
+    field: "भौतिकशास्त्र (ऑनर्स), गणित व संख्याशास्त्रासह"
+    place: "सावित्रीबाई फुले पुणे विद्यापीठ · ७८.१६%"
+
+skills:
+  - group: "प्रोग्रामिंग"
+    items: ["Python", "C", "C++", "Fortran"]
+  - group: "मॉडेल व साधने"
+    items: ["WRF", "MATLAB", "GrADS"]
+  - group: "AI / ML"
+    items: ["CNN", "CNN-LSTM", "RNN"]
+  - group: "प्लॅटफॉर्म"
+    items: ["Linux / UNIX", "Windows"]
+
+training:
+  - "JAM उत्तीर्ण (IIT मद्रास, २०१६)"
+  - "वातावरण-महासागर उपयोजनांमधील AI/ML प्रशिक्षण (IITM पुणे, २०२१)"
+  - "TROPMET २०२० सहभाग"
+  - "Master in AI & ML (Inside AIML, डिसेंबर २०२२ – सप्टेंबर २०२३)"
+  - "प्रशिक्षक — Climate Data Analysis and Visualization with Python (IMD पुणे, सप्टेंबर २०२३)"
+  - "साधन-व्यक्ती — Training on Seasonal Prediction (डिसेंबर २०२३)"
+  - "स्वयंसेवक — वार्षिक मान्सून कार्यशाळा (IITM पुणे, मार्च २०२४)"
+  - "प्रशिक्षक — निर्णय सहाय्य प्रणाली (DSS)"
+
+# प्रकाशने: संदर्भ इंग्रजीतच ठेवले आहेत (शैक्षणिक प्रथा). type: journal | report | conference
+publications:
+  - type: journal
+    year: 2025
+    text: "Pagire, A., Ratna, S. B., Cherchi, A., Sanap, S. D., & Sreejith, O. P. (2025). ENSO–MJO interaction and its association with monsoon extreme rainfall events over the Indian region. International Journal of Climatology, 45(14), e70093."
+    link: "https://doi.org/10.1002/joc.70093"
+  - type: journal
+    year: 2024
+    text: "Ratna, S. B., Takle, J., Musale, M., Sharma, T., Sabeerali, C. T., Sreejith, O. P., Pagire, A., et al. (2024). Assessment of ENSO forecast skill in MMCFS. Theoretical and Applied Climatology."
+  - type: report
+    year: 2023
+    text: "Marine Climatological Atlas 1991–2020 (2023). India Meteorological Department, Pune."
+  - type: conference
+    year: 2024
+    text: "Pagire, A. R., Ratna, S. B., Cherchi, A., Sanap, S. D., & Sreejith, O. P. Precipitation extremes and their association with ENSO–MJO phases. AGU Fall Meeting 2024."
+  - type: conference
+    year: 2024
+    text: "Pagire, A. R., Ratna, S. B., Chattopadhyay, R., & Sreejith, O. P. Deep learning algorithm for classification of widespread rainfall extremes. STIPMEX-2024."
+  - type: conference
+    year: 2023
+    text: "Pagire, A. R., & Singh, C. (2023). Diurnal variation of extreme rainfall events over J&K using IMERG V6 dataset. National Symposium on Climate Services for Health."
+  - type: conference
+    year: 2022
+    text: "Pagire, A. R., & Singh, C. (2022). Extreme rainfall events over Uttarakhand region (2000–2021) using satellite data. National Seminar on Geospatial Technology, IIRS Dehradun."
+
+contact:
+  email: "arvindpagire1995@gmail.com"
+  phone: "+91-9767590166"
+  show_phone: true          # फोन नंबर सार्वजनिक नको असल्यास false करा
+  orcid: "https://orcid.org/0009-0000-4938-0567"
+  # ऐच्छिक: रिकामे ठेवल्यास दिसणार नाही
+  linkedin: ""
+  github: "https://github.com/arvindrspagire"
+  twitter: ""
+
+# हवामान इशाऱ्यांसाठी अस्वीकरण (प्रत्येक इशाऱ्याखाली दिसते)
+alert_disclaimer: "हा इशारा माझ्या वैयक्तिक विश्लेषणावर आधारित माहितीपर मजकूर आहे. अधिकृत हवामान अंदाज व इशाऱ्यांसाठी कृपया भारतीय हवामान विभागाचे संकेतस्थळ mausam.imd.gov.in किंवा 'मौसम' / 'दामिनी' ॲप पाहा."

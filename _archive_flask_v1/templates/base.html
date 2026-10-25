@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Arvind's Homepage{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            background-color: lightblue;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Full-width navbar */
+        nav.navbar {
+            width: 100%;
+            background-color: #9581eb; /* Deep blue strip */
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.3rem;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #bbdefb; /* light blue hover */
+        }
+
+        .container {
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Full-width Blue Nav -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Brand -->
+            <a href="{{ url_for('index') }}" class="brand">Arvind's Homepage</a>
+
+            <!-- Links -->
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('engagements') }}">Engagements</a>
+                <a href="{{ url_for('publications') }}">Publications</a>
+                <a href="{{ url_for('academic') }}">Academic</a>
+                <a href="{{ url_for('gallery') }}">Gallery</a>
+                <a href="{{ url_for('contact') }}">Contact</a>
+                <a href="#"><i class="fas fa-search"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% macro level_badge(lvl, key) -%}
+<span class="badge badge-{{ key }}">{{ lvl.label }} इशारा · {{ lvl.action }}</span>
+{%- endmacro %}
+
+{% macro alert_card(a, root, compact=False) -%}
+<article class="alert-card level-{{ a.level }}">
+  <div class="alert-card-top">
+    {{ level_badge(a.lvl, a.level) }}
+    <time datetime="{{ a.date.isoformat() }}" class="muted">{{ a.date_mr_long }}</time>
+  </div>
+  <h3><a href="{{ root }}alerts/{{ a.slug }}/">{{ a.title }}</a></h3>
+  {% if a.regions %}<p class="alert-meta"><strong>जिल्हे/भाग:</strong> {{ a.regions | join(", ") }}</p>{% endif %}
+  {% if a.hazards and not compact %}<p class="alert-meta"><strong>धोके:</strong> {{ a.hazards | join(", ") }}</p>{% endif %}
+  {% if a.valid %}<p class="alert-meta"><strong>वैधता:</strong> {{ a.valid }}</p>{% endif %}
+</article>
+{%- endmacro %}
+
+{% macro post_card(p, root) -%}
+<article class="post-card">
+  <time datetime="{{ p.date.isoformat() }}" class="muted">{{ p.date_mr }}</time>
+  <h3><a href="{{ root }}blog/{{ p.slug }}/">{{ p.title }}</a></h3>
+  {% if p.summary %}<p>{{ p.summary }}</p>{% endif %}
+  {% if p.tags %}<p class="tags">{% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}</p>{% endif %}
+</article>
+{%- endmacro %}

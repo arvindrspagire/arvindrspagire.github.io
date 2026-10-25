@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}संपर्क — {{ site.name_mr }}{% endblock %}
+{% block content %}
+<h1 class="page-title">संपर्क</h1>
+<section class="card contact">
+  <p class="contact-name"><strong>{{ site.name_mr }}</strong> <span class="muted">({{ site.name_en }})</span></p>
+  <p>{{ site.position }}, {{ site.organisation }}</p>
+  <dl class="contact-list">
+    <div><dt>ई-मेल</dt><dd><a href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a></dd></div>
+    {% if site.contact.show_phone and site.contact.phone %}
+    <div><dt>फोन</dt><dd><a href="tel:{{ site.contact.phone | replace('-', '') }}">{{ site.contact.phone }}</a></dd></div>
+    {% endif %}
+    <div><dt>ठिकाण</dt><dd>{{ site.location }}</dd></div>
+    {% if site.contact.orcid %}<div><dt>ORCID</dt><dd><a href="{{ site.contact.orcid }}" rel="noopener">{{ site.contact.orcid | replace('https://', '') }}</a></dd></div>{% endif %}
+    {% for key, label in [("linkedin", "LinkedIn"), ("github", "GitHub"), ("twitter", "X / Twitter")] if site.contact[key] %}
+    <div><dt>{{ label }}</dt><dd><a href="{{ site.contact[key] }}" rel="noopener">{{ site.contact[key] | replace('https://', '') }}</a></dd></div>
+    {% endfor %}
+  </dl>
+  <p class="muted">संशोधन सहकार्य, व्याख्याने किंवा हवामानविषयक प्रश्नांसाठी ई-मेलद्वारे संपर्क साधा.</p>
+</section>
+{% endblock %}

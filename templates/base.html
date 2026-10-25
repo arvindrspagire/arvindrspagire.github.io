@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ site.site_title }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ site.name_mr }} — {{ site.tagline }}{% endblock %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ root }}static/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="{{ root }}">
+        <span class="brand-mark" aria-hidden="true">☁</span>
+        <span>{{ site.name_mr }}</span>
+      </a>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="मेनू">
+      <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+      <nav class="nav">
+        {% set links = [("home", "", "मुख्यपृष्ठ"), ("about", "about/", "माझ्याविषयी"),
+                        ("publications", "publications/", "संशोधन"), ("blog", "blog/", "ब्लॉग"),
+                        ("alerts", "alerts/", "हवामान इशारे"), ("contact", "contact/", "संपर्क")] %}
+        {% for key, href, label in links %}
+        <a href="{{ root }}{{ href }}"{% if active == key %} class="active" aria-current="page"{% endif %}>{{ label }}</a>
+        {% endfor %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>© {{ year }} {{ site.name_mr }} · {{ site.position }}, {{ site.location }}</p>
+      <p class="muted">अधिकृत हवामान इशाऱ्यांसाठी: <a href="https://mausam.imd.gov.in" rel="noopener">भारतीय हवामान विभाग</a> · अद्ययावत: {{ built }}</p>
+    </div>
+  </footer>
+</body>
+</html>

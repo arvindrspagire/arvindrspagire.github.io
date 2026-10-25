@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "_macros.html" import alert_card, level_badge %}
+{% block title %}हवामान इशारे — {{ site.name_mr }}{% endblock %}
+{% block content %}
+<h1 class="page-title">दैनंदिन हवामान इशारे</h1>
+<p class="lead">विदर्भ व महाराष्ट्रासाठी दैनंदिन हवामान माहिती आणि इशारे.</p>
+
+<details class="legend card">
+  <summary>इशाऱ्यांचे रंग काय सांगतात?</summary>
+  <ul class="plain">
+    {% for key, lvl in levels.items() %}
+    <li>{{ level_badge(lvl, key) }} — {{ lvl.desc }}</li>
+    {% endfor %}
+  </ul>
+</details>
+
+{% if alerts %}
+<div class="stack">
+  {% for a in alerts %}{{ alert_card(a, root) }}{% endfor %}
+</div>
+{% else %}
+<p class="empty">सध्या कोणताही इशारा प्रसिद्ध केलेला नाही.</p>
+{% endif %}
+
+<p class="disclaimer">{{ site.alert_disclaimer }}</p>
+{% endblock %}

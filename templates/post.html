@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — {{ site.name_mr }}{% endblock %}
+{% block description %}{{ post.summary or post.title }}{% endblock %}
+{% block content %}
+<article class="article">
+  <p class="muted"><a href="{{ root }}blog/">← सर्व लेख</a></p>
+  {% if post.draft %}<p class="draft-flag">मसुदा (draft) — हा लेख अद्याप प्रसिद्ध झालेला नाही</p>{% endif %}
+  <h1>{{ post.title }}</h1>
+  <p class="muted byline">{{ site.name_mr }} · <time datetime="{{ post.date.isoformat() }}">{{ post.date_mr_long }}</time></p>
+  <div class="prose">{{ post.body | safe }}</div>
+  {% if post.tags %}<p class="tags">{% for t in post.tags %}<span class="tag">{{ t }}</span>{% endfor %}</p>{% endif %}
+</article>
+{% endblock %}

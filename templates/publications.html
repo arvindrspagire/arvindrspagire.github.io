@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}संशोधन व प्रकाशने — {{ site.name_mr }}{% endblock %}
+{% block content %}
+<h1 class="page-title">संशोधन व प्रकाशने</h1>
+<p class="lead">संदर्भ शैक्षणिक प्रथेनुसार इंग्रजीत दिले आहेत. संपूर्ण यादीसाठी
+  <a href="{{ site.contact.orcid }}" rel="noopener">ORCID</a> पाहा.</p>
+
+{% for key, label, items in groups if items %}
+<section class="section">
+  <h2>{{ label }}</h2>
+  <ol class="pubs">
+    {% for p in items %}
+    <li>
+      <span class="pub-year">{{ p.year | mr }}</span>
+      <span>{{ p.text }}{% if p.link %} <a href="{{ p.link }}" rel="noopener">DOI</a>{% endif %}</span>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endfor %}
+{% endblock %}

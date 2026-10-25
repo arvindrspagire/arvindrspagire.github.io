@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}माझ्याविषयी — {{ site.name_mr }}{% endblock %}
+{% block content %}
+<h1 class="page-title">माझ्याविषयी</h1>
+
+<section class="card">
+  {% for para in site.bio %}<p>{{ para }}</p>{% endfor %}
+  <h3>संशोधनाचे विषय</h3>
+  <ul>{% for i in site.interests %}<li>{{ i }}</li>{% endfor %}</ul>
+</section>
+
+<section class="section">
+  <h2>कार्यानुभव</h2>
+  <ol class="timeline">
+    {% for e in site.experience %}
+    <li>
+      <p class="tl-period muted">{{ e.period }}</p>
+      <h3>{{ e.role }}</h3>
+      <p class="tl-org">{{ e.org }}</p>
+      <p>{{ e.detail }}</p>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<div class="two-col">
+  <section class="card">
+    <h2>शिक्षण</h2>
+    <ul class="plain">
+      {% for ed in site.education %}
+      <li><strong>{{ ed.degree }}</strong> — {{ ed.field }}<br><span class="muted">{{ ed.place }}</span></li>
+      {% endfor %}
+    </ul>
+  </section>
+  <section class="card">
+    <h2>तांत्रिक कौशल्ये</h2>
+    {% for s in site.skills %}
+    <p class="skill-row"><strong>{{ s.group }}:</strong>
+      {% for it in s['items'] %}<span class="tag">{{ it }}</span>{% endfor %}</p>
+    {% endfor %}
+  </section>
+</div>
+
+<section class="card">
+  <h2>प्रशिक्षण, प्रमाणपत्रे व योगदान</h2>
+  <ul>{% for t in site.training %}<li>{{ t }}</li>{% endfor %}</ul>
+</section>
+{% endblock %}

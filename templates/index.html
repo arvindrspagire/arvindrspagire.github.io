@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% from "_macros.html" import alert_card, post_card %}
+{% block content %}
+<section class="hero">
+  <div class="hero-photo">
+    {% if has_photo %}
+    <img src="{{ root }}{{ site.photo }}" alt="{{ site.name_mr }}" width="168" height="168">
+    {% else %}
+    <div class="avatar" aria-hidden="true">अ</div>
+    {% endif %}
+  </div>
+  <div class="hero-text">
+    <p class="eyebrow">{{ site.tagline }}</p>
+    <h1>{{ site.name_mr }}</h1>
+    <p class="name-en">{{ site.name_en }}</p>
+    <p class="hero-role"><strong>{{ site.position }}</strong>, {{ site.organisation }}</p>
+    <p>{{ site.bio[0] }}</p>
+    <p class="hero-actions">
+      <a class="btn" href="{{ root }}alerts/">आजचे हवामान इशारे</a>
+      <a class="btn btn-ghost" href="{{ root }}about/">माझ्याविषयी</a>
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>ताजा हवामान इशारा</h2>
+    <a href="{{ root }}alerts/">सर्व इशारे →</a>
+  </div>
+  {% if latest_alert %}
+    {{ alert_card(latest_alert, root) }}
+    <p class="stale-note muted" data-date="{{ latest_alert.date.isoformat() }}" hidden>
+      टीप: हा इशारा {{ latest_alert.date_mr }} रोजीचा आहे; आजचा इशारा अद्याप प्रसिद्ध झालेला नाही.</p>
+  {% else %}
+    <p class="empty">सध्या कोणताही इशारा प्रसिद्ध केलेला नाही.</p>
+  {% endif %}
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>ताजे लेख</h2>
+    <a href="{{ root }}blog/">सर्व लेख →</a>
+  </div>
+  {% if posts %}
+  <div class="grid">
+    {% for p in posts %}{{ post_card(p, root) }}{% endfor %}
+  </div>
+  {% else %}
+    <p class="empty">लवकरच नवीन लेख येत आहेत.</p>
+  {% endif %}
+</section>
+
+<section class="section">
+  <h2>संशोधनाचे विषय</h2>
+  <ul class="chips">
+    {% for i in site.interests %}<li>{{ i }}</li>{% endfor %}
+  </ul>
+</section>
+
+<script>
+  // show a note when the latest alert is not from today (site is static)
+  document.querySelectorAll('.stale-note').forEach(function (el) {
+    var d = new Date(); var today = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    if (el.dataset.date < today) el.hidden = false;
+  });
+</script>
+{% endblock %}
