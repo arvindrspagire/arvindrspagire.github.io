@@ -149,6 +149,7 @@ def build(drafts=False):
          groups=[(t, lab, [p for p in site.get("publications", []) if p["type"] == t])
                  for t, lab in (("journal", "शोधनिबंध (Journal articles)"),
                                 ("preprint", "प्रीप्रिंट (Preprints)"),
+                                ("article", "लेख (Articles)"),
                                 ("report", "अहवाल व प्रकाशने (Reports)"),
                                 ("conference", "परिषदांमधील सादरीकरणे (Conference presentations)"))])
     page("blog_list.html", "blog/index.html", "blog", posts=blog)
