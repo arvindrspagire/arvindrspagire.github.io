@@ -28,7 +28,7 @@
   </p>
   <p class="muted">नकाशाचे रंग: उद्याचा ({{ c.days[0].date_mr }}) अंदाज. स्वतंत्र चाचणी कालावधीतील {% if c.test_span %}({{ c.test_span | mr }}){% endif %} कौशल्य (HSS मध्यक):
     {% for d in c.days %}{{ d.short_mr }}: {{ c.hss_mr[loop.index0] }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
-  {% if c.ecmwf_checked %}<p class="muted">अंतिम श्रेणी ECMWF च्या त्या भागातील पावसाशी जुळवली आहे: ECMWF कोरडे (१ मिमीपेक्षा कमी) असल्यास पाऊस दाखवला जात नाही, आणि श्रेणी ECMWF पेक्षा एका श्रेणीपेक्षा जास्त वेगळी नसते.</p>{% endif %}
+  {% if c.ecmwf_checked %}<p class="muted">अंदाज डीप-लर्निंग CNN-LSTM मॉडेलचा आहे (ERA5 व IMD पावसावर प्रशिक्षित; ECMWF चे वातावरणीय क्षेत्र इनपुट). सुरक्षा तपासणी: ECMWF नुसार कोरडे (१ मिमीपेक्षा कमी) असल्यास मॉडेलचा पाऊस दाखवला जात नाही; ECMWF मॉडेलची श्रेणी कधीही वाढवत नाही.</p>{% endif %}
   <noscript><p class="empty">तालुका निवडण्यासाठी browser मध्ये JavaScript चालू करा.</p></noscript>
   <script type="application/json" id="tq-data-{{ c.id }}">{{ {"classes": c.classes, "days": c.days,
     "regions": c.regions | map(attribute="id") | list,
