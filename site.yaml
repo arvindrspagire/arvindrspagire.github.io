@@ -6,8 +6,8 @@
 site_title: "अरविंद पागिरे | हवामान, संशोधन आणि इशारे"
 site_url: "https://arvindrspagire.github.io"            # उदा. https://arvindpagire.github.io  (RSS/शेअर लिंकसाठी; रिकामे चालेल)
 
-name_mr: "अरविंद राजेंद्र पागिरे"
-name_en: "Arvind R. Pagire"
+name_mr: "अरविंद पागिरे"
+name_en: "Arvind Pagire"
 tagline: "हवामानशास्त्रज्ञ · AI-आधारित हवामान अंदाज · हायब्रिड मॉडेलिंग"
 photo: "static/images/profile.jpg"   # गोल फोटो (चौरस crop); मूळ पूर्ण फोटो: static/images/profile.jpeg
 
