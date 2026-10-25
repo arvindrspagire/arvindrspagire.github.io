@@ -12,7 +12,7 @@ cd D:\06_Personal\03_Portfolio
 
 ## दैनंदिन इशारे आपोआप (हवामान विज्ञान pipeline)
 
-`D:_Research_Projects\hawaman-vidnyanun_daily.bat` (रोज ०९:१५ वाजता) pipeline संपल्यावर आपोआप:
+`D:\01_Research_Projects\hawaman-vidnyan\run_daily.bat` (रोज ०९:१५ वाजता) pipeline संपल्यावर आपोआप:
 
 ```
 python build.py hawaman --push
