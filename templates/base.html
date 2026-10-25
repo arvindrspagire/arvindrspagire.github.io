@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% from "_macros.html" import profile_links %}
+{% from "_macros.html" import profile_links, subscribe_form %}
 <html lang="mr">
 <head>
   <meta charset="UTF-8">
@@ -23,7 +23,7 @@
       <nav class="nav">
         {% set links = [("home", "", "मुख्यपृष्ठ"), ("about", "about/", "माझ्याविषयी"),
                         ("publications", "publications/", "संशोधन"), ("blog", "blog/", "ब्लॉग"),
-                        ("alerts", "alerts/", "हवामान इशारे"), ("forecast", "forecast/", "AI अंदाज"),
+                        ("alerts", "alerts/", "हवामान इशारे"), ("forecast", "forecast/", "प्रायोगिक AI अंदाज"),
                         ("contact", "contact/", "संपर्क")] %}
         {% for key, href, label in links %}
         <a href="{{ root }}{{ href }}"{% if active == key %} class="active" aria-current="page"{% endif %}>{{ label }}</a>
@@ -37,6 +37,23 @@
   </main>
 
   <footer class="site-footer">
+    <div class="wrap footer-cols">
+      <div>
+        <h3>माझ्याशी संपर्क (Reach me)</h3>
+        <p>✉ <a href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a></p>
+        {% if site.contact.whatsapp and site.contact.phone %}<p>💬 <a href="https://wa.me/{{ site.contact.phone | replace('-', '') | replace('+', '') }}" rel="noopener">WhatsApp संदेश</a></p>{% endif %}
+        <p>📝 <a href="{{ root }}contact/">संदेश फॉर्म भरा</a></p>
+      </div>
+      <div>
+        <h3>Subscribe</h3>
+        <p class="muted">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</p>
+        {{ subscribe_form(site, "footer") }}
+      </div>
+      <div>
+        <h3>दुवे</h3>
+        <p><a href="{{ root }}alerts/">हवामान इशारे</a> · <a href="{{ root }}forecast/">प्रायोगिक AI अंदाज</a> · <a href="{{ root }}blog/">ब्लॉग</a> · <a href="{{ root }}publications/">संशोधन</a></p>
+      </div>
+    </div>
     <div class="wrap footer-inner">
       <div>
         <p>© {{ year }} {{ site.name_mr }} · {{ site.position }}, {{ site.organisation }}</p>

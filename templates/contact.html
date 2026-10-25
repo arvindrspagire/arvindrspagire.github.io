@@ -1,7 +1,9 @@
 {% extends "base.html" %}
+{% from "_macros.html" import contact_form, subscribe_form %}
 {% block title %}संपर्क — {{ site.name_mr }}{% endblock %}
 {% block content %}
 <h1 class="page-title">संपर्क</h1>
+<div class="contact-grid">
 <section class="card contact">
   <p class="contact-name"><strong>{{ site.name_mr }}</strong> <span class="muted">({{ site.name_en }})</span></p>
   <p>{{ site.position }}, {{ site.organisation }}</p>
@@ -10,6 +12,9 @@
     {% if site.contact.show_phone and site.contact.phone %}
     <div><dt>फोन</dt><dd><a href="tel:{{ site.contact.phone | replace('-', '') }}">{{ site.contact.phone }}</a></dd></div>
     {% endif %}
+    {% if site.contact.whatsapp and site.contact.phone %}
+    <div><dt>WhatsApp</dt><dd><a href="https://wa.me/{{ site.contact.phone | replace('-', '') | replace('+', '') }}" rel="noopener">संदेश पाठवा</a></dd></div>
+    {% endif %}
     <div><dt>ठिकाण</dt><dd>{{ site.location }}</dd></div>
     {% if site.contact.scholar %}<div><dt>Google Scholar</dt><dd><a href="{{ site.contact.scholar }}" rel="noopener">scholar.google.com — {{ site.name_en }}</a></dd></div>{% endif %}
     {% if site.contact.orcid %}<div><dt>ORCID</dt><dd><a href="{{ site.contact.orcid }}" rel="noopener">{{ site.contact.orcid | replace('https://', '') }}</a></dd></div>{% endif %}
@@ -17,6 +22,17 @@
     <div><dt>{{ label }}</dt><dd><a href="{{ site.contact[key] }}" rel="noopener">{{ site.contact[key] | replace('https://', '') }}</a></dd></div>
     {% endfor %}
   </dl>
-  <p class="muted">संशोधन सहकार्य, व्याख्याने किंवा हवामानविषयक प्रश्नांसाठी ई-मेलद्वारे संपर्क साधा.</p>
+  <p class="muted">संशोधन सहकार्य, व्याख्याने किंवा हवामानविषयक प्रश्नांसाठी ई-मेलद्वारे किंवा फॉर्मद्वारे संपर्क साधा.</p>
+</section>
+<section class="card">
+  <h2>मला संदेश पाठवा</h2>
+  <p class="muted">फॉर्म भरा — संदेश थेट माझ्या ई-मेलवर येतो.</p>
+  {{ contact_form(site) }}
+</section>
+</div>
+<section class="card subscribe-card">
+  <h2>Subscribe — अपडेट ई-मेलवर मिळवा</h2>
+  <p class="muted">महाराष्ट्रासाठी हवामान इशारे, प्रायोगिक AI पाऊस अंदाज व नवीन लेखांची माहिती.</p>
+  {{ subscribe_form(site, "page") }}
 </section>
 {% endblock %}

@@ -47,7 +47,7 @@
 {% if fc %}
 <section class="section">
   <div class="section-head">
-    <h2>AI पाऊस अंदाज</h2>
+    <h2>प्रायोगिक AI पाऊस अंदाज <small class="muted">(Experimental AI forecast)</small></h2>
     <a href="{{ root }}forecast/">संपूर्ण अंदाज →</a>
   </div>
   {% for c in fc.categorical if c.display == "selector" %}{{ taluka_selector(c) }}{% endfor %}

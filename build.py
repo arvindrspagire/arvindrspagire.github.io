@@ -225,6 +225,7 @@ def build(drafts=False):
         page("alert.html", f"alerts/{a['slug']}/index.html", "alerts", alert=a)
     page("forecast.html", "forecast/index.html", "forecast", fc=fc)
     page("contact.html", "contact/index.html", "contact")
+    page("thanks.html", "contact/thanks/index.html", "contact")
     page("404.html", "404.html", "")
 
     note = " (drafts सह)" if drafts else ""
@@ -443,7 +444,7 @@ if __name__ == "__main__":
         build()
         if "--push" in sys.argv:
             fc = load_forecast()
-            push(f"AI पाऊस अंदाज {fc['base_date'] if fc else ''}".strip())
+            push(f"प्रायोगिक AI पाऊस अंदाज {fc['base_date'] if fc else ''}".strip())
     elif cmd == "new-blog":
         if len(args) < 2:
             raise SystemExit("उदा.: python build.py new-blog monsoon-2026")

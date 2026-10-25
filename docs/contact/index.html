@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../static/css/style.css?v=234468f1">
+  <link rel="stylesheet" href="../static/css/style.css?v=3c61bd83">
 </head>
 <body>
   <header class="site-header">
@@ -25,7 +25,7 @@
         <a href="../publications/index.html">संशोधन</a>
         <a href="../blog/index.html">ब्लॉग</a>
         <a href="../alerts/index.html">हवामान इशारे</a>
-        <a href="../forecast/index.html">AI अंदाज</a>
+        <a href="../forecast/index.html">प्रायोगिक AI अंदाज</a>
         <a href="../contact/index.html" class="active" aria-current="page">संपर्क</a>
       </nav>
     </div>
@@ -33,21 +33,98 @@
 
   <main class="wrap main">
 <h1 class="page-title">संपर्क</h1>
+<div class="contact-grid">
 <section class="card contact">
   <p class="contact-name"><strong>अरविंद पागिरे</strong> <span class="muted">(Arvind Pagire)</span></p>
   <p>प्रकल्प शास्त्रज्ञ-I, HPC-AIML टीम, भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</p>
   <dl class="contact-list">
     <div><dt>ई-मेल</dt><dd><a href="mailto:arvindrspagire@gmail.com">arvindrspagire@gmail.com</a></dd></div>
     <div><dt>फोन</dt><dd><a href="tel:+919767590166">+91-9767590166</a></dd></div>
+    <div><dt>WhatsApp</dt><dd><a href="https://wa.me/919767590166" rel="noopener">संदेश पाठवा</a></dd></div>
     <div><dt>ठिकाण</dt><dd>पुणे, महाराष्ट्र</dd></div>
 <div><dt>Google Scholar</dt><dd><a href="https://scholar.google.com/citations?user=vkmoTSkAAAAJ&amp;hl=en" rel="noopener">scholar.google.com — Arvind Pagire</a></dd></div><div><dt>ORCID</dt><dd><a href="https://orcid.org/0009-0000-4938-0567" rel="noopener">orcid.org/0009-0000-4938-0567</a></dd></div>    <div><dt>GitHub</dt><dd><a href="https://github.com/arvindrspagire" rel="noopener">github.com/arvindrspagire</a></dd></div>
     <div><dt>X / Twitter</dt><dd><a href="https://x.com/arvind_weathLAB" rel="noopener">x.com/arvind_weathLAB</a></dd></div>
   </dl>
-  <p class="muted">संशोधन सहकार्य, व्याख्याने किंवा हवामानविषयक प्रश्नांसाठी ई-मेलद्वारे संपर्क साधा.</p>
+  <p class="muted">संशोधन सहकार्य, व्याख्याने किंवा हवामानविषयक प्रश्नांसाठी ई-मेलद्वारे किंवा फॉर्मद्वारे संपर्क साधा.</p>
+</section>
+<section class="card">
+  <h2>मला संदेश पाठवा</h2>
+  <p class="muted">फॉर्म भरा — संदेश थेट माझ्या ई-मेलवर येतो.</p>
+  <form class="msg-form" action="https://formsubmit.co/arvindrspagire@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="वेबसाइटवरून संदेश — Arvind Pagire">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="https://arvindrspagire.github.io/contact/thanks/index.html">
+  <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+  <div class="form-row">
+    <label>नाव *<input type="text" name="name" required autocomplete="name"></label>
+    <label>ई-मेल *<input type="email" name="email" required autocomplete="email"></label>
+  </div>
+  <div class="form-row">
+    <label>फोन (ऐच्छिक)<input type="tel" name="phone" autocomplete="tel"></label>
+    <label>विषय
+      <select name="topic">
+        <option>संशोधन सहकार्य (Research collaboration)</option>
+        <option>व्याख्यान / कार्यशाळा (Talk / workshop)</option>
+        <option>हवामानविषयक प्रश्न (Weather query)</option>
+        <option>प्रायोगिक AI अंदाज अभिप्राय (Forecast feedback)</option>
+        <option>इतर (Other)</option>
+      </select>
+    </label>
+  </div>
+  <label>संदेश *<textarea name="message" rows="6" required></textarea></label>
+  <label class="check"><input type="checkbox" name="subscribe" value="होय"> नवीन इशारे व लेखांसाठी मला ई-मेल पाठवा</label>
+  <button type="submit" class="btn">संदेश पाठवा</button>
+</form>
+
+</section>
+</div>
+<section class="card subscribe-card">
+  <h2>Subscribe — अपडेट ई-मेलवर मिळवा</h2>
+  <p class="muted">महाराष्ट्रासाठी हवामान इशारे, प्रायोगिक AI पाऊस अंदाज व नवीन लेखांची माहिती.</p>
+  <form class="subscribe page" action="https://formsubmit.co/arvindrspagire@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="नवीन सदस्य (Subscribe) — Arvind Pagire">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="https://arvindrspagire.github.io/contact/thanks/index.html">
+  <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+  <input type="hidden" name="प्रकार" value="Subscribe: हवामान इशारे, प्रायोगिक AI अंदाज व लेख">
+  <label for="sub-page" class="sr-only">ई-मेल</label>
+  <input id="sub-page" type="email" name="email" required placeholder="तुमचा ई-मेल">
+  <button type="submit" class="btn">Subscribe</button>
+</form>
+
 </section>
   </main>
 
   <footer class="site-footer">
+    <div class="wrap footer-cols">
+      <div>
+        <h3>माझ्याशी संपर्क (Reach me)</h3>
+        <p>✉ <a href="mailto:arvindrspagire@gmail.com">arvindrspagire@gmail.com</a></p>
+<p>💬 <a href="https://wa.me/919767590166" rel="noopener">WhatsApp संदेश</a></p>        <p>📝 <a href="../contact/index.html">संदेश फॉर्म भरा</a></p>
+      </div>
+      <div>
+        <h3>Subscribe</h3>
+        <p class="muted">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</p>
+        <form class="subscribe footer" action="https://formsubmit.co/arvindrspagire@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="नवीन सदस्य (Subscribe) — Arvind Pagire">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="https://arvindrspagire.github.io/contact/thanks/index.html">
+  <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+  <input type="hidden" name="प्रकार" value="Subscribe: हवामान इशारे, प्रायोगिक AI अंदाज व लेख">
+  <label for="sub-footer" class="sr-only">ई-मेल</label>
+  <input id="sub-footer" type="email" name="email" required placeholder="तुमचा ई-मेल">
+  <button type="submit" class="btn">Subscribe</button>
+</form>
+
+      </div>
+      <div>
+        <h3>दुवे</h3>
+        <p><a href="../alerts/index.html">हवामान इशारे</a> · <a href="../forecast/index.html">प्रायोगिक AI अंदाज</a> · <a href="../blog/index.html">ब्लॉग</a> · <a href="../publications/index.html">संशोधन</a></p>
+      </div>
+    </div>
     <div class="wrap footer-inner">
       <div>
         <p>© २०२६ अरविंद पागिरे · प्रकल्प शास्त्रज्ञ-I, HPC-AIML टीम, भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</p>

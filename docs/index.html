@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./static/css/style.css?v=234468f1">
+  <link rel="stylesheet" href="./static/css/style.css?v=3c61bd83">
 </head>
 <body>
   <header class="site-header">
@@ -25,7 +25,7 @@
         <a href="./publications/index.html">संशोधन</a>
         <a href="./blog/index.html">ब्लॉग</a>
         <a href="./alerts/index.html">हवामान इशारे</a>
-        <a href="./forecast/index.html">AI अंदाज</a>
+        <a href="./forecast/index.html">प्रायोगिक AI अंदाज</a>
         <a href="./contact/index.html">संपर्क</a>
       </nav>
     </div>
@@ -34,7 +34,7 @@
   <main class="wrap main">
 <section class="hero">
   <div class="hero-photo">
-    <img src="./static/images/profile.jpg?v=234468f1" alt="अरविंद पागिरे" width="200" height="200">
+    <img src="./static/images/profile.jpg?v=3c61bd83" alt="अरविंद पागिरे" width="200" height="200">
   </div>
   <div class="hero-text">
     <p class="eyebrow">हवामानशास्त्रज्ञ · AI-आधारित हवामान अंदाज · हायब्रिड मॉडेलिंग</p>
@@ -74,11 +74,11 @@
 
 <section class="section">
   <div class="section-head">
-    <h2>AI पाऊस अंदाज</h2>
+    <h2>प्रायोगिक AI पाऊस अंदाज <small class="muted">(Experimental AI forecast)</small></h2>
     <a href="./forecast/index.html">संपूर्ण अंदाज →</a>
   </div>
 <section class="card cat-fc tq" id="maharashtra_talukas">
-  <h2>DL आधारित पाऊस अंदाज — तुमचा तालुका निवडा</h2>
+  <h2>प्रायोगिक AI पाऊस अंदाज — तुमचा तालुका निवडा</h2>
   <p class="muted">तुमचा तालुका निवडा (किंवा नकाशावर क्लिक करा) — पुढील ५ दिवसांचा दिवसनिहाय पाऊस श्रेणी अंदाज (प्रत्येक दिवस: त्या दिवशी सकाळी ८:३० ते दुसऱ्या दिवशी सकाळी ८:३०).</p>
   <label class="tq-pick">तालुका:
     <select id="tq-select-maharashtra_talukas">
@@ -609,6 +609,33 @@
   </main>
 
   <footer class="site-footer">
+    <div class="wrap footer-cols">
+      <div>
+        <h3>माझ्याशी संपर्क (Reach me)</h3>
+        <p>✉ <a href="mailto:arvindrspagire@gmail.com">arvindrspagire@gmail.com</a></p>
+<p>💬 <a href="https://wa.me/919767590166" rel="noopener">WhatsApp संदेश</a></p>        <p>📝 <a href="./contact/index.html">संदेश फॉर्म भरा</a></p>
+      </div>
+      <div>
+        <h3>Subscribe</h3>
+        <p class="muted">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</p>
+        <form class="subscribe footer" action="https://formsubmit.co/arvindrspagire@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="नवीन सदस्य (Subscribe) — Arvind Pagire">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="https://arvindrspagire.github.io/contact/thanks/index.html">
+  <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+  <input type="hidden" name="प्रकार" value="Subscribe: हवामान इशारे, प्रायोगिक AI अंदाज व लेख">
+  <label for="sub-footer" class="sr-only">ई-मेल</label>
+  <input id="sub-footer" type="email" name="email" required placeholder="तुमचा ई-मेल">
+  <button type="submit" class="btn">Subscribe</button>
+</form>
+
+      </div>
+      <div>
+        <h3>दुवे</h3>
+        <p><a href="./alerts/index.html">हवामान इशारे</a> · <a href="./forecast/index.html">प्रायोगिक AI अंदाज</a> · <a href="./blog/index.html">ब्लॉग</a> · <a href="./publications/index.html">संशोधन</a></p>
+      </div>
+    </div>
     <div class="wrap footer-inner">
       <div>
         <p>© २०२६ अरविंद पागिरे · प्रकल्प शास्त्रज्ञ-I, HPC-AIML टीम, भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</p>

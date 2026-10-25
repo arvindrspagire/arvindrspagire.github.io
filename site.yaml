@@ -127,6 +127,9 @@ contact:
   email: "arvindrspagire@gmail.com"
   phone: "+91-9767590166"
   show_phone: true          # फोन नंबर सार्वजनिक नको असल्यास false करा
+  whatsapp: true            # फोन नंबरवर WhatsApp संदेशाची लिंक
+  # संपर्क व सदस्यता फॉर्म formsubmit.co द्वारे या ई-मेलवर येतात (पहिल्या फॉर्मनंतर आलेला activation ई-मेल एकदा confirm करा)
+  form_email: "arvindrspagire@gmail.com"
   orcid: "https://orcid.org/0009-0000-4938-0567"
   scholar: "https://scholar.google.com/citations?user=vkmoTSkAAAAJ&hl=en"
   # ऐच्छिक: रिकामे ठेवल्यास दिसणार नाही

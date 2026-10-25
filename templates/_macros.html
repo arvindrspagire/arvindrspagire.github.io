@@ -65,3 +65,49 @@
 {% if p.doi %}<a class="doi" href="https://doi.org/{{ p.doi }}" rel="noopener" target="_blank">{{ icon("doi") }}doi:{{ p.doi }}</a>
 {% elif p.link %}<a class="doi" href="{{ p.link }}" rel="noopener" target="_blank">{{ icon("doi") }}दुवा</a>{% endif %}
 {%- endmacro %}
+
+
+{# ---- forms (static site: delivered by formsubmit.co to site.contact.form_email) ---- #}
+{% macro form_hidden(site, subject) %}
+  <input type="hidden" name="_subject" value="{{ subject }}">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="{{ site.site_url }}/contact/thanks/index.html">
+  <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+{% endmacro %}
+
+{% macro subscribe_form(site, cls="") %}
+{% if site.contact.form_email %}
+<form class="subscribe {{ cls }}" action="https://formsubmit.co/{{ site.contact.form_email }}" method="POST">
+  {{ form_hidden(site, "नवीन सदस्य (Subscribe) — " ~ site.name_en) }}
+  <input type="hidden" name="प्रकार" value="Subscribe: हवामान इशारे, प्रायोगिक AI अंदाज व लेख">
+  <label for="sub-{{ cls or 'x' }}" class="sr-only">ई-मेल</label>
+  <input id="sub-{{ cls or 'x' }}" type="email" name="email" required placeholder="तुमचा ई-मेल">
+  <button type="submit" class="btn">Subscribe</button>
+</form>
+{% endif %}
+{% endmacro %}
+
+{% macro contact_form(site) %}
+<form class="msg-form" action="https://formsubmit.co/{{ site.contact.form_email }}" method="POST">
+  {{ form_hidden(site, "वेबसाइटवरून संदेश — " ~ site.name_en) }}
+  <div class="form-row">
+    <label>नाव *<input type="text" name="name" required autocomplete="name"></label>
+    <label>ई-मेल *<input type="email" name="email" required autocomplete="email"></label>
+  </div>
+  <div class="form-row">
+    <label>फोन (ऐच्छिक)<input type="tel" name="phone" autocomplete="tel"></label>
+    <label>विषय
+      <select name="topic">
+        <option>संशोधन सहकार्य (Research collaboration)</option>
+        <option>व्याख्यान / कार्यशाळा (Talk / workshop)</option>
+        <option>हवामानविषयक प्रश्न (Weather query)</option>
+        <option>प्रायोगिक AI अंदाज अभिप्राय (Forecast feedback)</option>
+        <option>इतर (Other)</option>
+      </select>
+    </label>
+  </div>
+  <label>संदेश *<textarea name="message" rows="6" required></textarea></label>
+  <label class="check"><input type="checkbox" name="subscribe" value="होय"> नवीन इशारे व लेखांसाठी मला ई-मेल पाठवा</label>
+  <button type="submit" class="btn">संदेश पाठवा</button>
+</form>
+{% endmacro %}

@@ -36,7 +36,7 @@
  "categorical": [
   {
    "id": "maharashtra_talukas",
-   "title_mr": "DL आधारित पाऊस अंदाज — तुमचा तालुका निवडा",
+   "title_mr": "प्रायोगिक AI पाऊस अंदाज — तुमचा तालुका निवडा",
    "display": "selector",
    "classes": [
     {
