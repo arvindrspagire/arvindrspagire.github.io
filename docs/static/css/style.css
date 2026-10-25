@@ -305,7 +305,7 @@ ul.plain li { margin-bottom: .7em; }
 .cat-table th, .cat-table td { padding: 4px 8px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
 .cat-table td { text-align: center; }
 .cat-group th { background: var(--brand-soft); color: var(--brand); }
-.home-fc { display: grid; grid-template-columns: minmax(200px, 320px) 1fr; gap: 24px; align-items: start; }
+.home-fc { display: grid; grid-template-columns: 1fr; gap: 16px; align-items: start; }
 .home-fc > .muted { grid-column: 1 / -1; margin: 0; }
 .home-fc-map { margin: 0; }
 .home-fc-map svg { width: 100%; height: auto; }
