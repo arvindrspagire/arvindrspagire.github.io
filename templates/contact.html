@@ -11,6 +11,7 @@
     <div><dt>फोन</dt><dd><a href="tel:{{ site.contact.phone | replace('-', '') }}">{{ site.contact.phone }}</a></dd></div>
     {% endif %}
     <div><dt>ठिकाण</dt><dd>{{ site.location }}</dd></div>
+    {% if site.contact.scholar %}<div><dt>Google Scholar</dt><dd><a href="{{ site.contact.scholar }}" rel="noopener">scholar.google.com — {{ site.name_en }}</a></dd></div>{% endif %}
     {% if site.contact.orcid %}<div><dt>ORCID</dt><dd><a href="{{ site.contact.orcid }}" rel="noopener">{{ site.contact.orcid | replace('https://', '') }}</a></dd></div>{% endif %}
     {% for key, label in [("linkedin", "LinkedIn"), ("github", "GitHub"), ("twitter", "X / Twitter")] if site.contact[key] %}
     <div><dt>{{ label }}</dt><dd><a href="{{ site.contact[key] }}" rel="noopener">{{ site.contact[key] | replace('https://', '') }}</a></dd></div>

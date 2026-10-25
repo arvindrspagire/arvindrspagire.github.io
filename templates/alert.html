@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import level_badge %}
 {% block title %}{{ alert.title }} — हवामान इशारा{% endblock %}
-{% block description %}{{ alert.lvl.label }} इशारा: {{ alert.title }} ({{ alert.date_mr }}){% endblock %}
+{% block description %}{{ alert.lvl.label }} {{ "अंदाज" if alert.level == "info" else "इशारा" }}: {{ alert.title }} ({{ alert.date_mr }}){% endblock %}
 {% block content %}
 <article class="article">
   <p class="muted"><a href="{{ root }}alerts/">← सर्व इशारे</a></p>

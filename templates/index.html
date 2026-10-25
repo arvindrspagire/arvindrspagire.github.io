@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% from "_macros.html" import alert_card, post_card %}
+{% from "_macros.html" import alert_card, post_card, research_card, profile_links, icon %}
 {% block content %}
 <section class="hero">
   <div class="hero-photo">
     {% if has_photo %}
-    <img src="{{ root }}{{ site.photo }}" alt="{{ site.name_mr }}" width="168" height="168">
+    <img src="{{ root }}{{ site.photo }}?v={{ v }}" alt="{{ site.name_mr }}" width="200" height="200">
     {% else %}
     <div class="avatar" aria-hidden="true">अ</div>
     {% endif %}
@@ -13,14 +13,30 @@
     <p class="eyebrow">{{ site.tagline }}</p>
     <h1>{{ site.name_mr }}</h1>
     <p class="name-en">{{ site.name_en }}</p>
-    <p class="hero-role"><strong>{{ site.position }}</strong>, {{ site.organisation }}</p>
-    <p>{{ site.bio[0] }}</p>
-    <p class="hero-actions">
-      <a class="btn" href="{{ root }}alerts/">आजचे हवामान इशारे</a>
-      <a class="btn btn-ghost" href="{{ root }}about/">माझ्याविषयी</a>
-    </p>
+    <p class="hero-role"><strong>{{ site.position }}</strong>, {{ site.organisation }}
+      <span class="hero-loc">{{ icon("pin") }}{{ site.location }}</span></p>
+    <p class="hero-bio">{{ site.bio[0] }}</p>
+    {{ profile_links(site, "on-dark") }}
   </div>
 </section>
+
+<section class="stats" aria-label="ठळक आकडे">
+  {% for n, label in stats %}
+  <div class="stat"><span class="stat-n">{{ n }}</span><span class="stat-l">{{ label }}</span></div>
+  {% endfor %}
+</section>
+
+{% if site.research %}
+<section class="section">
+  <div class="section-head">
+    <h2>चालू संशोधन</h2>
+    <a href="{{ root }}publications/">संशोधन व प्रकाशने →</a>
+  </div>
+  <div class="research-grid">
+    {% for r in site.research %}{{ research_card(r) }}{% endfor %}
+  </div>
+</section>
+{% endif %}
 
 <section class="section">
   <div class="section-head">
@@ -33,6 +49,9 @@
       टीप: हा इशारा {{ latest_alert.date_mr }} रोजीचा आहे; आजचा इशारा अद्याप प्रसिद्ध झालेला नाही.</p>
   {% else %}
     <p class="empty">सध्या कोणताही इशारा प्रसिद्ध केलेला नाही.</p>
+  {% endif %}
+  {% if site.contact.twitter %}
+  <p class="follow"><a href="{{ site.contact.twitter }}" rel="noopener" target="_blank">𝕏 दैनंदिन महाराष्ट्र हवामान अपडेट: @{{ site.contact.twitter.rstrip('/').split('/')[-1] }}</a></p>
   {% endif %}
 </section>
 

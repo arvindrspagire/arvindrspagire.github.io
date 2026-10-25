@@ -10,6 +10,19 @@ conda activate myenv
 cd D:\06_Personal\03_Portfolio
 ```
 
+## दैनंदिन इशारे आपोआप (हवामान विज्ञान pipeline)
+
+`D:_Research_Projects\hawaman-vidnyanun_daily.bat` (रोज ०९:१५ वाजता) pipeline संपल्यावर आपोआप:
+
+```
+python build.py hawaman --push
+```
+
+हे आजच्या `twitter/output/<दिनांक>/` मधील tweet, कारणमीमांसा व चित्रांवरून `content/alerts/<दिनांक>-hawaman.md`
+तयार करते, संकेतस्थळ build करते आणि GitHub वर push करते. इशाऱ्याचा रंग IMD च्या अधिकृत जिल्हानिहाय
+इशाऱ्यांवरून ठरतो; ते उपलब्ध नसल्यास "माहितीपर अंदाज" (राखाडी) दाखवला जातो — मॉडेल अंदाज कधीही इशारा म्हणून नाही.
+हाताने एखाद्या दिवसासाठी: `python build.py hawaman 2026-10-25 --push`.
+
 ## दैनंदिन हवामान इशारा (रोजचे काम)
 
 1. `python build.py new-alert` — `content/alerts/` मध्ये आजच्या तारखेची फाइल तयार होते.

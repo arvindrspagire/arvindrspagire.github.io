@@ -1,9 +1,18 @@
 {% extends "base.html" %}
+{% from "_macros.html" import profile_links, research_card, doi_link %}
 {% block title %}संशोधन व प्रकाशने — {{ site.name_mr }}{% endblock %}
 {% block content %}
 <h1 class="page-title">संशोधन व प्रकाशने</h1>
-<p class="lead">संदर्भ शैक्षणिक प्रथेनुसार इंग्रजीत दिले आहेत. संपूर्ण यादीसाठी
-  <a href="{{ site.contact.orcid }}" rel="noopener">ORCID</a> पाहा.</p>
+<p class="lead">संदर्भ शैक्षणिक प्रथेनुसार इंग्रजीत दिले आहेत. संपूर्ण व अद्ययावत यादी, उद्धरणे (citations) यांसाठी
+  Google Scholar किंवा ORCID पाहा.</p>
+{{ profile_links(site) }}
+
+{% if site.research %}
+<section class="section">
+  <h2>चालू संशोधन</h2>
+  <div class="research-grid">{% for r in site.research %}{{ research_card(r) }}{% endfor %}</div>
+</section>
+{% endif %}
 
 {% for key, label, items in groups if items %}
 <section class="section">
@@ -12,7 +21,7 @@
     {% for p in items %}
     <li>
       <span class="pub-year">{{ p.year | mr }}</span>
-      <span>{{ p.text }}{% if p.link %} <a href="{{ p.link }}" rel="noopener">DOI</a>{% endif %}</span>
+      <span>{{ p.text }} {{ doi_link(p) }}</span>
     </li>
     {% endfor %}
   </ol>

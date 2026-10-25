@@ -5,6 +5,9 @@
     python build.py serve           तयार करून http://localhost:8000 वर पाहा (build + local preview)
     python build.py new-alert       आजच्या तारखेचा नवीन इशारा तयार करा (new alert for today)
     python build.py new-blog नाव     नवीन ब्लॉग लेख तयार करा (new blog post; slug in English)
+    python build.py hawaman [YYYY-MM-DD] [--push]
+                                    हवामान विज्ञान pipeline च्या आजच्या tweet वरून इशारा तयार करा
+                                    (alert from the hawaman-vidnyan daily output; --push = build + git push)
     --drafts                        draft: true असलेले लेखही दाखवा (include drafts, for preview only)
 
 Content lives in content/blog/*.md and content/alerts/*.md (YAML front matter + Markdown).
@@ -15,6 +18,7 @@ Needs: jinja2, mistune, pyyaml.
 from datetime import date, datetime
 from pathlib import Path
 import functools
+import hashlib
 import http.server
 import re
 import shutil
@@ -47,6 +51,8 @@ LEVELS = {
     "yellow": dict(label="पिवळा", action="अद्ययावत राहा", desc="हवामानावर लक्ष ठेवा; परिस्थिती बदलू शकते."),
     "orange": dict(label="नारंगी", action="तयार राहा", desc="धोकादायक हवामानाची शक्यता; आवश्यक तयारी करा."),
     "red":    dict(label="लाल", action="कृती करा", desc="अतितीव्र हवामान; स्थानिक प्रशासनाच्या सूचनांचे पालन करा."),
+    # used when no IMD district warning was available: model guidance must never look like a warning
+    "info":   dict(label="माहितीपर", action="मॉडेल-आधारित अंदाज", desc="IMD चा जिल्हानिहाय इशारा उपलब्ध नसताना प्रसिद्ध केलेला मॉडेल-आधारित अंदाज; अधिकृत इशारा नाही."),
 }
 
 md = mistune.create_markdown(plugins=["table", "strikethrough", "url"])
@@ -110,7 +116,14 @@ def build(drafts=False):
                       autoescape=select_autoescape(["html"]), trim_blocks=True, lstrip_blocks=True)
     env.filters["mr"] = mr_num
     photo = ROOT / site.get("photo", "static/images/profile.jpg")
-    common = dict(site=site, levels=LEVELS, has_photo=photo.exists(),
+    # ?v=<hash> on CSS/photo so browsers fetch the new file right after each deploy
+    h = hashlib.md5((ROOT / "static/css/style.css").read_bytes() + (photo.read_bytes() if photo.exists() else b""))
+    pubs = site.get("publications", [])
+    stats = [(mr_num(sum(p["type"] in ("journal", "preprint") for p in pubs)), "शोधनिबंध व प्रीप्रिंट"),
+             (mr_num(sum(p["type"] == "conference" for p in pubs)), "परिषद सादरीकरणे"),
+             (mr_num(date.today().year - 2020) + "+", "वर्षांचा संशोधन अनुभव"),
+             (mr_num(len(site.get("research", []))), "चालू संशोधन प्रकल्प")]
+    common = dict(site=site, levels=LEVELS, has_photo=photo.exists(), v=h.hexdigest()[:8], stats=stats,
                   built=mr_date(date.today()), year=mr_num(date.today().year))
 
     # empty docs/ but keep the folder itself (a running preview server keeps it open on Windows)
@@ -136,6 +149,7 @@ def build(drafts=False):
     page("publications.html", "publications/index.html", "publications",
          groups=[(t, lab, [p for p in site.get("publications", []) if p["type"] == t])
                  for t, lab in (("journal", "शोधनिबंध (Journal articles)"),
+                                ("preprint", "प्रीप्रिंट (Preprints)"),
                                 ("report", "अहवाल व प्रकाशने (Reports)"),
                                 ("conference", "परिषदांमधील सादरीकरणे (Conference presentations)"))])
     page("blog_list.html", "blog/index.html", "blog", posts=blog)
@@ -202,6 +216,90 @@ draft: true              # प्रसिद्ध करताना ही �
     print("नवीन लेख:", path)
 
 
+HAWAMAN_COLOR = {1: "red", 2: "orange", 3: "yellow", 4: "green"}     # IMD district warning colour codes
+REGIONS_MR = ["कोकण", "मध्य महाराष्ट्र", "मराठवाडा", "विदर्भ"]
+HORIZON_MR = {"short": "अल्पकालीन अंदाज", "medium": "मध्यम कालावधी अंदाज",
+              "extended": "विस्तारित अंदाज", "seasonal": "हंगामी अंदाज"}
+
+
+def hawaman(day=None):
+    """Turn the hawaman-vidnyan daily tweet package into content/alerts/<date>-hawaman.md (+ images)."""
+    import json
+    from PIL import Image
+    site = yaml.safe_load((ROOT / "site.yaml").read_text(encoding="utf-8"))
+    src = Path(site.get("hawaman_dir", r"D:\01_Research_Projects\hawaman-vidnyan"))
+    out_root = src / "twitter" / "output"
+    day = day or (max(p.name for p in out_root.iterdir() if re.fullmatch(r"\d{4}-\d{2}-\d{2}", p.name))
+                  if out_root.exists() else None)
+    pkg = out_root / str(day)
+    if not day or not (pkg / "thread.txt").exists():
+        raise SystemExit(f"हवामान विज्ञान tweet सापडले नाही: {pkg}")
+    d = date.fromisoformat(day)
+    meta = json.loads((pkg / "meta.json").read_text(encoding="utf-8")) if (pkg / "meta.json").exists() else {}
+
+    # IMD warnings for that day decide the colour; without them the alert is "info" (model guidance only)
+    level, regions, hazards = "info", list(REGIONS_MR), []
+    runs = sorted((src / "data" / "runs").glob(f"{d:%Y%m%d}_*/processed/facts.json"))
+    warn = json.loads(runs[-1].read_text(encoding="utf-8")).get("warnings", {}) if runs else {}
+    wday = next((w for w in warn.get("days", []) if w["date"] == day), None) if warn.get("available") else None
+    if wday and wday["districts"]:
+        sys.path.insert(0, str(src / "src"))
+        from hawaman_maharashtra.content.phrases import WARNING_MR
+        level = HAWAMAN_COLOR.get(wday["max_color"], "green")
+        hit = [x for x in wday["districts"] if x["color"] < 4]
+        regions = [x["name_mr"] for x in hit] or regions
+        hazards = sorted({WARNING_MR.get(c) for x in hit for c in x["codes"]} - {None})
+
+    thread = (pkg / "thread.txt").read_text(encoding="utf-8")
+    parts = [s.strip() for s in re.split(r"\n-{3,}\n", thread) if s.strip()]
+    first = parts[0].splitlines()
+    title = re.sub(r"^\W+", "", first[0]).strip() or "महाराष्ट्र हवामान"
+    horizon = HORIZON_MR.get(meta.get("horizon"), "हवामान अंदाज")
+
+    def lines(s):                       # keep tweet line breaks, drop hashtag lines
+        return "  \n".join(l for l in s.splitlines() if not l.startswith("#"))
+
+    img_dir = ROOT / "static" / "images" / "alerts" / day
+    imgs = []
+    for name in meta.get("media") or sorted(p.name for p in pkg.glob("[0-9]_*.jpg")):
+        if (pkg / name).exists():
+            img_dir.mkdir(parents=True, exist_ok=True)
+            im = Image.open(pkg / name).convert("RGB")
+            im.thumbnail((1200, 1200))
+            im.save(img_dir / name, quality=82, optimize=True)
+            imgs.append(name)
+
+    body = [f"**{horizon}** · स्रोत: हवामान विज्ञान स्वयंचलित विश्लेषण", "", lines("\n".join(first[1:])), ""]
+    if imgs:
+        body += [f"![{horizon}](../../static/images/alerts/{day}/{imgs[0]})", ""]
+    if len(parts) > 1:
+        body += ["### हवामानामागचे कारण", ""] + [lines(s) + "\n" for s in parts[1:]]
+    body += [f"![हवामान प्रणाली](../../static/images/alerts/{day}/{n})\n" for n in imgs[1:]]
+    tw = site.get("contact", {}).get("twitter")
+    if tw:
+        body += ["", f"दैनंदिन अपडेटसाठी X वर फॉलो करा: [@{tw.rstrip('/').rsplit('/', 1)[-1]}]({tw})"]
+
+    q = lambda v: json.dumps(v, ensure_ascii=False)
+    front = [f"title: {q(title)}", f"date: {day}", f"level: {level}",
+             f"valid: {q(mr_date(d) + ' पासून — ' + horizon)}",
+             f"regions: {q(regions)}", f"hazards: {q(hazards)}", "source: hawaman-vidnyan"]
+    dest = CONTENT / "alerts" / f"{day}-hawaman.md"
+    dest.write_text("---\n" + "\n".join(front) + "\n---\n\n" + "\n".join(body).strip() + "\n", encoding="utf-8")
+    print(f"हवामान विज्ञान इशारा ({level}): {dest}")
+    return day
+
+
+def push(msg):
+    import subprocess
+    run = lambda *a: subprocess.run(["git", *a], cwd=ROOT, check=True)
+    run("add", "-A")
+    if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode == 0:
+        print("बदल नाहीत; push केले नाही"); return
+    run("commit", "-q", "-m", msg)
+    run("push", "-q")
+    print("GitHub वर push केले")
+
+
 def serve(port=8000):
     handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(OUT))
     print(f"पाहा: http://localhost:{port}   (थांबवण्यासाठी Ctrl+C)")
@@ -209,7 +307,7 @@ def serve(port=8000):
 
 
 if __name__ == "__main__":
-    args = [a for a in sys.argv[1:] if a != "--drafts"]
+    args = [a for a in sys.argv[1:] if a not in ("--drafts", "--push")]
     drafts = "--drafts" in sys.argv
     cmd = args[0] if args else "build"
     if cmd == "build":
@@ -219,6 +317,11 @@ if __name__ == "__main__":
         serve()
     elif cmd == "new-alert":
         new_alert()
+    elif cmd == "hawaman":
+        day = hawaman(next((a for a in args[1:] if re.fullmatch(r"\d{4}-\d{2}-\d{2}", a)), None))
+        if "--push" in sys.argv:
+            build()
+            push(f"इशारा {day} (हवामान विज्ञान)")
     elif cmd == "new-blog":
         if len(args) < 2:
             raise SystemExit("उदा.: python build.py new-blog monsoon-2026")

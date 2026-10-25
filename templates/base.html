@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% from "_macros.html" import profile_links %}
 <html lang="mr">
 <head>
   <meta charset="UTF-8">
@@ -8,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ root }}static/css/style.css">
+  <link rel="stylesheet" href="{{ root }}static/css/style.css?v={{ v }}">
 </head>
 <body>
   <header class="site-header">
@@ -36,8 +37,11 @@
 
   <footer class="site-footer">
     <div class="wrap footer-inner">
-      <p>© {{ year }} {{ site.name_mr }} · {{ site.position }}, {{ site.location }}</p>
-      <p class="muted">अधिकृत हवामान इशाऱ्यांसाठी: <a href="https://mausam.imd.gov.in" rel="noopener">भारतीय हवामान विभाग</a> · अद्ययावत: {{ built }}</p>
+      <div>
+        <p>© {{ year }} {{ site.name_mr }} · {{ site.position }}, {{ site.organisation }}</p>
+        <p class="muted">अधिकृत हवामान इशाऱ्यांसाठी: <a href="https://mausam.imd.gov.in" rel="noopener">भारतीय हवामान विभाग</a> · अद्ययावत: {{ built }}</p>
+      </div>
+      {{ profile_links(site, "on-dark compact") }}
     </div>
   </footer>
 </body>

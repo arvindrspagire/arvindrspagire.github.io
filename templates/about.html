@@ -1,13 +1,22 @@
 {% extends "base.html" %}
+{% from "_macros.html" import profile_links, research_card %}
 {% block title %}माझ्याविषयी — {{ site.name_mr }}{% endblock %}
 {% block content %}
 <h1 class="page-title">माझ्याविषयी</h1>
+{{ profile_links(site) }}
 
 <section class="card">
   {% for para in site.bio %}<p>{{ para }}</p>{% endfor %}
   <h3>संशोधनाचे विषय</h3>
   <ul>{% for i in site.interests %}<li>{{ i }}</li>{% endfor %}</ul>
 </section>
+
+{% if site.research %}
+<section class="section">
+  <h2>चालू संशोधन</h2>
+  <div class="research-grid">{% for r in site.research %}{{ research_card(r) }}{% endfor %}</div>
+</section>
+{% endif %}
 
 <section class="section">
   <h2>कार्यानुभव</h2>

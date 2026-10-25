@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../static/css/style.css">
+  <link rel="stylesheet" href="../static/css/style.css?v=6f88b983">
 </head>
 <body>
   <header class="site-header">
@@ -32,7 +32,8 @@
 
   <main class="wrap main">
 <h1 class="page-title">दैनंदिन हवामान इशारे</h1>
-<p class="lead">विदर्भ व महाराष्ट्रासाठी दैनंदिन हवामान माहिती आणि इशारे.</p>
+<p class="lead">महाराष्ट्रासाठी दैनंदिन हवामान अंदाज व इशारे — हवामान विज्ञान स्वयंचलित विश्लेषणातून दररोज अद्ययावत.
+  रंग IMD च्या अधिकृत जिल्हानिहाय इशाऱ्यांवरून ठरतो; तो उपलब्ध नसल्यास "माहितीपर अंदाज" दाखवला जातो.</p>
 
 <details class="legend card">
   <summary>इशाऱ्यांचे रंग काय सांगतात?</summary>
@@ -41,18 +42,31 @@
     <li><span class="badge badge-yellow">पिवळा इशारा · अद्ययावत राहा</span> — हवामानावर लक्ष ठेवा; परिस्थिती बदलू शकते.</li>
     <li><span class="badge badge-orange">नारंगी इशारा · तयार राहा</span> — धोकादायक हवामानाची शक्यता; आवश्यक तयारी करा.</li>
     <li><span class="badge badge-red">लाल इशारा · कृती करा</span> — अतितीव्र हवामान; स्थानिक प्रशासनाच्या सूचनांचे पालन करा.</li>
+    <li><span class="badge badge-info">माहितीपर अंदाज</span> — IMD चा जिल्हानिहाय इशारा उपलब्ध नसताना प्रसिद्ध केलेला मॉडेल-आधारित अंदाज; अधिकृत इशारा नाही.</li>
   </ul>
 </details>
 
-<p class="empty">सध्या कोणताही इशारा प्रसिद्ध केलेला नाही.</p>
+<div class="stack">
+<article class="alert-card level-info">
+  <div class="alert-card-top">
+    <span class="badge badge-info">माहितीपर अंदाज</span>
+    <time datetime="2026-10-25" class="muted">रविवार, २५ ऑक्टोबर २०२६</time>
+  </div>
+  <h3><a href="../alerts/2026-10-25-hawaman/index.html">पुढील आठवडा (२८ ऑक्टो – ३ नोव्हें) | महाराष्ट्र</a></h3>
+<p class="alert-meta"><strong>जिल्हे/भाग:</strong> कोकण, मध्य महाराष्ट्र, मराठवाडा, विदर्भ</p><p class="alert-meta"><strong>वैधता:</strong> २५ ऑक्टोबर २०२६ पासून — मध्यम कालावधी अंदाज</p></article></div>
 
 <p class="disclaimer">हा इशारा माझ्या वैयक्तिक विश्लेषणावर आधारित माहितीपर मजकूर आहे. अधिकृत हवामान अंदाज व इशाऱ्यांसाठी कृपया भारतीय हवामान विभागाचे संकेतस्थळ mausam.imd.gov.in किंवा &#39;मौसम&#39; / &#39;दामिनी&#39; ॲप पाहा.</p>
   </main>
 
   <footer class="site-footer">
     <div class="wrap footer-inner">
-      <p>© २०२६ अरविंद राजेंद्र पागिरे · प्रकल्प शास्त्रज्ञ-I, पुणे, महाराष्ट्र</p>
-      <p class="muted">अधिकृत हवामान इशाऱ्यांसाठी: <a href="https://mausam.imd.gov.in" rel="noopener">भारतीय हवामान विभाग</a> · अद्ययावत: २५ ऑक्टोबर २०२६</p>
+      <div>
+        <p>© २०२६ अरविंद राजेंद्र पागिरे · प्रकल्प शास्त्रज्ञ-I, भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</p>
+        <p class="muted">अधिकृत हवामान इशाऱ्यांसाठी: <a href="https://mausam.imd.gov.in" rel="noopener">भारतीय हवामान विभाग</a> · अद्ययावत: २५ ऑक्टोबर २०२६</p>
+      </div>
+      <p class="profile-links on-dark compact">
+<a class="pl" href="https://scholar.google.com/citations?user=vkmoTSkAAAAJ&amp;hl=en" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><span>Google Scholar</span></a><a class="pl" href="https://orcid.org/0009-0000-4938-0567" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9 10v7M9 7v.01M12.5 10v7h1.8a3.5 3.5 0 0 0 0-7z"/></svg><span>ORCID</span></a><a class="pl" href="https://github.com/arvindrspagire" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.8 2.8 5.8 3.1 5.8 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4.4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a>  <a class="pl" href="mailto:arvindpagire1995@gmail.com"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span>ई-मेल</span></a>
+</p>
     </div>
   </footer>
 </body>
