@@ -43,6 +43,40 @@
   {% endif %}
 </section>
 
+{% if fc %}
+<section class="section">
+  <div class="section-head">
+    <h2>AI पाऊस अंदाज</h2>
+    <a href="{{ root }}forecast/">संपूर्ण अंदाज →</a>
+  </div>
+  <div class="card home-fc">
+    {% for c in fc.categorical[:1] %}{% if c.maps %}
+    <figure class="home-fc-map">
+      <svg viewBox="-2 -2 {{ c.maps.w + 4 }} {{ c.maps.h + 4 }}" role="img" aria-label="उद्याचा जिल्हानिहाय अंदाज">
+        {% for r in c.regions %}{% if r.id in c.maps.paths %}
+        <path class="cat-{{ r.cat[0] }}" d="{{ c.maps.paths[r.id] }}"><title>{{ r.name_mr }}: {{ c.classes[r.cat[0]].mr }}</title></path>
+        {% endif %}{% endfor %}
+      </svg>
+      <figcaption>{{ c.days[0].date_mr }} — पाऊस श्रेणी अंदाज</figcaption>
+      <p class="cat-legend">{% for k in c.classes %}<span class="cat-chip cat-{{ loop.index0 }}">{{ k.mr }}</span>{% endfor %}</p>
+      <p><a class="btn" href="{{ root }}forecast/#{{ c.id }}">तुमचा तालुका निवडा →</a></p>
+    </figure>
+    {% endif %}{% endfor %}
+    {% for r in fc.regions %}
+    <div class="home-fc-strip">
+      <p><strong>{{ r.name_mr }} — अतिवृष्टीची शक्यता</strong></p>
+      <div class="fc-days">
+        {% for d in r.days %}
+        <div class="fc-day fc-{{ d.band }}"><p class="fc-date">{{ d.date_mr }}</p><p class="fc-band">{{ d.band_mr }}</p></div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+    <p class="muted">डीप-लर्निंग (CNN-LSTM) आधारित संशोधनात्मक अंदाज · आधार: ECMWF, {{ fc.base_mr }} · अधिकृत इशारा नाही</p>
+  </div>
+</section>
+{% endif %}
+
 <section class="section">
   <div class="section-head">
     <h2>ताजे लेख</h2>

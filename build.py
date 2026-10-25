@@ -5,6 +5,7 @@
     python build.py serve           तयार करून http://localhost:8000 वर पाहा (build + local preview)
     python build.py new-alert       आजच्या तारखेचा नवीन इशारा तयार करा (new alert for today)
     python build.py new-blog नाव     नवीन ब्लॉग लेख तयार करा (new blog post; slug in English)
+    python build.py forecast [--push]   AI पाऊस अंदाज पान तयार करा (content/forecast/latest.json वरून)
     python build.py hawaman [YYYY-MM-DD] [--push]
                                     हवामान विज्ञान pipeline च्या आजच्या output वरून विश्लेषण पान तयार करा
                                     (alert from the hawaman-vidnyan daily output; --push = build + git push)
@@ -107,6 +108,66 @@ def check_alert(a):
     return a
 
 
+def load_forecast():
+    """content/forecast/latest.json, written daily by extreme-rainfall-aiera (python -m operational.forecast --publish)."""
+    import json
+    path = CONTENT / "forecast" / "latest.json"
+    if not path.exists():
+        return None
+    fc = json.loads(path.read_text(encoding="utf-8"))
+    fc["base_mr"] = mr_date(date.fromisoformat(fc["base_date"]), weekday=True)
+    for r in fc["regions"]:
+        for d in r["days"]:
+            day = date.fromisoformat(d["date"])
+            d["date_mr"] = f"{WEEKDAYS[day.weekday()]}, {mr_num(day.day)} {MONTHS[day.month - 1]}"
+            d["pct"] = mr_num(round(d["score"] * 100))
+            d["hist_pct"] = mr_num(round(d["hist_hit_rate"] * 100)) if d.get("hist_hit_rate") is not None else "–"
+            if d.get("ifs_rain_mm") is not None:
+                d["ifs_mr"] = mr_num(f"{d['ifs_rain_mm']:.1f}")
+        r["threshold_mr"] = mr_num(f"{r['threshold_mm']:.1f}")
+    for c in fc.get("categorical", []):
+        for d in c["days"]:
+            day = date.fromisoformat(d["date"])
+            d["date_mr"] = f"{WEEKDAYS[day.weekday()]}, {mr_num(day.day)} {MONTHS[day.month - 1]}"
+            d["short_mr"] = f"{mr_num(day.day)} {MONTHS[day.month - 1][:3]}"
+        for k in c["classes"]:
+            lo, hi = k["from"], k["to"]
+            k["range_mr"] = mr_num(f"< {hi}" if not lo else f"≥ {lo}" if hi is None else f"{lo}–{round(hi - 0.1, 1)}") + " मिमी/दिवस"
+        c["hss_mr"] = [mr_num(f"{h:.2f}") if h is not None else "–" for h in c.get("test_median_hss", [])]
+        for r in c["regions"]:
+            r["pct"] = [mr_num(round(max(p) * 100)) for p in r["prob"]]
+        groups = {}
+        for r in c["regions"]:
+            groups.setdefault(r["group"], []).append(r)
+        c["groups"] = [(SUBDIV_MR.get(g, g), sorted(rs, key=lambda r: r["name_mr"])) for g, rs in sorted(groups.items())]
+        c["maps"] = district_svg(CONTENT / "forecast" / f"shapes_{c['id']}.json")
+    return fc
+
+
+SUBDIV_MR = {"Konkan": "कोकण", "Konkan & Goa": "कोकण", "Madhya Maharashtra": "मध्य महाराष्ट्र",
+             "Marathwada": "मराठवाडा", "Vidarbha": "विदर्भ"}
+
+
+def district_svg(path):
+    """{region id: SVG path 'd'} in a 0..W x 0..H box (equirectangular, cos-lat scaled), plus the box."""
+    import json
+    import math
+    if not path.exists():
+        return None
+    shapes = json.loads(path.read_text(encoding="utf-8"))
+    rings = {rid: (g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]])
+             for rid, g in shapes.items()}
+    pts = [p for polys in rings.values() for poly in polys for ring in poly for p in ring]
+    x0, x1 = min(p[0] for p in pts), max(p[0] for p in pts)
+    y0, y1 = min(p[1] for p in pts), max(p[1] for p in pts)
+    k = math.cos(math.radians((y0 + y1) / 2))
+    s = 400 / ((x1 - x0) * k)
+    proj = lambda p: f"{(p[0] - x0) * k * s:.1f},{(y1 - p[1]) * s:.1f}"
+    d = {rid: " ".join("M" + " L".join(proj(p) for p in ring) + "Z" for poly in polys for ring in poly)
+         for rid, polys in rings.items()}
+    return {"paths": d, "w": 400, "h": round((y1 - y0) * s)}
+
+
 def build(drafts=False):
     site = yaml.safe_load((ROOT / "site.yaml").read_text(encoding="utf-8"))
     blog = load("blog", drafts)
@@ -143,7 +204,8 @@ def build(drafts=False):
         html = re.sub(r'href="((?:\.\.?/)+(?:[^"#?:]*/)?)"', r'href="\1index.html"', html)
         dest.write_text(html, encoding="utf-8")
 
-    page("index.html", "index.html", "home", latest_alert=alerts[0] if alerts else None, posts=blog[:3])
+    fc = load_forecast()
+    page("index.html", "index.html", "home", latest_alert=alerts[0] if alerts else None, posts=blog[:3], fc=fc)
     page("about.html", "about/index.html", "about")
     page("publications.html", "publications/index.html", "publications",
          groups=[(t, lab, [p for p in site.get("publications", []) if p["type"] == t])
@@ -158,6 +220,7 @@ def build(drafts=False):
     page("alerts_list.html", "alerts/index.html", "alerts", alerts=alerts)
     for a in alerts:
         page("alert.html", f"alerts/{a['slug']}/index.html", "alerts", alert=a)
+    page("forecast.html", "forecast/index.html", "forecast", fc=fc)
     page("contact.html", "contact/index.html", "contact")
     page("404.html", "404.html", "")
 
@@ -373,6 +436,11 @@ if __name__ == "__main__":
         if "--push" in sys.argv:
             build()
             push(f"इशारा {day} (हवामान विज्ञान)")
+    elif cmd == "forecast":                   # called by extreme-rainfall-aiera after it writes latest.json
+        build()
+        if "--push" in sys.argv:
+            fc = load_forecast()
+            push(f"AI पाऊस अंदाज {fc['base_date'] if fc else ''}".strip())
     elif cmd == "new-blog":
         if len(args) < 2:
             raise SystemExit("उदा.: python build.py new-blog monsoon-2026")

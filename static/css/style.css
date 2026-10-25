@@ -267,3 +267,66 @@ ul.plain li { margin-bottom: .7em; }
 .x-ico { width: 22px; text-align: center; font-weight: 700; font-size: 1.05rem; line-height: 1; }
 .pub-status { display: inline-block; font-size: .85rem; font-weight: 700; color: #1b6e3a; background: #e3f4e8; border-radius: 6px; padding: 0 8px; margin-left: 4px; }
 .pub-note { display: block; font-size: .88rem; color: var(--muted); font-style: italic; margin-top: 2px; }
+
+/* AI extreme-rainfall forecast (forecast.html) — blue scale on purpose: IMD colours are reserved for official warnings */
+.fc-head h2 { margin: 0 0 .2em; }
+.fc-days { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+.fc-day { border-radius: 10px; padding: 14px; border: 1px solid var(--line); background: var(--card); }
+.fc-day p { margin: 0 0 6px; }
+.fc-date { font-weight: 600; }
+.fc-band { font-size: 1.35rem; font-weight: 700; }
+.fc-score, .fc-ifs { font-size: .92rem; }
+.fc-hist { font-size: .88rem; color: var(--muted); line-height: 1.4; }
+.fc-low { background: #f3f7fa; } .fc-low .fc-band { color: #5d6b7a; }
+.fc-moderate { background: #e3eff6; } .fc-moderate .fc-band { color: #2c6f93; }
+.fc-high { background: #c9e0ee; } .fc-high .fc-band { color: #0b4f71; }
+.fc-very_high { background: #0b4f71; color: #fff; border-color: #0b4f71; }
+.fc-very_high .fc-hist { color: #d4e6f0; }
+.fc-chip { display: inline-block; border-radius: 999px; padding: 0 10px; margin: 0 4px 4px 0; font-weight: 600; font-size: .9rem; }
+.fc-chip.fc-very_high { color: #fff; }
+
+/* AI district rain categories — rain-amount blues, not IMD warning colours */
+.cat-legend { display: flex; flex-wrap: wrap; gap: 6px; }
+.cat-chip { border-radius: 999px; padding: 2px 12px; font-weight: 600; font-size: .92rem; border: 1px solid var(--line); }
+.cat-chip small { font-weight: 400; opacity: .85; }
+.cat-0 { background: #f4f6f8; fill: #f4f6f8; }
+.cat-1 { background: #cfe3f4; fill: #cfe3f4; }
+.cat-2 { background: #6aa8d8; fill: #6aa8d8; color: #0b2233; }
+.cat-3 { background: #0b4f71; fill: #0b4f71; color: #fff; }
+.cat-4 { background: #3b1f6e; fill: #3b1f6e; color: #fff; }
+.cat-maps { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 16px 0; }
+.cat-maps figure { margin: 0; text-align: center; }
+.cat-maps svg { width: 100%; height: auto; }
+.cat-maps path { stroke: #fff; stroke-width: 1; }
+.cat-maps path:hover { stroke: var(--ink); stroke-width: 2; }
+.cat-maps figcaption { font-size: .9rem; color: var(--muted); }
+.cat-table-wrap { overflow-x: auto; margin: 8px 0 12px; }
+.cat-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+.cat-table th, .cat-table td { padding: 4px 8px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+.cat-table td { text-align: center; }
+.cat-group th { background: var(--brand-soft); color: var(--brand); }
+.home-fc { display: grid; grid-template-columns: minmax(200px, 320px) 1fr; gap: 24px; align-items: start; }
+.home-fc > .muted { grid-column: 1 / -1; margin: 0; }
+.home-fc-map { margin: 0; }
+.home-fc-map svg { width: 100%; height: auto; }
+.home-fc-map path { stroke: #fff; stroke-width: 1; }
+.home-fc-map figcaption { font-size: .9rem; color: var(--muted); text-align: center; }
+@media (max-width: 760px) { .home-fc { grid-template-columns: 1fr; } }
+
+/* taluka selector */
+.tq-pick { display: block; font-weight: 600; margin: 12px 0; }
+.tq-pick select { font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; max-width: 100%; margin-left: 6px; }
+.tq-body { display: grid; grid-template-columns: 1fr minmax(220px, 340px); gap: 20px; align-items: start; }
+.tq-days { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.tq-days h3 { grid-column: 1 / -1; margin: 0; }
+.tq-day { border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: var(--card); }
+.tq-day p { margin: 0 0 8px; }
+.tq-bar { display: grid; grid-template-columns: 8.5em 1fr 2.6em; gap: 6px; align-items: center; font-size: .8rem; margin-bottom: 3px; }
+.tq-bar i { background: #eef2f6; border-radius: 4px; height: 8px; overflow: hidden; }
+.tq-bar b { display: block; height: 100%; border-radius: 4px; }
+.tq-bar em { font-style: normal; text-align: right; color: var(--muted); }
+.tq-map { width: 100%; height: auto; cursor: pointer; }
+.tq-map path { stroke: #fff; stroke-width: .6; }
+.tq-map path:hover { stroke: var(--ink); stroke-width: 1.2; }
+.tq-map path.on { stroke: #e65100; stroke-width: 2.5; }
+@media (max-width: 760px) { .tq-body { grid-template-columns: 1fr; } }

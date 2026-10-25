@@ -1,0 +1,117 @@
+{
+ "issued_utc": "2026-10-25T16:16Z",
+ "base_date": "2026-10-25",
+ "input_days": [
+  "2026-10-21",
+  "2026-10-22",
+  "2026-10-23",
+  "2026-10-24",
+  "2026-10-25"
+ ],
+ "source": "ECMWF IFS open data (CC BY 4.0), 00 UTC, daily mean of 0/6/12/18 h",
+ "model": "CNN-LSTM trained on ERA5 1979-2008 (validation 2009-2015, test 2016-2022)",
+ "bands": [
+  {
+   "key": "low",
+   "mr": "कमी",
+   "from": 0.0
+  },
+  {
+   "key": "moderate",
+   "mr": "मध्यम",
+   "from": 0.5
+  },
+  {
+   "key": "high",
+   "mr": "जास्त",
+   "from": 0.75
+  },
+  {
+   "key": "very_high",
+   "mr": "खूप जास्त",
+   "from": 0.9
+  }
+ ],
+ "regions": [
+  {
+   "id": "vidarbha",
+   "name_mr": "विदर्भ",
+   "name_en": "Vidarbha",
+   "threshold_mm": 9.56,
+   "variables": [
+    "vert_anom",
+    "shum_anom",
+    "ws200_anom",
+    "ws850_anom"
+   ],
+   "days": [
+    {
+     "lead": 1,
+     "date": "2026-10-26",
+     "score": 0.7594,
+     "in_season": true,
+     "band": "high",
+     "band_mr": "जास्त",
+     "hist_hit_rate": 0.3,
+     "hist_n": 210,
+     "test_recall": 0.918,
+     "test_precision": 0.391,
+     "ifs_rain_mm": 0.0
+    },
+    {
+     "lead": 2,
+     "date": "2026-10-27",
+     "score": 0.9072,
+     "in_season": true,
+     "band": "very_high",
+     "band_mr": "खूप जास्त",
+     "hist_hit_rate": 0.6242774566473989,
+     "hist_n": 173,
+     "test_recall": 0.925,
+     "test_precision": 0.35,
+     "ifs_rain_mm": 0.5
+    },
+    {
+     "lead": 3,
+     "date": "2026-10-28",
+     "score": 0.9218,
+     "in_season": true,
+     "band": "very_high",
+     "band_mr": "खूप जास्त",
+     "hist_hit_rate": 0.6011560693641619,
+     "hist_n": 173,
+     "test_recall": 0.914,
+     "test_precision": 0.371,
+     "ifs_rain_mm": 7.7
+    },
+    {
+     "lead": 4,
+     "date": "2026-10-29",
+     "score": 0.8546,
+     "in_season": true,
+     "band": "high",
+     "band_mr": "जास्त",
+     "hist_hit_rate": 0.34285714285714286,
+     "hist_n": 315,
+     "test_recall": 0.873,
+     "test_precision": 0.327,
+     "ifs_rain_mm": 5.8
+    },
+    {
+     "lead": 5,
+     "date": "2026-10-30",
+     "score": 0.3203,
+     "in_season": true,
+     "band": "low",
+     "band_mr": "कमी",
+     "hist_hit_rate": 0.022411953041622197,
+     "hist_n": 1874,
+     "test_recall": 0.843,
+     "test_precision": 0.329,
+     "ifs_rain_mm": 0.7
+    }
+   ]
+  }
+ ],
+ "categorical": []
+}

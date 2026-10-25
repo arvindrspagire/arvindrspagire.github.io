@@ -23,7 +23,8 @@
       <nav class="nav">
         {% set links = [("home", "", "मुख्यपृष्ठ"), ("about", "about/", "माझ्याविषयी"),
                         ("publications", "publications/", "संशोधन"), ("blog", "blog/", "ब्लॉग"),
-                        ("alerts", "alerts/", "हवामान इशारे"), ("contact", "contact/", "संपर्क")] %}
+                        ("alerts", "alerts/", "हवामान इशारे"), ("forecast", "forecast/", "AI अंदाज"),
+                        ("contact", "contact/", "संपर्क")] %}
         {% for key, href, label in links %}
         <a href="{{ root }}{{ href }}"{% if active == key %} class="active" aria-current="page"{% endif %}>{{ label }}</a>
         {% endfor %}
