@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../static/css/style.css?v=0dad9b06">
+  <link rel="stylesheet" href="../static/css/style.css?v=234468f1">
 </head>
 <body>
   <header class="site-header">
@@ -497,7 +497,7 @@
       out.innerHTML = '<h3>' + D.names[i] + '</h3>' + D.days.map(function (d, j) {
         var c = D.cat[i][j], p = D.prob[i][j];
         return '<article class="tq-day cat-edge-' + c + '"><p class="fc-date">' + d.date_mr + '</p>' +
-          '<p class="tq-cat"><span class="cat-chip cat-' + c + '">' + D.classes[c].mr + '</span></p>' +
+          '<p class="tq-cat">अंदाज: <span class="cat-chip cat-' + c + '">' + D.classes[c].mr + '</span></p><p class="tq-note">प्रत्येक श्रेणीची शक्यता:</p>' +
           D.classes.map(function (k, n) {
             var v = Math.round(p[n] * 100);
             return '<div class="tq-bar"><span>' + k.mr + '</span><i><b class="cat-' + n + '" style="width:' + v + '%"></b></i><em>' + mr(v) + '%</em></div>';
