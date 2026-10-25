@@ -121,8 +121,7 @@ def build(drafts=False):
     pubs = site.get("publications", [])
     stats = [(mr_num(sum(p["type"] in ("journal", "preprint") for p in pubs)), "शोधनिबंध व प्रीप्रिंट"),
              (mr_num(sum(p["type"] == "conference" for p in pubs)), "परिषद सादरीकरणे"),
-             (mr_num(date.today().year - 2020) + "+", "वर्षांचा संशोधन अनुभव"),
-             (mr_num(len(site.get("research", []))), "चालू संशोधन प्रकल्प")]
+             (mr_num(date.today().year - 2020) + "+", "वर्षांचा संशोधन अनुभव")]
     common = dict(site=site, levels=LEVELS, has_photo=photo.exists(), v=h.hexdigest()[:8], stats=stats,
                   built=mr_date(date.today()), year=mr_num(date.today().year))
 

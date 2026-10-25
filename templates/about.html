@@ -11,13 +11,6 @@
   <ul>{% for i in site.interests %}<li>{{ i }}</li>{% endfor %}</ul>
 </section>
 
-{% if site.research %}
-<section class="section">
-  <h2>चालू संशोधन</h2>
-  <div class="research-grid">{% for r in site.research %}{{ research_card(r) }}{% endfor %}</div>
-</section>
-{% endif %}
-
 <section class="section">
   <h2>कार्यानुभव</h2>
   <ol class="timeline">

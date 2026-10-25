@@ -7,13 +7,6 @@
   Google Scholar किंवा ORCID पाहा.</p>
 {{ profile_links(site) }}
 
-{% if site.research %}
-<section class="section">
-  <h2>चालू संशोधन</h2>
-  <div class="research-grid">{% for r in site.research %}{{ research_card(r) }}{% endfor %}</div>
-</section>
-{% endif %}
-
 {% for key, label, items in groups if items %}
 <section class="section">
   <h2>{{ label }}</h2>

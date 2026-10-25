@@ -46,6 +46,7 @@
   {% if site.contact.scholar %}<a class="pl" href="{{ site.contact.scholar }}" rel="noopener" target="_blank">{{ icon("scholar") }}<span>Google Scholar</span></a>{% endif %}
   {% if site.contact.orcid %}<a class="pl" href="{{ site.contact.orcid }}" rel="noopener" target="_blank">{{ icon("orcid") }}<span>ORCID</span></a>{% endif %}
   {% if site.contact.github %}<a class="pl" href="{{ site.contact.github }}" rel="noopener" target="_blank">{{ icon("github") }}<span>GitHub</span></a>{% endif %}
+  {% if site.contact.twitter %}<a class="pl" href="{{ site.contact.twitter }}" rel="noopener" target="_blank"><span class="x-ico" aria-hidden="true">𝕏</span><span>@{{ site.contact.twitter.rstrip('/').split('/')[-1] }}</span></a>{% endif %}
   <a class="pl" href="mailto:{{ site.contact.email }}">{{ icon("mail") }}<span>ई-मेल</span></a>
 </p>
 {%- endmacro %}

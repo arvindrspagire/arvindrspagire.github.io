@@ -26,18 +26,6 @@
   {% endfor %}
 </section>
 
-{% if site.research %}
-<section class="section">
-  <div class="section-head">
-    <h2>चालू संशोधन</h2>
-    <a href="{{ root }}publications/">संशोधन व प्रकाशने →</a>
-  </div>
-  <div class="research-grid">
-    {% for r in site.research %}{{ research_card(r) }}{% endfor %}
-  </div>
-</section>
-{% endif %}
-
 <section class="section">
   <div class="section-head">
     <h2>ताजा हवामान इशारा</h2>
