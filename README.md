@@ -36,29 +36,22 @@ python build.py new-blog monsoon-2026      (नाव इंग्रजी ल�
 नाव, पद, अनुभव, शिक्षण, प्रकाशने, संपर्क — सर्व `site.yaml` मध्ये आहे. तुमचा फोटो
 `static/images/profile.jpg` या नावाने ठेवा (चौरस, किमान 400×400). फोटो नसल्यास "अ" आद्याक्षर दिसते.
 
-## ऑनलाइन प्रसिद्ध करणे (GitHub Pages — मोफत)
+## ऑनलाइन प्रसिद्ध करणे (GitHub Pages)
 
-पहिल्यांदा एकदाच:
-1. github.com वर नवीन repository तयार करा, उदा. `arvindpagire.github.io` (हे नाव ठेवल्यास पत्ता
-   `https://arvindpagire.github.io` होतो; `arvindpagire` ऐवजी तुमचे GitHub username).
-2. या फोल्डरमध्ये:
-   ```
-   git init -b main
-   git add .
-   git commit -m "Marathi personal website"
-   git remote add origin https://github.com/<username>/<username>.github.io.git
-   git push -u origin main
-   ```
-3. GitHub वर Settings → Pages → Source: "Deploy from a branch", Branch: `main`, Folder: `/docs` → Save.
+संकेतस्थळ प्रसिद्ध झाले आहे: **https://arvindrspagire.github.io**
+(repository: github.com/arvindrspagire/arvindrspagire.github.io, Pages source: `main` → `/docs`)
 
-त्यानंतर दररोज:
+बदल केल्यानंतर दरवेळी:
 ```
 python build.py
 git add .
 git commit -m "इशारा 2026-10-25"
 git push
 ```
-एक-दोन मिनिटांत संकेतस्थळ अद्ययावत होते. (`docs/` कोणत्याही इतर web host वर — Netlify, स्वतःचा सर्व्हर — थेट अपलोड करता येतो.)
+एक-दोन मिनिटांत संकेतस्थळ अद्ययावत होते.
+
+**सोपा मार्ग:** `site.bat` वर double-click केल्यास myenv आपोआप वापरून संकेतस्थळ तयार होते आणि
+browser मध्ये http://localhost:8000 उघडते. `docs/index.html` थेट उघडले तरी सर्व दुवे चालतात.
 
 ## फोल्डर रचना
 
