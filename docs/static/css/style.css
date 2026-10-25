@@ -221,6 +221,11 @@ ul.plain li { margin-bottom: .7em; }
 .reel-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(170px, 200px); gap: 14px;
   overflow-x: auto; padding: 4px 2px 14px; scroll-snap-type: x mandatory; }
 .reel-slide { margin: 0; scroll-snap-align: start; }
+.reel-gif { margin: 0 auto 10px; max-width: 360px; text-align: center; }
+.reel-gif img { display: block; width: 100%; height: auto; border-radius: 16px; box-shadow: 0 10px 30px rgba(16, 32, 48, .22); }
+.reel-gif figcaption { font-size: .88rem; margin-top: 8px; }
+.reel-all { margin-top: 12px; }
+.reel-all summary { cursor: pointer; font-weight: 600; color: var(--brand); text-align: center; margin-bottom: 12px; }
 .reel-slide img { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: cover;
   border-radius: 12px; box-shadow: var(--shadow); transition: transform .15s; }
 .reel-slide a:hover img { transform: translateY(-3px); }

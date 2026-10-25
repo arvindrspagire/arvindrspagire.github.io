@@ -304,7 +304,15 @@ def hawaman(day=None):
         key = re.sub(r"^\d+_|(_slide)?$", "", f.stem)
         slides.append({"src": f"{rel}/reel/{f.name}", "label": SLIDE_MR.get(key, key.replace("_", " "))})
 
-    body = [f"**{horizon}** · स्रोत: हवामान विज्ञान स्वयंचलित विश्लेषण", "", lines("\n".join(first[1:])), ""]
+    # the same slides as one slow, looping GIF (360×640, 4 s per slide; ~0.6 MB)
+    gif = None
+    if slides:
+        frames = [Image.open(img_dir / "reel" / Path(s["src"]).name).convert("RGB").resize((360, 640), Image.LANCZOS)
+                  .quantize(colors=160, method=Image.Quantize.MEDIANCUT) for s in slides]
+        frames[0].save(img_dir / "reel.gif", save_all=True, append_images=frames[1:], duration=4000, loop=0, optimize=True)
+        gif = f"{rel}/reel.gif"
+
+    body = [f"**{horizon}** · वैयक्तिक विश्लेषणावर आधारित", "", lines("\n".join(first[1:])), ""]
     if imgs:
         body += [f"![{horizon}](../../{rel}/{imgs[0]})", ""]
     if len(parts) > 1:
@@ -324,7 +332,7 @@ def hawaman(day=None):
     q = lambda v: json.dumps(v, ensure_ascii=False)
     front = [f"title: {q(title)}", f"date: {day}", f"level: {level}",
              f"valid: {q(mr_date(d) + ' — ' + horizon)}",
-             f"regions: {q(regions)}", f"hazards: {q(hazards)}", f"slides: {q(slides)}", "source: hawaman-vidnyan"]
+             f"regions: {q(regions)}", f"hazards: {q(hazards)}", f"slides: {q(slides)}", f"gif: {q(gif)}", "source: hawaman-vidnyan"]
     dest = CONTENT / "alerts" / f"{day}-hawaman.md"
     dest.write_text("---\n" + "\n".join(front) + "\n---\n\n" + "\n".join(body).strip() + "\n", encoding="utf-8")
     print(f"हवामान विज्ञान विश्लेषण ({level}, {len(slides)} slides): {dest}")

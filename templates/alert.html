@@ -19,6 +19,14 @@
   {% if alert.slides %}
   <section class="reel">
     <h2>आजचे दृश्य विश्लेषण <span class="muted">(रील स्लाइड्स)</span></h2>
+    {% if alert.gif %}
+    <figure class="reel-gif">
+      <img src="{{ root }}{{ alert.gif }}" alt="आजच्या हवामान विश्लेषणाच्या सर्व स्लाइड्स (चलचित्र)" width="360" height="640">
+      <figcaption class="muted">{{ alert.slides | length | mr }} स्लाइड्स · प्रत्येक ४ सेकंद · सतत पुनरावृत्ती</figcaption>
+    </figure>
+    <details class="reel-all">
+      <summary>सर्व स्लाइड्स स्वतंत्रपणे पाहा</summary>
+    {% endif %}
     <div class="reel-strip">
       {% for s in alert.slides %}
       <figure class="reel-slide">
@@ -27,6 +35,7 @@
       </figure>
       {% endfor %}
     </div>
+    {% if alert.gif %}</details>{% endif %}
   </section>
   {% endif %}
   <div class="prose">{{ alert.body | safe }}</div>
