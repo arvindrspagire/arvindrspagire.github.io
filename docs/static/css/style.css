@@ -247,3 +247,5 @@ ul.plain li { margin-bottom: .7em; }
 .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
 .site-footer .muted { color: #9fb3c2; }
 .x-ico { width: 22px; text-align: center; font-weight: 700; font-size: 1.05rem; line-height: 1; }
+.pub-status { display: inline-block; font-size: .85rem; font-weight: 700; color: #1b6e3a; background: #e3f4e8; border-radius: 6px; padding: 0 8px; margin-left: 4px; }
+.pub-note { display: block; font-size: .88rem; color: var(--muted); font-style: italic; margin-top: 2px; }

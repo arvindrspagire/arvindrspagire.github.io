@@ -14,7 +14,7 @@
     {% for p in items %}
     <li>
       <span class="pub-year">{{ p.year | mr }}</span>
-      <span>{{ p.text }} {{ doi_link(p) }}</span>
+      <span>{{ p.text }}{% if p.status %} <span class="pub-status">{{ p.status }}</span>{% endif %} {{ doi_link(p) }}{% if p.note and not p.doi %} <span class="pub-note">{{ p.note }}</span>{% endif %}</span>
     </li>
     {% endfor %}
   </ol>

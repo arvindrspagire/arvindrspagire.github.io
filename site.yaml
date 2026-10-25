@@ -87,6 +87,11 @@ training:
 # doi: फक्त DOI क्रमांक लिहा (https://doi.org/ आपोआप जोडले जाते)
 publications:
   - type: journal
+    year: 2026
+    text: "Pagire, A., Ratna, S. B., Chattopadhyay, R., Sreejith, O. P., & Acharya, N. (2026). Deep learning-based prediction of extreme rainfall circulation days over Vidarbha using large-scale reanalysis precursors. Bulletin of Atmospheric Science and Technology (Springer Nature)."
+    status: "स्वीकृत (Accepted)"
+    note: "DOI प्रकाशनानंतर अद्ययावत केला जाईल"   # प्रकाशित झाल्यावर status/note काढून doi: "10.1007/..." लिहा
+  - type: journal
     year: 2025
     text: "Pagire, A., Ratna, S. B., Cherchi, A., Sanap, S. D., & Sreejith, O. P. (2025). ENSO–MJO interaction and its association with monsoon extreme rainfall events over the Indian region. International Journal of Climatology, 45(14), e70093."
     doi: "10.1002/joc.70093"
