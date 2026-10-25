@@ -227,7 +227,8 @@ def hawaman(day=None):
     import json
     from PIL import Image
     site = yaml.safe_load((ROOT / "site.yaml").read_text(encoding="utf-8"))
-    src = Path(site.get("hawaman_dir", r"D:\01_Research_Projects\hawaman-vidnyan"))
+    import os                                   # HAWAMAN_DIR is set by the GitHub Actions workflow
+    src = Path(os.environ.get("HAWAMAN_DIR") or site.get("hawaman_dir", r"D:\01_Research_Projects\hawaman-vidnyan"))
     out_root = src / "twitter" / "output"
     day = day or (max(p.name for p in out_root.iterdir() if re.fullmatch(r"\d{4}-\d{2}-\d{2}", p.name))
                   if out_root.exists() else None)
@@ -296,6 +297,7 @@ def push(msg):
     if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode == 0:
         print("बदल नाहीत; push केले नाही"); return
     run("commit", "-q", "-m", msg)
+    run("pull", "-q", "--rebase")             # laptop and GitHub Actions may both publish
     run("push", "-q")
     print("GitHub वर push केले")
 
