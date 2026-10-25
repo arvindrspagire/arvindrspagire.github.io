@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import level_badge %}
 {% block title %}{{ alert.title }} — हवामान इशारा{% endblock %}
-{% block description %}{{ alert.lvl.label }} {{ "अंदाज" if alert.level == "info" else "इशारा" }}: {{ alert.title }} ({{ alert.date_mr }}){% endblock %}
+{% block description %}{{ alert.lvl.label }} {{ "विश्लेषण" if alert.level == "info" else "इशारा" }}: {{ alert.title }} ({{ alert.date_mr }}){% endblock %}
 {% block content %}
 <article class="article">
   <p class="muted"><a href="{{ root }}alerts/">← सर्व इशारे</a></p>
@@ -16,6 +16,19 @@
       {% if alert.hazards %}<div><dt>धोके</dt><dd>{{ alert.hazards | join(", ") }}</dd></div>{% endif %}
     </dl>
   </div>
+  {% if alert.slides %}
+  <section class="reel">
+    <h2>आजचे दृश्य विश्लेषण <span class="muted">(रील स्लाइड्स)</span></h2>
+    <div class="reel-strip">
+      {% for s in alert.slides %}
+      <figure class="reel-slide">
+        <a href="{{ root }}{{ s.src }}" target="_blank" rel="noopener"><img src="{{ root }}{{ s.src }}" alt="{{ s.label }}" loading="lazy" width="540" height="960"></a>
+        <figcaption><span class="slide-n">{{ loop.index | mr }}</span> {{ s.label }}</figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
   <div class="prose">{{ alert.body | safe }}</div>
   <p class="disclaimer">{{ site.alert_disclaimer }}</p>
 </article>

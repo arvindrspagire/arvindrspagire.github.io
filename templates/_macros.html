@@ -1,5 +1,5 @@
 {% macro level_badge(lvl, key) -%}
-<span class="badge badge-{{ key }}">{% if key == "info" %}{{ lvl.label }} अंदाज{% else %}{{ lvl.label }} इशारा · {{ lvl.action }}{% endif %}</span>
+<span class="badge badge-{{ key }}">{% if key == "info" %}{{ lvl.label }} विश्लेषण{% else %}{{ lvl.label }} इशारा · {{ lvl.action }}{% endif %}</span>
 {%- endmacro %}
 
 {% macro alert_card(a, root, compact=False) -%}

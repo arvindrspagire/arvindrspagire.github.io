@@ -6,7 +6,7 @@
     python build.py new-alert       आजच्या तारखेचा नवीन इशारा तयार करा (new alert for today)
     python build.py new-blog नाव     नवीन ब्लॉग लेख तयार करा (new blog post; slug in English)
     python build.py hawaman [YYYY-MM-DD] [--push]
-                                    हवामान विज्ञान pipeline च्या आजच्या tweet वरून इशारा तयार करा
+                                    हवामान विज्ञान pipeline च्या आजच्या output वरून विश्लेषण पान तयार करा
                                     (alert from the hawaman-vidnyan daily output; --push = build + git push)
     --drafts                        draft: true असलेले लेखही दाखवा (include drafts, for preview only)
 
@@ -52,7 +52,7 @@ LEVELS = {
     "orange": dict(label="नारंगी", action="तयार राहा", desc="धोकादायक हवामानाची शक्यता; आवश्यक तयारी करा."),
     "red":    dict(label="लाल", action="कृती करा", desc="अतितीव्र हवामान; स्थानिक प्रशासनाच्या सूचनांचे पालन करा."),
     # used when no IMD district warning was available: model guidance must never look like a warning
-    "info":   dict(label="माहितीपर", action="मॉडेल-आधारित अंदाज", desc="IMD चा जिल्हानिहाय इशारा उपलब्ध नसताना प्रसिद्ध केलेला मॉडेल-आधारित अंदाज; अधिकृत इशारा नाही."),
+    "info":   dict(label="माहितीपर", action="मॉडेल-आधारित विश्लेषण", desc="IMD चा जिल्हानिहाय इशारा उपलब्ध नसताना प्रसिद्ध केलेले मॉडेल-आधारित हवामान विश्लेषण; अधिकृत इशारा नाही."),
 }
 
 md = mistune.create_markdown(plugins=["table", "strikethrough", "url"])
@@ -218,16 +218,36 @@ draft: true              # प्रसिद्ध करताना ही �
 
 HAWAMAN_COLOR = {1: "red", 2: "orange", 3: "yellow", 4: "green"}     # IMD district warning colour codes
 REGIONS_MR = ["कोकण", "मध्य महाराष्ट्र", "मराठवाडा", "विदर्भ"]
-HORIZON_MR = {"short": "अल्पकालीन अंदाज", "medium": "मध्यम कालावधी अंदाज",
-              "extended": "विस्तारित अंदाज", "seasonal": "हंगामी अंदाज"}
+HORIZON_MR = {"short": "अल्पकालीन विश्लेषण (१–३ दिवस)", "medium": "मध्यम कालावधी विश्लेषण (४–१० दिवस)",
+              "extended": "विस्तारित कालावधी विश्लेषण (२–४ आठवडे)", "seasonal": "हंगामी विश्लेषण (१–३ महिने)"}
+SLIDE_MR = {"cover": "मुखपृष्ठ", "short_range": "अल्पकालीन विश्लेषण", "satellite": "उपग्रह निरीक्षण",
+            "circulation_today": "आजची वाऱ्यांची स्थिती", "medium_range": "मध्यम कालावधी विश्लेषण",
+            "circulation_week": "आठवड्याची वाऱ्यांची स्थिती", "extended_range": "विस्तारित कालावधी विश्लेषण",
+            "seasonal": "हंगामी विश्लेषण", "outro": "समारोप"}
+
+# the site presents the pipeline output as analysis, never as a forecast ("अंदाज")
+ANALYSIS_WORDS = [
+    ("हा मॉडेल-आधारित अंदाज आहे", "हे मॉडेल-आधारित विश्लेषण आहे"),
+    ("महाराष्ट्राचा हवामान अंदाज", "महाराष्ट्राचे हवामान विश्लेषण"),
+    ("या काळाचा अंदाज", "या काळाचे विश्लेषण"),
+    ("संभाव्य अंदाजांवर", "संभाव्य मॉडेल-परिणामांवर"),
+    ("विस्तारित अंदाज नकाशे", "विस्तारित कालावधी नकाशे"),
+]
+
+
+def analysis_words(text):
+    for a, b in ANALYSIS_WORDS:
+        text = text.replace(a, b)
+    text = re.sub(r"पैकी (\S+) अंदाज\)", r"पैकी \1 सदस्य)", text)
+    return re.sub(r"अंदाज(?![\u093e-\u094d\u0902])", "विश्लेषण", text)    # keep अंदाजे (approximately)
 
 
 def hawaman(day=None):
-    """Turn the hawaman-vidnyan daily tweet package into content/alerts/<date>-hawaman.md (+ images)."""
+    """Turn the hawaman-vidnyan daily output (tweet, reel slides, discussion) into content/alerts/<date>-hawaman.md."""
     import json
+    import os                                   # HAWAMAN_DIR is set by the GitHub Actions workflow
     from PIL import Image
     site = yaml.safe_load((ROOT / "site.yaml").read_text(encoding="utf-8"))
-    import os                                   # HAWAMAN_DIR is set by the GitHub Actions workflow
     src = Path(os.environ.get("HAWAMAN_DIR") or site.get("hawaman_dir", r"D:\01_Research_Projects\hawaman-vidnyan"))
     out_root = src / "twitter" / "output"
     day = day or (max(p.name for p in out_root.iterdir() if re.fullmatch(r"\d{4}-\d{2}-\d{2}", p.name))
@@ -237,11 +257,13 @@ def hawaman(day=None):
         raise SystemExit(f"हवामान विज्ञान tweet सापडले नाही: {pkg}")
     d = date.fromisoformat(day)
     meta = json.loads((pkg / "meta.json").read_text(encoding="utf-8")) if (pkg / "meta.json").exists() else {}
+    runs = sorted((src / "data" / "runs").glob(f"{d:%Y%m%d}_*"))
+    run = runs[-1] if runs else None
 
-    # IMD warnings for that day decide the colour; without them the alert is "info" (model guidance only)
+    # IMD warnings for that day decide the colour; without them the alert is "info" (model-based analysis only)
     level, regions, hazards = "info", list(REGIONS_MR), []
-    runs = sorted((src / "data" / "runs").glob(f"{d:%Y%m%d}_*/processed/facts.json"))
-    warn = json.loads(runs[-1].read_text(encoding="utf-8")).get("warnings", {}) if runs else {}
+    facts = run / "processed" / "facts.json" if run else None
+    warn = json.loads(facts.read_text(encoding="utf-8")).get("warnings", {}) if facts and facts.exists() else {}
     wday = next((w for w in warn.get("days", []) if w["date"] == day), None) if warn.get("available") else None
     if wday and wday["districts"]:
         sys.path.insert(0, str(src / "src"))
@@ -251,42 +273,61 @@ def hawaman(day=None):
         regions = [x["name_mr"] for x in hit] or regions
         hazards = sorted({WARNING_MR.get(c) for x in hit for c in x["codes"]} - {None})
 
-    thread = (pkg / "thread.txt").read_text(encoding="utf-8")
+    thread = analysis_words((pkg / "thread.txt").read_text(encoding="utf-8"))
     parts = [s.strip() for s in re.split(r"\n-{3,}\n", thread) if s.strip()]
     first = parts[0].splitlines()
-    title = re.sub(r"^\W+", "", first[0]).strip() or "महाराष्ट्र हवामान"
-    horizon = HORIZON_MR.get(meta.get("horizon"), "हवामान अंदाज")
+    title = re.sub(r"^\W+", "", first[0]).strip() or "महाराष्ट्र हवामान विश्लेषण"
+    horizon = HORIZON_MR.get(meta.get("horizon"), "हवामान विश्लेषण")
 
     def lines(s):                       # keep tweet line breaks, drop hashtag lines
         return "  \n".join(l for l in s.splitlines() if not l.startswith("#"))
 
     img_dir = ROOT / "static" / "images" / "alerts" / day
+    rel = f"static/images/alerts/{day}"
+
+    def save(src_img, dest, box):
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        im = Image.open(src_img).convert("RGB")
+        im.thumbnail(box)
+        im.save(dest, quality=80, optimize=True)
+
     imgs = []
     for name in meta.get("media") or sorted(p.name for p in pkg.glob("[0-9]_*.jpg")):
         if (pkg / name).exists():
-            img_dir.mkdir(parents=True, exist_ok=True)
-            im = Image.open(pkg / name).convert("RGB")
-            im.thumbnail((1200, 1200))
-            im.save(img_dir / name, quality=82, optimize=True)
+            save(pkg / name, img_dir / name, (1200, 1200))
             imgs.append(name)
+
+    # reel slides (1080×1920) → 540×960 gallery images
+    slides = []
+    for f in sorted((run / "graphics" / "instagram").glob("*.jpg")) if run else []:
+        save(f, img_dir / "reel" / f.name, (540, 960))
+        key = re.sub(r"^\d+_|(_slide)?$", "", f.stem)
+        slides.append({"src": f"{rel}/reel/{f.name}", "label": SLIDE_MR.get(key, key.replace("_", " "))})
 
     body = [f"**{horizon}** · स्रोत: हवामान विज्ञान स्वयंचलित विश्लेषण", "", lines("\n".join(first[1:])), ""]
     if imgs:
-        body += [f"![{horizon}](../../static/images/alerts/{day}/{imgs[0]})", ""]
+        body += [f"![{horizon}](../../{rel}/{imgs[0]})", ""]
     if len(parts) > 1:
         body += ["### हवामानामागचे कारण", ""] + [lines(s) + "\n" for s in parts[1:]]
-    body += [f"![हवामान प्रणाली](../../static/images/alerts/{day}/{n})\n" for n in imgs[1:]]
+    body += [f"![वाऱ्यांची स्थिती व दाब प्रणाली](../../{rel}/{n})\n" for n in imgs[1:]]
+    disc = run / "content" / "marathi_discussion.txt" if run else None
+    if disc and disc.exists():
+        text = analysis_words(disc.read_text(encoding="utf-8")).strip().splitlines()
+        if text and not text[0].startswith("#"):
+            text = text[1:]                                   # first line repeats the page title/date
+        text = [("### " + l.lstrip("# ").strip()) if l.startswith("#") else l for l in text]
+        body += ["", "## सविस्तर हवामान विश्लेषण", ""] + text
     tw = site.get("contact", {}).get("twitter")
     if tw:
         body += ["", f"दैनंदिन अपडेटसाठी X वर फॉलो करा: [@{tw.rstrip('/').rsplit('/', 1)[-1]}]({tw})"]
 
     q = lambda v: json.dumps(v, ensure_ascii=False)
     front = [f"title: {q(title)}", f"date: {day}", f"level: {level}",
-             f"valid: {q(mr_date(d) + ' पासून — ' + horizon)}",
-             f"regions: {q(regions)}", f"hazards: {q(hazards)}", "source: hawaman-vidnyan"]
+             f"valid: {q(mr_date(d) + ' — ' + horizon)}",
+             f"regions: {q(regions)}", f"hazards: {q(hazards)}", f"slides: {q(slides)}", "source: hawaman-vidnyan"]
     dest = CONTENT / "alerts" / f"{day}-hawaman.md"
     dest.write_text("---\n" + "\n".join(front) + "\n---\n\n" + "\n".join(body).strip() + "\n", encoding="utf-8")
-    print(f"हवामान विज्ञान इशारा ({level}): {dest}")
+    print(f"हवामान विज्ञान विश्लेषण ({level}, {len(slides)} slides): {dest}")
     return day
 
 

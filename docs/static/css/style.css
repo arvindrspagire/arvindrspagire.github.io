@@ -215,6 +215,19 @@ ul.plain li { margin-bottom: .7em; }
 .disclaimer { margin-top: 2em; font-size: .95rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 1em; }
 .stale-note { margin-top: .6em; font-size: .95rem; }
 
+/* reel slides gallery on alert pages */
+.reel { margin: 0 0 1.8em; }
+.reel h2 { font-size: 1.25rem; }
+.reel-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(170px, 200px); gap: 14px;
+  overflow-x: auto; padding: 4px 2px 14px; scroll-snap-type: x mandatory; }
+.reel-slide { margin: 0; scroll-snap-align: start; }
+.reel-slide img { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: cover;
+  border-radius: 12px; box-shadow: var(--shadow); transition: transform .15s; }
+.reel-slide a:hover img { transform: translateY(-3px); }
+.reel-slide figcaption { font-size: .88rem; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+.slide-n { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--brand); color: #fff; font-size: .78rem; font-weight: 700; margin-right: 4px; }
+
 /* ---------- about ---------- */
 .timeline { list-style: none; padding: 0 0 0 22px; margin: 0; border-left: 3px solid var(--brand-soft); }
 .timeline li { position: relative; padding: 0 0 22px 18px; }
