@@ -73,7 +73,7 @@
   </div>
   {% endif %}
   <p class="muted">स्वतंत्र चाचणी कालावधीतील {% if c.test_span %}({{ c.test_span | mr }}){% endif %} कौशल्य — Heidke Skill Score (मध्यक, ० = योगायोग, १ = अचूक):
-    {% for d in c.days %}{{ d.short_mr }}: {{ c.hss_mr[loop.index0] }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
+    {% for d in c.days %}{{ d.short_mr }}: {{ c.hss_mr[loop.index0] }}{% if not loop.last %} · {% endif %}{% endfor %}{% if c.hss_jjas_mr %}<br>फक्त पावसाळा (जून–सप्टेंबर): {% for d in c.days %}{{ d.short_mr }}: {{ c.hss_jjas_mr[loop.index0] }}{% if not loop.last %} · {% endif %}{% endfor %} — पावसाळ्यात दिवसागणिक श्रेणी सांगणे अधिक कठीण असल्याने कौशल्य कमी आहे.{% endif %}</p>
 </section>
 {% endfor %}
 

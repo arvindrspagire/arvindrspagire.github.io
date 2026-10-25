@@ -134,6 +134,7 @@ def load_forecast():
             lo, hi = k["from"], k["to"]
             k["range_mr"] = mr_num(f"< {hi}" if not lo else f"≥ {lo}" if hi is None else f"{lo}–{round(hi - 0.1, 1)}") + " मिमी/दिवस"
         c["hss_mr"] = [mr_num(f"{h:.2f}") if h is not None else "–" for h in c.get("test_median_hss", [])]
+        c["hss_jjas_mr"] = [mr_num(f"{h:.2f}") if h is not None else "–" for h in c.get("test_median_hss_jjas") or []]
         for r in c["regions"]:
             r["pct"] = [mr_num(round(max(p) * 100)) for p in r["prob"]]
         groups = {}
