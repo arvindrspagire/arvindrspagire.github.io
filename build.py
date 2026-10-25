@@ -118,7 +118,7 @@ def load_forecast():
     fc["base_mr"] = mr_date(date.fromisoformat(fc["base_date"]), weekday=True)
     for r in fc["regions"]:
         for d in r["days"]:
-            day = date.fromisoformat(d["date"])
+            day = date.fromisoformat(d.get("start", d["date"]))   # IMD rain day: 08:30 IST start -> 08:30 next day
             d["date_mr"] = f"{WEEKDAYS[day.weekday()]}, {mr_num(day.day)} {MONTHS[day.month - 1]}"
             d["pct"] = mr_num(round(d["score"] * 100))
             d["hist_pct"] = mr_num(round(d["hist_hit_rate"] * 100)) if d.get("hist_hit_rate") is not None else "–"
@@ -127,7 +127,7 @@ def load_forecast():
         r["threshold_mr"] = mr_num(f"{r['threshold_mm']:.1f}")
     for c in fc.get("categorical", []):
         for d in c["days"]:
-            day = date.fromisoformat(d["date"])
+            day = date.fromisoformat(d.get("start", d["date"]))   # IMD rain day: 08:30 IST start -> 08:30 next day
             d["date_mr"] = f"{WEEKDAYS[day.weekday()]}, {mr_num(day.day)} {MONTHS[day.month - 1]}"
             d["short_mr"] = f"{mr_num(day.day)} {MONTHS[day.month - 1][:3]}"
         for k in c["classes"]:
@@ -141,6 +141,9 @@ def load_forecast():
             groups.setdefault(r["group"], []).append(r)
         c["groups"] = [(SUBDIV_MR.get(g, g), sorted(rs, key=lambda r: r["name_mr"])) for g, rs in sorted(groups.items())]
         c["maps"] = district_svg(CONTENT / "forecast" / f"shapes_{c['id']}.json")
+        # Maharashtra-wide summary: how many regions fall in each category on each day
+        c["summary"] = [[mr_num(sum(r["cat"][i] == k for r in c["regions"])) for k in range(len(c["classes"]))]
+                        for i in range(len(c["days"]))]
     return fc
 
 

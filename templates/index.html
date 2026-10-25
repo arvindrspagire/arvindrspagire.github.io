@@ -51,19 +51,22 @@
     <a href="{{ root }}forecast/">संपूर्ण अंदाज →</a>
   </div>
   {% for c in fc.categorical if c.display == "selector" %}{{ taluka_selector(c) }}{% endfor %}
+  {% for c in fc.categorical if c.display == "selector" %}
   <div class="card home-fc">
-    {% for r in fc.regions %}
-    <div class="home-fc-strip">
-      <p><strong>{{ r.name_mr }} — अतिवृष्टीची शक्यता</strong></p>
-      <div class="fc-days">
-        {% for d in r.days %}
-        <div class="fc-day fc-{{ d.band }}"><p class="fc-date">{{ d.date_mr }}</p><p class="fc-band">{{ d.band_mr }}</p></div>
-        {% endfor %}
+    <p><strong>महाराष्ट्र — पुढील {{ c.days | length | mr }} दिवस: किती तालुक्यांत कोणता पाऊस?</strong></p>
+    <div class="fc-days">
+      {% for d in c.days %}{% set i = loop.index0 %}
+      <div class="fc-day">
+        <p class="fc-date">{{ d.date_mr }}</p>
+        {% for k in c.classes %}{% if c.summary[i][loop.index0] != "०" %}
+        <p class="mh-row"><span class="cat-chip cat-{{ loop.index0 }}">{{ k.mr }}</span> {{ c.summary[i][loop.index0] }}</p>
+        {% endif %}{% endfor %}
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
     <p class="muted">डीप-लर्निंग (CNN-LSTM) आधारित संशोधनात्मक अंदाज · आधार: ECMWF, {{ fc.base_mr }} · अधिकृत इशारा नाही</p>
   </div>
+  {% endfor %}
 </section>
 {% endif %}
 

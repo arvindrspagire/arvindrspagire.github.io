@@ -330,3 +330,4 @@ ul.plain li { margin-bottom: .7em; }
 .tq-map path:hover { stroke: var(--ink); stroke-width: 1.2; }
 .tq-map path.on { stroke: #e65100; stroke-width: 2.5; }
 @media (max-width: 760px) { .tq-body { grid-template-columns: 1fr; } }
+.mh-row { margin: 0 0 4px; font-size: .92rem; }

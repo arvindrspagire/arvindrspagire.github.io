@@ -3,7 +3,7 @@
 {% macro taluka_selector(c) %}
 <section class="card cat-fc tq" id="{{ c.id }}">
   <h2>{{ c.title_mr }}</h2>
-  <p class="muted">तुमचा तालुका निवडा (किंवा नकाशावर क्लिक करा) — पुढील {{ c.days | length | mr }} दिवसांचा दिवसनिहाय पाऊस श्रेणी अंदाज.</p>
+  <p class="muted">तुमचा तालुका निवडा (किंवा नकाशावर क्लिक करा) — पुढील {{ c.days | length | mr }} दिवसांचा दिवसनिहाय पाऊस श्रेणी अंदाज (प्रत्येक दिवस: त्या दिवशी सकाळी ८:३० ते दुसऱ्या दिवशी सकाळी ८:३०).</p>
   <label class="tq-pick">तालुका:
     <select id="tq-select-{{ c.id }}">
       {% for gname, rs in c.groups %}
