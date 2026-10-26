@@ -1,154 +1,189 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>माझ्याविषयी — अरविंद पागिरे</title>
-  <meta name="description" content="अरविंद पागिरे — हवामानशास्त्रज्ञ · AI-आधारित हवामान अंदाज · हायब्रिड मॉडेलिंग">
+  <script>
+    // English by default; मराठी if chosen before (localStorage) or asked for with ?lang=mr — set before first paint
+    (function () {
+      var q = /[?&]lang=(en|mr)\b/.exec(location.search), l = q && q[1];
+      try { if (l) localStorage.setItem('lang', l); else l = localStorage.getItem('lang'); } catch (e) {}
+      if (l === 'mr') document.documentElement.lang = 'mr';
+    })();
+  </script>
+  <title data-mr="माझ्याविषयी — अरविंद पागिरे">About — Arvind Pagire</title>
+  <meta name="description" content="Arvind Pagire — Meteorologist · AI-based weather prediction · Hybrid modelling">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../static/css/style.css?v=f237c7a0">
+  <link rel="stylesheet" href="../static/css/style.css?v=7f417a43">
 </head>
 <body>
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="brand" href="../index.html">
         <span class="brand-mark" aria-hidden="true">☁</span>
-        <span>अरविंद पागिरे</span>
+        <span><span class="l-en">Arvind Pagire</span><span class="l-mr" lang="mr">अरविंद पागिरे</span></span>
       </a>
-      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="मेनू">
+      <button type="button" id="lang-btn" class="lang-btn" aria-label="Switch language / भाषा बदला">
+        <span class="l-en" lang="mr">मराठी</span><span class="l-mr" lang="en">English</span>
+      </button>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menu">
       <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
       <nav class="nav">
-        <a href="../index.html">मुख्यपृष्ठ</a>
-        <a href="../about/index.html" class="active" aria-current="page">माझ्याविषयी</a>
-        <a href="../publications/index.html">संशोधन</a>
-        <a href="../blog/index.html">ब्लॉग</a>
-        <a href="../alerts/index.html">हवामान इशारे</a>
-        <a href="../forecast/index.html">प्रायोगिक AI अंदाज</a>
-        <a href="../contact/index.html">संपर्क</a>
+        <a href="../index.html"><span class="l-en">Home</span><span class="l-mr" lang="mr">मुख्यपृष्ठ</span></a>
+        <a href="../about/index.html" class="active" aria-current="page"><span class="l-en">About</span><span class="l-mr" lang="mr">माझ्याविषयी</span></a>
+        <a href="../publications/index.html"><span class="l-en">Research</span><span class="l-mr" lang="mr">संशोधन</span></a>
+        <a href="../blog/index.html"><span class="l-en">Blog</span><span class="l-mr" lang="mr">ब्लॉग</span></a>
+        <a href="../alerts/index.html"><span class="l-en">Weather alerts</span><span class="l-mr" lang="mr">हवामान इशारे</span></a>
+        <a href="../forecast/index.html"><span class="l-en">AI forecast</span><span class="l-mr" lang="mr">प्रायोगिक AI अंदाज</span></a>
+        <a href="../contact/index.html"><span class="l-en">Contact</span><span class="l-mr" lang="mr">संपर्क</span></a>
       </nav>
     </div>
   </header>
 
   <main class="wrap main">
-<h1 class="page-title">माझ्याविषयी</h1>
+<h1 class="page-title"><span class="l-en">About me</span><span class="l-mr" lang="mr">माझ्याविषयी</span></h1>
 <p class="profile-links ">
-<a class="pl" href="https://scholar.google.com/citations?user=vkmoTSkAAAAJ&amp;hl=en" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><span>Google Scholar</span></a><a class="pl" href="https://orcid.org/0009-0000-4938-0567" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9 10v7M9 7v.01M12.5 10v7h1.8a3.5 3.5 0 0 0 0-7z"/></svg><span>ORCID</span></a><a class="pl" href="https://github.com/arvindrspagire" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.8 2.8 5.8 3.1 5.8 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4.4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a><a class="pl" href="https://x.com/arvind_weathLAB" rel="noopener" target="_blank"><span class="x-ico" aria-hidden="true">𝕏</span><span>@arvind_weathLAB</span></a>  <a class="pl" href="mailto:arvindrspagire@gmail.com"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span>ई-मेल</span></a>
+<a class="pl" href="https://scholar.google.com/citations?user=vkmoTSkAAAAJ&amp;hl=en" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><span>Google Scholar</span></a><a class="pl" href="https://orcid.org/0009-0000-4938-0567" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9 10v7M9 7v.01M12.5 10v7h1.8a3.5 3.5 0 0 0 0-7z"/></svg><span>ORCID</span></a><a class="pl" href="https://github.com/arvindrspagire" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.8 2.8 5.8 3.1 5.8 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4.4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a><a class="pl" href="https://x.com/arvind_weathLAB" rel="noopener" target="_blank"><span class="x-ico" aria-hidden="true">𝕏</span><span>@arvind_weathLAB</span></a>  <a class="pl" href="mailto:arvindrspagire@gmail.com"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span><span class="l-en">E-mail</span><span class="l-mr" lang="mr">ई-मेल</span></span></a>
 </p>
 
 <section class="card">
-<p>मी भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे येथील HPC-AIML टीममध्ये प्रकल्प शास्त्रज्ञ-I म्हणून कृत्रिम बुद्धिमत्तेवर (AI) आधारित हवामान अंदाज आणि हायब्रिड मॉडेलिंगसाठी — भौतिकशास्त्रावर आधारित हवामान मॉडेल आणि मशीन लर्निंग यांची सांगड — कार्यरत आहे. हवामान विज्ञानातील पाच वर्षांहून अधिक अनुभवासह अल्पकालीन हवामान अंदाज आणि अतिवृष्टीच्या घटना हे माझे प्रमुख अभ्यासविषय आहेत.</p><p>सावित्रीबाई फुले पुणे विद्यापीठातून वातावरणशास्त्र व तंत्रज्ञान या विषयात माझे पीएच.डी. संशोधन सुरू आहे. या संकेतस्थळावर मी हवामानविषयक लेख आणि दैनंदिन हवामान इशारे मराठीत प्रसिद्ध करतो.</p>  <h3>संशोधनाचे विषय</h3>
-  <ul><li>AI-आधारित हवामान अंदाज (AI weather prediction)</li><li>हायब्रिड मॉडेलिंग — भौतिकी-आधारित मॉडेल + मशीन लर्निंग (Hybrid modelling)</li><li>अल्पकालीन हवामान अंदाज (Short-range prediction)</li><li>दूरसंबंध अभ्यास — एल निनो (ENSO), हिंदी महासागर द्विध्रुव (IOD) व MJO यांचा अतिवृष्टीवरील प्रभाव</li><li>उपग्रह पर्जन्य माहितीचे (IMERG) मूल्यमापन आणि भूप्रदेशाचा प्रभाव</li></ul>
+<p><span class="l-en">I work as a Project Scientist-I in the HPC-AIML team at the Indian Institute of Tropical Meteorology (IITM), Pune, on artificial-intelligence (AI) based weather prediction and hybrid modelling — combining physics-based weather models with machine learning. With more than five years of experience in weather science, my main research areas are short-range weather prediction and extreme rainfall events.</span><span class="l-mr" lang="mr">मी भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे येथील HPC-AIML टीममध्ये प्रकल्प शास्त्रज्ञ-I म्हणून कृत्रिम बुद्धिमत्तेवर (AI) आधारित हवामान अंदाज आणि हायब्रिड मॉडेलिंगसाठी — भौतिकशास्त्रावर आधारित हवामान मॉडेल आणि मशीन लर्निंग यांची सांगड — कार्यरत आहे. हवामान विज्ञानातील पाच वर्षांहून अधिक अनुभवासह अल्पकालीन हवामान अंदाज आणि अतिवृष्टीच्या घटना हे माझे प्रमुख अभ्यासविषय आहेत.</span></p><p><span class="l-en">I am pursuing a PhD in Atmospheric Science and Technology at Savitribai Phule Pune University. On this site I publish weather articles and daily weather alerts (the daily alerts are written in Marathi).</span><span class="l-mr" lang="mr">सावित्रीबाई फुले पुणे विद्यापीठातून वातावरणशास्त्र व तंत्रज्ञान या विषयात माझे पीएच.डी. संशोधन सुरू आहे. या संकेतस्थळावर मी हवामानविषयक लेख आणि दैनंदिन हवामान इशारे मराठीत प्रसिद्ध करतो.</span></p>  <h3><span class="l-en">Research interests</span><span class="l-mr" lang="mr">संशोधनाचे विषय</span></h3>
+  <ul><li><span class="l-en">AI-based weather prediction</span><span class="l-mr" lang="mr">AI-आधारित हवामान अंदाज</span></li><li><span class="l-en">Hybrid modelling — physics-based models + machine learning</span><span class="l-mr" lang="mr">हायब्रिड मॉडेलिंग — भौतिकी-आधारित मॉडेल + मशीन लर्निंग</span></li><li><span class="l-en">Short-range weather prediction</span><span class="l-mr" lang="mr">अल्पकालीन हवामान अंदाज</span></li><li><span class="l-en">Teleconnections — impact of El Niño (ENSO), the Indian Ocean Dipole (IOD) and the MJO on extreme rainfall</span><span class="l-mr" lang="mr">दूरसंबंध अभ्यास — एल निनो (ENSO), हिंदी महासागर द्विध्रुव (IOD) व MJO यांचा अतिवृष्टीवरील प्रभाव</span></li><li><span class="l-en">Evaluation of satellite rainfall (IMERG) and the effect of terrain</span><span class="l-mr" lang="mr">उपग्रह पर्जन्य माहितीचे (IMERG) मूल्यमापन आणि भूप्रदेशाचा प्रभाव</span></li></ul>
 </section>
 
 <section class="section">
-  <h2>कार्यानुभव</h2>
+  <h2><span class="l-en">Experience</span><span class="l-mr" lang="mr">कार्यानुभव</span></h2>
   <ol class="timeline">
     <li>
-      <p class="tl-period muted">मे २०२६ – सध्या</p>
-      <h3>प्रकल्प शास्त्रज्ञ-I</h3>
-      <p class="tl-org">HPC-AIML टीम, भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</p>
-      <p>HPC-AIML टीममध्ये AI-आधारित हवामान अंदाज आणि हायब्रिड (भौतिकी + मशीन लर्निंग) हवामान मॉडेलिंगसाठी कार्यरत.</p>
+      <p class="tl-period muted"><span class="l-en">May 2026 – present</span><span class="l-mr" lang="mr">मे २०२६ – सध्या</span></p>
+      <h3><span class="l-en">Project Scientist-I</span><span class="l-mr" lang="mr">प्रकल्प शास्त्रज्ञ-I</span></h3>
+      <p class="tl-org"><span class="l-en">HPC-AIML Team, Indian Institute of Tropical Meteorology (IITM), Pune</span><span class="l-mr" lang="mr">HPC-AIML टीम, भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</span></p>
+      <p><span class="l-en">Working in the HPC-AIML team on AI-based weather prediction and hybrid (physics + machine learning) weather modelling.</span><span class="l-mr" lang="mr">HPC-AIML टीममध्ये AI-आधारित हवामान अंदाज आणि हायब्रिड (भौतिकी + मशीन लर्निंग) हवामान मॉडेलिंगसाठी कार्यरत.</span></p>
     </li>
     <li>
-      <p class="tl-period muted">जानेवारी २०२५ – एप्रिल २०२६</p>
-      <h3>प्रकल्प शास्त्रज्ञ-II</h3>
-      <p class="tl-org">प्रादेशिक हवामान केंद्र, नागपूर (भारतीय हवामान विभाग)</p>
-      <p>विदर्भासाठी दैनंदिन हवामान अंदाज, मानक कार्यपद्धती (SOP) तयार करणे, PET साठी ग्रिडेड माहितीसंच आणि CMIP6 मॉडेल वापरून हवामान बदल अभ्यास.</p>
+      <p class="tl-period muted"><span class="l-en">January 2025 – April 2026</span><span class="l-mr" lang="mr">जानेवारी २०२५ – एप्रिल २०२६</span></p>
+      <h3><span class="l-en">Project Scientist-II</span><span class="l-mr" lang="mr">प्रकल्प शास्त्रज्ञ-II</span></h3>
+      <p class="tl-org"><span class="l-en">Regional Meteorological Centre, Nagpur (India Meteorological Department)</span><span class="l-mr" lang="mr">प्रादेशिक हवामान केंद्र, नागपूर (भारतीय हवामान विभाग)</span></p>
+      <p><span class="l-en">Daily weather forecasts for Vidarbha, preparing standard operating procedures (SOPs), a gridded dataset for PET, and climate-change studies using CMIP6 models.</span><span class="l-mr" lang="mr">विदर्भासाठी दैनंदिन हवामान अंदाज, मानक कार्यपद्धती (SOP) तयार करणे, PET साठी ग्रिडेड माहितीसंच आणि CMIP6 मॉडेल वापरून हवामान बदल अभ्यास.</span></p>
     </li>
     <li>
-      <p class="tl-period muted">मे २०२३ – सध्या</p>
-      <h3>पीएच.डी. संशोधक</h3>
-      <p class="tl-org">भारतीय हवामान विभाग, पुणे</p>
-      <p>ENSO, IOD आणि MJO यांसारख्या मोठ्या हवामान घटकांचा अतिवृष्टीच्या परिवर्तनशीलतेवरील प्रभाव.</p>
+      <p class="tl-period muted"><span class="l-en">May 2023 – present</span><span class="l-mr" lang="mr">मे २०२३ – सध्या</span></p>
+      <h3><span class="l-en">PhD Researcher</span><span class="l-mr" lang="mr">पीएच.डी. संशोधक</span></h3>
+      <p class="tl-org"><span class="l-en">India Meteorological Department, Pune</span><span class="l-mr" lang="mr">भारतीय हवामान विभाग, पुणे</span></p>
+      <p><span class="l-en">Impact of large-scale climate drivers such as ENSO, the IOD and the MJO on the variability of extreme rainfall.</span><span class="l-mr" lang="mr">ENSO, IOD आणि MJO यांसारख्या मोठ्या हवामान घटकांचा अतिवृष्टीच्या परिवर्तनशीलतेवरील प्रभाव.</span></p>
     </li>
     <li>
-      <p class="tl-period muted">जानेवारी २०२२ – मे २०२३</p>
-      <h3>कनिष्ठ संशोधन अधिछात्र (JRF)</h3>
-      <p class="tl-org">भारतीय सुदूर संवेदन संस्था (IIRS), देहरादून</p>
-      <p>वायव्य हिमालयातील अतिवृष्टीचे उपग्रह-आधारित विश्लेषण आणि WRF सिम्युलेशन.</p>
+      <p class="tl-period muted"><span class="l-en">January 2022 – May 2023</span><span class="l-mr" lang="mr">जानेवारी २०२२ – मे २०२३</span></p>
+      <h3><span class="l-en">Junior Research Fellow (JRF)</span><span class="l-mr" lang="mr">कनिष्ठ संशोधन अधिछात्र (JRF)</span></h3>
+      <p class="tl-org"><span class="l-en">Indian Institute of Remote Sensing (IIRS), Dehradun</span><span class="l-mr" lang="mr">भारतीय सुदूर संवेदन संस्था (IIRS), देहरादून</span></p>
+      <p><span class="l-en">Satellite-based analysis and WRF simulations of extreme rainfall over the north-western Himalaya.</span><span class="l-mr" lang="mr">वायव्य हिमालयातील अतिवृष्टीचे उपग्रह-आधारित विश्लेषण आणि WRF सिम्युलेशन.</span></p>
     </li>
     <li>
-      <p class="tl-period muted">जुलै २०२० – जानेवारी २०२२</p>
-      <h3>कनिष्ठ संशोधन अधिछात्र (JRF)</h3>
-      <p class="tl-org">भारतीय हवामान विभाग, पुणे</p>
-      <p>MMCFS मॉडेल अंदाजांचे कौशल्य-पडताळणी विश्लेषण; RCC पुणेसाठी पडताळणी उत्पादन विकसित केले.</p>
+      <p class="tl-period muted"><span class="l-en">July 2020 – January 2022</span><span class="l-mr" lang="mr">जुलै २०२० – जानेवारी २०२२</span></p>
+      <h3><span class="l-en">Junior Research Fellow (JRF)</span><span class="l-mr" lang="mr">कनिष्ठ संशोधन अधिछात्र (JRF)</span></h3>
+      <p class="tl-org"><span class="l-en">India Meteorological Department, Pune</span><span class="l-mr" lang="mr">भारतीय हवामान विभाग, पुणे</span></p>
+      <p><span class="l-en">Skill verification of MMCFS model forecasts; developed verification products for RCC Pune.</span><span class="l-mr" lang="mr">MMCFS मॉडेल अंदाजांचे कौशल्य-पडताळणी विश्लेषण; RCC पुणेसाठी पडताळणी उत्पादन विकसित केले.</span></p>
     </li>
     <li>
-      <p class="tl-period muted">मे – जुलै २०१७</p>
-      <h3>उन्हाळी प्रशिक्षणार्थी</h3>
-      <p class="tl-org">भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</p>
-      <p>भारतीय उन्हाळी मान्सूनमधील मोठ्या वातावरणीय अभिसरणाची उप-ऋतुकालीन परिवर्तनशीलता.</p>
+      <p class="tl-period muted"><span class="l-en">May – July 2017</span><span class="l-mr" lang="mr">मे – जुलै २०१७</span></p>
+      <h3><span class="l-en">Summer Trainee</span><span class="l-mr" lang="mr">उन्हाळी प्रशिक्षणार्थी</span></h3>
+      <p class="tl-org"><span class="l-en">Indian Institute of Tropical Meteorology (IITM), Pune</span><span class="l-mr" lang="mr">भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</span></p>
+      <p><span class="l-en">Sub-seasonal variability of the large-scale atmospheric circulation in the Indian summer monsoon.</span><span class="l-mr" lang="mr">भारतीय उन्हाळी मान्सूनमधील मोठ्या वातावरणीय अभिसरणाची उप-ऋतुकालीन परिवर्तनशीलता.</span></p>
     </li>
   </ol>
 </section>
 
 <div class="two-col">
   <section class="card">
-    <h2>शिक्षण</h2>
+    <h2><span class="l-en">Education</span><span class="l-mr" lang="mr">शिक्षण</span></h2>
     <ul class="plain">
-      <li><strong>पीएच.डी. (सुरू, मे २०२३ पासून)</strong> — वातावरणशास्त्र व तंत्रज्ञान<br><span class="muted">सावित्रीबाई फुले पुणे विद्यापीठ</span></li>
-      <li><strong>एम.एस्सी.</strong> — वातावरणशास्त्र<br><span class="muted">NIT राउरकेला · CGPA ७.४१</span></li>
-      <li><strong>बी.एस्सी.</strong> — भौतिकशास्त्र (ऑनर्स), गणित व संख्याशास्त्रासह<br><span class="muted">सावित्रीबाई फुले पुणे विद्यापीठ · ७८.१६%</span></li>
+      <li><strong><span class="l-en">PhD (ongoing, since May 2023)</span><span class="l-mr" lang="mr">पीएच.डी. (सुरू, मे २०२३ पासून)</span></strong> — <span class="l-en">Atmospheric Science and Technology</span><span class="l-mr" lang="mr">वातावरणशास्त्र व तंत्रज्ञान</span><br><span class="muted"><span class="l-en">Savitribai Phule Pune University</span><span class="l-mr" lang="mr">सावित्रीबाई फुले पुणे विद्यापीठ</span></span></li>
+      <li><strong><span class="l-en">M.Sc.</span><span class="l-mr" lang="mr">एम.एस्सी.</span></strong> — <span class="l-en">Atmospheric Science</span><span class="l-mr" lang="mr">वातावरणशास्त्र</span><br><span class="muted"><span class="l-en">NIT Rourkela · CGPA 7.41</span><span class="l-mr" lang="mr">NIT राउरकेला · CGPA ७.४१</span></span></li>
+      <li><strong><span class="l-en">B.Sc.</span><span class="l-mr" lang="mr">बी.एस्सी.</span></strong> — <span class="l-en">Physics (Honours), with Mathematics and Statistics</span><span class="l-mr" lang="mr">भौतिकशास्त्र (ऑनर्स), गणित व संख्याशास्त्रासह</span><br><span class="muted"><span class="l-en">Savitribai Phule Pune University · 78.16%</span><span class="l-mr" lang="mr">सावित्रीबाई फुले पुणे विद्यापीठ · ७८.१६%</span></span></li>
     </ul>
   </section>
   <section class="card">
-    <h2>तांत्रिक कौशल्ये</h2>
-    <p class="skill-row"><strong>प्रोग्रामिंग:</strong>
+    <h2><span class="l-en">Technical skills</span><span class="l-mr" lang="mr">तांत्रिक कौशल्ये</span></h2>
+    <p class="skill-row"><strong><span class="l-en">Programming</span><span class="l-mr" lang="mr">प्रोग्रामिंग</span>:</strong>
 <span class="tag">Python</span><span class="tag">C</span><span class="tag">C++</span><span class="tag">Fortran</span></p>
-    <p class="skill-row"><strong>मॉडेल व साधने:</strong>
+    <p class="skill-row"><strong><span class="l-en">Models and tools</span><span class="l-mr" lang="mr">मॉडेल व साधने</span>:</strong>
 <span class="tag">WRF</span><span class="tag">MATLAB</span><span class="tag">GrADS</span></p>
     <p class="skill-row"><strong>AI / ML:</strong>
 <span class="tag">CNN</span><span class="tag">CNN-LSTM</span><span class="tag">RNN</span></p>
-    <p class="skill-row"><strong>प्लॅटफॉर्म:</strong>
+    <p class="skill-row"><strong><span class="l-en">Platforms</span><span class="l-mr" lang="mr">प्लॅटफॉर्म</span>:</strong>
 <span class="tag">Linux / UNIX</span><span class="tag">Windows</span></p>
   </section>
 </div>
 
 <section class="card">
-  <h2>प्रशिक्षण, प्रमाणपत्रे व योगदान</h2>
-  <ul><li>JAM उत्तीर्ण (IIT मद्रास, २०१६)</li><li>वातावरण-महासागर उपयोजनांमधील AI/ML प्रशिक्षण (IITM पुणे, २०२१)</li><li>TROPMET २०२० सहभाग</li><li>Master in AI &amp; ML (Inside AIML, डिसेंबर २०२२ – सप्टेंबर २०२३)</li><li>प्रशिक्षक — Climate Data Analysis and Visualization with Python (IMD पुणे, सप्टेंबर २०२३)</li><li>साधन-व्यक्ती — Training on Seasonal Prediction (डिसेंबर २०२३)</li><li>स्वयंसेवक — वार्षिक मान्सून कार्यशाळा (IITM पुणे, मार्च २०२४)</li><li>प्रशिक्षक — निर्णय सहाय्य प्रणाली (DSS)</li></ul>
+  <h2><span class="l-en">Training, certificates and contributions</span><span class="l-mr" lang="mr">प्रशिक्षण, प्रमाणपत्रे व योगदान</span></h2>
+  <ul><li><span class="l-en">Qualified JAM (IIT Madras, 2016)</span><span class="l-mr" lang="mr">JAM उत्तीर्ण (IIT मद्रास, २०१६)</span></li><li><span class="l-en">Training on AI/ML in atmosphere–ocean applications (IITM Pune, 2021)</span><span class="l-mr" lang="mr">वातावरण-महासागर उपयोजनांमधील AI/ML प्रशिक्षण (IITM पुणे, २०२१)</span></li><li><span class="l-en">Participant, TROPMET 2020</span><span class="l-mr" lang="mr">TROPMET २०२० सहभाग</span></li><li><span class="l-en">Master in AI &amp; ML (Inside AIML, December 2022 – September 2023)</span><span class="l-mr" lang="mr">Master in AI &amp; ML (Inside AIML, डिसेंबर २०२२ – सप्टेंबर २०२३)</span></li><li><span class="l-en">Trainer — Climate Data Analysis and Visualization with Python (IMD Pune, September 2023)</span><span class="l-mr" lang="mr">प्रशिक्षक — Climate Data Analysis and Visualization with Python (IMD पुणे, सप्टेंबर २०२३)</span></li><li><span class="l-en">Resource person — Training on Seasonal Prediction (December 2023)</span><span class="l-mr" lang="mr">साधन-व्यक्ती — Training on Seasonal Prediction (डिसेंबर २०२३)</span></li><li><span class="l-en">Volunteer — Annual Monsoon Workshop (IITM Pune, March 2024)</span><span class="l-mr" lang="mr">स्वयंसेवक — वार्षिक मान्सून कार्यशाळा (IITM पुणे, मार्च २०२४)</span></li><li><span class="l-en">Trainer — Decision Support System (DSS)</span><span class="l-mr" lang="mr">प्रशिक्षक — निर्णय सहाय्य प्रणाली (DSS)</span></li></ul>
 </section>
   </main>
 
   <footer class="site-footer">
     <div class="wrap footer-cols">
       <div>
-        <h3>माझ्याशी संपर्क (Reach me)</h3>
+        <h3><span class="l-en">Reach me</span><span class="l-mr" lang="mr">माझ्याशी संपर्क</span></h3>
         <p>✉ <a href="mailto:arvindrspagire@gmail.com">arvindrspagire@gmail.com</a></p>
-<p>💬 <a href="https://wa.me/919767590166" rel="noopener">WhatsApp संदेश</a></p>        <p>📝 <a href="../contact/index.html">संदेश फॉर्म भरा</a></p>
+<p>💬 <a href="https://wa.me/919767590166" rel="noopener"><span class="l-en">WhatsApp message</span><span class="l-mr" lang="mr">WhatsApp संदेश</span></a></p>        <p>📝 <a href="../contact/index.html"><span class="l-en">Fill in the message form</span><span class="l-mr" lang="mr">संदेश फॉर्म भरा</span></a></p>
       </div>
       <div>
         <h3>Subscribe</h3>
-        <p class="muted">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</p>
+        <p class="muted"><span class="l-en">New weather alerts, the experimental AI forecast and posts by e-mail.</span><span class="l-mr" lang="mr">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</span></p>
         <form class="subscribe footer" action="https://formsubmit.co/arvindrspagire@gmail.com" method="POST">
-    <input type="hidden" name="_subject" value="नवीन सदस्य (Subscribe) — Arvind Pagire">
+    <input type="hidden" name="_subject" value="New subscriber — Arvind Pagire">
   <input type="hidden" name="_template" value="table">
   <input type="hidden" name="_next" value="https://arvindrspagire.github.io/contact/thanks/index.html">
   <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 
-  <input type="hidden" name="प्रकार" value="Subscribe: हवामान इशारे, प्रायोगिक AI अंदाज व लेख">
-  <label for="sub-footer" class="sr-only">ई-मेल</label>
-  <input id="sub-footer" type="email" name="email" required placeholder="तुमचा ई-मेल">
+  <input type="hidden" name="type" value="Subscribe: weather alerts, experimental AI forecast and posts">
+  <label for="sub-footer" class="sr-only">E-mail</label>
+  <input id="sub-footer" type="email" name="email" required placeholder="Your e-mail" data-mr-ph="तुमचा ई-मेल">
   <button type="submit" class="btn">Subscribe</button>
 </form>
 
       </div>
       <div>
-        <h3>दुवे</h3>
-        <p><a href="../alerts/index.html">हवामान इशारे</a> · <a href="../forecast/index.html">प्रायोगिक AI अंदाज</a> · <a href="../blog/index.html">ब्लॉग</a> · <a href="../publications/index.html">संशोधन</a></p>
+        <h3><span class="l-en">Links</span><span class="l-mr" lang="mr">दुवे</span></h3>
+        <p><a href="../alerts/index.html"><span class="l-en">Weather alerts</span><span class="l-mr" lang="mr">हवामान इशारे</span></a> · <a href="../forecast/index.html"><span class="l-en">AI forecast</span><span class="l-mr" lang="mr">प्रायोगिक AI अंदाज</span></a> · <a href="../blog/index.html"><span class="l-en">Blog</span><span class="l-mr" lang="mr">ब्लॉग</span></a> · <a href="../publications/index.html"><span class="l-en">Research</span><span class="l-mr" lang="mr">संशोधन</span></a></p>
       </div>
     </div>
     <div class="wrap footer-inner">
       <div>
-        <p>© २०२६ अरविंद पागिरे · प्रकल्प शास्त्रज्ञ-I, HPC-AIML टीम, भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</p>
-        <p class="muted">अधिकृत हवामान इशाऱ्यांसाठी: <a href="https://mausam.imd.gov.in" rel="noopener">भारतीय हवामान विभाग</a> · अद्ययावत: २६ ऑक्टोबर २०२६</p>
+        <p>© <span class="l-en">2026</span><span class="l-mr" lang="mr">२०२६</span> <span class="l-en">Arvind Pagire</span><span class="l-mr" lang="mr">अरविंद पागिरे</span> · <span class="l-en">Project Scientist-I</span><span class="l-mr" lang="mr">प्रकल्प शास्त्रज्ञ-I</span>, <span class="l-en">HPC-AIML Team, Indian Institute of Tropical Meteorology (IITM), Pune</span><span class="l-mr" lang="mr">HPC-AIML टीम, भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</span></p>
+        <p class="muted"><span class="l-en">For official weather warnings:</span><span class="l-mr" lang="mr">अधिकृत हवामान इशाऱ्यांसाठी:</span> <a href="https://mausam.imd.gov.in" rel="noopener"><span class="l-en">India Meteorological Department</span><span class="l-mr" lang="mr">भारतीय हवामान विभाग</span></a> · <span class="l-en">Updated:</span><span class="l-mr" lang="mr">अद्ययावत:</span> <span class="l-en">26 October 2026</span><span class="l-mr" lang="mr">२६ ऑक्टोबर २०२६</span></p>
       </div>
       <p class="profile-links on-dark compact">
-<a class="pl" href="https://scholar.google.com/citations?user=vkmoTSkAAAAJ&amp;hl=en" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><span>Google Scholar</span></a><a class="pl" href="https://orcid.org/0009-0000-4938-0567" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9 10v7M9 7v.01M12.5 10v7h1.8a3.5 3.5 0 0 0 0-7z"/></svg><span>ORCID</span></a><a class="pl" href="https://github.com/arvindrspagire" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.8 2.8 5.8 3.1 5.8 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4.4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a><a class="pl" href="https://x.com/arvind_weathLAB" rel="noopener" target="_blank"><span class="x-ico" aria-hidden="true">𝕏</span><span>@arvind_weathLAB</span></a>  <a class="pl" href="mailto:arvindrspagire@gmail.com"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span>ई-मेल</span></a>
+<a class="pl" href="https://scholar.google.com/citations?user=vkmoTSkAAAAJ&amp;hl=en" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><span>Google Scholar</span></a><a class="pl" href="https://orcid.org/0009-0000-4938-0567" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9 10v7M9 7v.01M12.5 10v7h1.8a3.5 3.5 0 0 0 0-7z"/></svg><span>ORCID</span></a><a class="pl" href="https://github.com/arvindrspagire" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.8 2.8 5.8 3.1 5.8 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4.4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a><a class="pl" href="https://x.com/arvind_weathLAB" rel="noopener" target="_blank"><span class="x-ico" aria-hidden="true">𝕏</span><span>@arvind_weathLAB</span></a>  <a class="pl" href="mailto:arvindrspagire@gmail.com"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span><span class="l-en">E-mail</span><span class="l-mr" lang="mr">ई-मेल</span></span></a>
 </p>
     </div>
   </footer>
+  <script>
+  // language switch: CSS shows .l-en or .l-mr from <html lang>; plain-text spots (title, <option>, placeholder) swap here
+  (function () {
+    var root = document.documentElement;
+    function apply() {
+      var mr = root.lang === 'mr';
+      document.querySelectorAll('[data-mr]').forEach(function (el) {
+        if (el.dataset.en === undefined) el.dataset.en = el.textContent;
+        el.textContent = mr ? el.dataset.mr : el.dataset.en;
+      });
+      document.querySelectorAll('[data-mr-ph]').forEach(function (el) {
+        if (el.dataset.enPh === undefined) el.dataset.enPh = el.placeholder;
+        el.placeholder = mr ? el.dataset.mrPh : el.dataset.enPh;
+      });
+    }
+    document.getElementById('lang-btn').addEventListener('click', function () {
+      root.lang = root.lang === 'mr' ? 'en' : 'mr';
+      try { localStorage.setItem('lang', root.lang); } catch (e) {}
+      apply();
+    });
+    window.siteLang = { apply: apply };
+    apply();
+  })();
+  </script>
 </body>
 </html>

@@ -1,18 +1,20 @@
 """
-मराठी वैयक्तिक संकेतस्थळ — बिल्ड स्क्रिप्ट (Marathi personal website builder)
+Bilingual personal website builder: English by default, मराठी with the header button (choice is remembered)
 
-    python build.py                 संकेतस्थळ docs/ मध्ये तयार करा (build site into docs/)
-    python build.py serve           तयार करून http://localhost:8000 वर पाहा (build + local preview)
-    python build.py new-alert       आजच्या तारखेचा नवीन इशारा तयार करा (new alert for today)
-    python build.py new-blog नाव     नवीन ब्लॉग लेख तयार करा (new blog post; slug in English)
-    python build.py forecast [--push]   AI पाऊस अंदाज पान तयार करा (content/forecast/latest.json वरून)
+    python build.py                 build the site into docs/
+    python build.py serve           build + local preview at http://localhost:8000
+    python build.py new-alert       new alert file for today
+    python build.py new-blog slug   new blog post (slug: lowercase letters, digits, -)
+    python build.py forecast [--push]   rebuild with the AI rain forecast (content/forecast/latest.json)
     python build.py hawaman [YYYY-MM-DD] [--push]
-                                    हवामान विज्ञान pipeline च्या आजच्या output वरून विश्लेषण पान तयार करा
-                                    (alert from the hawaman-vidnyan daily output; --push = build + git push)
-    --drafts                        draft: true असलेले लेखही दाखवा (include drafts, for preview only)
+                                    alert from the hawaman-vidnyan daily output (--push = build + git push)
+    --drafts                        include draft: true posts (preview only)
 
 Content lives in content/blog/*.md and content/alerts/*.md (YAML front matter + Markdown).
 Profile data lives in site.yaml. Output (docs/) is plain HTML for GitHub Pages or any web host.
+
+Two languages: any text value may be {en: "...", mr: "..."} (site.yaml, front matter); a plain string
+is shown in both languages. A post body may hold both: English first, then a line <!-- mr -->, then Marathi.
 Needs: jinja2, mistune, pyyaml.
 """
 
@@ -29,8 +31,9 @@ try:
     import mistune
     import yaml
     from jinja2 import Environment, FileSystemLoader, select_autoescape
+    from markupsafe import Markup, escape
 except ImportError as e:
-    raise SystemExit(f"{e}\nmyenv वापरा: 'conda activate myenv' करून पुन्हा चालवा, किंवा site.bat वर double-click करा.")
+    raise SystemExit(f"{e}\nUse myenv: run 'conda activate myenv' and try again, or double-click site.bat.")
 
 # Marathi output must not crash a non-UTF-8 console / redirected stdout
 for _s in (sys.stdout, sys.stderr):
@@ -42,18 +45,32 @@ OUT = ROOT / "docs"
 CONTENT = ROOT / "content"
 
 MR_DIGITS = str.maketrans("0123456789", "०१२३४५६७८९")
-MONTHS = ["जानेवारी", "फेब्रुवारी", "मार्च", "एप्रिल", "मे", "जून", "जुलै",
-          "ऑगस्ट", "सप्टेंबर", "ऑक्टोबर", "नोव्हेंबर", "डिसेंबर"]
-WEEKDAYS = ["सोमवार", "मंगळवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार", "रविवार"]
+MONTHS_EN = ["January", "February", "March", "April", "May", "June", "July",
+             "August", "September", "October", "November", "December"]
+WEEKDAYS_EN = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+MONTHS_MR = ["जानेवारी", "फेब्रुवारी", "मार्च", "एप्रिल", "मे", "जून", "जुलै",
+             "ऑगस्ट", "सप्टेंबर", "ऑक्टोबर", "नोव्हेंबर", "डिसेंबर"]
+WEEKDAYS_MR = ["सोमवार", "मंगळवार", "बुधवार", "गुरुवार", "शुक्रवार", "शनिवार", "रविवार"]
+
+
+def bi(en, mr):
+    return {"en": en, "mr": mr}
+
 
 # IMD colour-coded impact-based warnings
 LEVELS = {
-    "green":  dict(label="हिरवा", action="कोणताही इशारा नाही", desc="सामान्य हवामान; विशेष काळजीची गरज नाही."),
-    "yellow": dict(label="पिवळा", action="अद्ययावत राहा", desc="हवामानावर लक्ष ठेवा; परिस्थिती बदलू शकते."),
-    "orange": dict(label="नारंगी", action="तयार राहा", desc="धोकादायक हवामानाची शक्यता; आवश्यक तयारी करा."),
-    "red":    dict(label="लाल", action="कृती करा", desc="अतितीव्र हवामान; स्थानिक प्रशासनाच्या सूचनांचे पालन करा."),
+    "green":  dict(label=bi("Green", "हिरवा"), action=bi("No warning", "कोणताही इशारा नाही"),
+                   desc=bi("Normal weather; no special precautions needed.", "सामान्य हवामान; विशेष काळजीची गरज नाही.")),
+    "yellow": dict(label=bi("Yellow", "पिवळा"), action=bi("Be updated", "अद्ययावत राहा"),
+                   desc=bi("Keep an eye on the weather; conditions may change.", "हवामानावर लक्ष ठेवा; परिस्थिती बदलू शकते.")),
+    "orange": dict(label=bi("Orange", "नारंगी"), action=bi("Be prepared", "तयार राहा"),
+                   desc=bi("Hazardous weather is likely; make the necessary preparations.", "धोकादायक हवामानाची शक्यता; आवश्यक तयारी करा.")),
+    "red":    dict(label=bi("Red", "लाल"), action=bi("Take action", "कृती करा"),
+                   desc=bi("Extreme weather; follow the instructions of local authorities.", "अतितीव्र हवामान; स्थानिक प्रशासनाच्या सूचनांचे पालन करा.")),
     # used when no IMD district warning was available: model guidance must never look like a warning
-    "info":   dict(label="माहितीपर", action="मॉडेल-आधारित विश्लेषण", desc="IMD चा जिल्हानिहाय इशारा उपलब्ध नसताना प्रसिद्ध केलेले मॉडेल-आधारित हवामान विश्लेषण; अधिकृत इशारा नाही."),
+    "info":   dict(label=bi("Information", "माहितीपर"), action=bi("Model-based analysis", "मॉडेल-आधारित विश्लेषण"),
+                   desc=bi("Model-based weather analysis published when no IMD district warning is available; not an official warning.",
+                           "IMD चा जिल्हानिहाय इशारा उपलब्ध नसताना प्रसिद्ध केलेले मॉडेल-आधारित हवामान विश्लेषण; अधिकृत इशारा नाही.")),
 }
 
 md = mistune.create_markdown(plugins=["table", "strikethrough", "url"])
@@ -64,19 +81,59 @@ def mr_num(x):
 
 
 def mr_date(d, weekday=False):
-    s = f"{mr_num(d.day)} {MONTHS[d.month - 1]} {mr_num(d.year)}"
-    return f"{WEEKDAYS[d.weekday()]}, {s}" if weekday else s
+    s = f"{mr_num(d.day)} {MONTHS_MR[d.month - 1]} {mr_num(d.year)}"
+    return f"{WEEKDAYS_MR[d.weekday()]}, {s}" if weekday else s
+
+
+def en_date(d, weekday=False):
+    s = f"{d.day} {MONTHS_EN[d.month - 1]} {d.year}"
+    return f"{WEEKDAYS_EN[d.weekday()]}, {s}" if weekday else s
+
+
+def date_bi(d, weekday=False):
+    return bi(en_date(d, weekday), mr_date(d, weekday))
+
+
+def day_bi(d):                          # "Tuesday, 27 October" / "मंगळवार, २७ ऑक्टोबर"
+    return bi(f"{WEEKDAYS_EN[d.weekday()]}, {d.day} {MONTHS_EN[d.month - 1]}",
+              f"{WEEKDAYS_MR[d.weekday()]}, {mr_num(d.day)} {MONTHS_MR[d.month - 1]}")
+
+
+# ---- template helpers: both languages go into the page, CSS shows the one in <html lang> ----
+def t(en, mr=None):
+    """Inline bilingual text. t("Home", "मुख्यपृष्ठ"), t({"en": .., "mr": ..}) or t("same in both")."""
+    if isinstance(en, dict):
+        en, mr = en.get("en"), en.get("mr")
+    if en is None:
+        en, mr = mr, None
+    if en is None:
+        return Markup("")
+    if mr is None or mr == en:
+        return escape(en)
+    return Markup('<span class="l-en">{}</span><span class="l-mr" lang="mr">{}</span>').format(en, mr)
+
+
+def num(n):
+    """A number in both scripts: 27 / २७."""
+    return t(str(n), mr_num(n))
+
+
+def pick(x, lang):
+    """Plain text in one language (for attributes, <title>, <option>)."""
+    if isinstance(x, dict):
+        return x.get(lang) or x.get("en") or x.get("mr") or ""
+    return "" if x is None else str(x)
 
 
 def read_post(path):
     text = path.read_text(encoding="utf-8")
     m = re.match(r"^---\s*\n(.*?)\n---\s*\n?(.*)$", text, flags=re.S)
     if not m:
-        raise SystemExit(f"{path.name}: फाइलच्या सुरुवातीला --- मधील माहिती (front matter) नाही")
+        raise SystemExit(f"{path.name}: no front matter (--- block) at the top of the file")
     meta = yaml.safe_load(m.group(1)) or {}
     for key in ("title", "date"):
         if key not in meta:
-            raise SystemExit(f"{path.name}: '{key}' आवश्यक आहे")
+            raise SystemExit(f"{path.name}: '{key}' is required")
     d = meta["date"]
     if isinstance(d, str):
         d = datetime.strptime(d, "%Y-%m-%d").date()
@@ -84,9 +141,11 @@ def read_post(path):
         d = d.date()
     meta["date"] = d
     meta["slug"] = path.stem
-    meta["body"] = md(m.group(2))
-    meta["date_mr"] = mr_date(d)
-    meta["date_mr_long"] = mr_date(d, weekday=True)
+    # English body, then a line "<!-- mr -->", then the Marathi body; one language alone is shown in both
+    parts = re.split(r"^<!--\s*mr\s*-->[ \t]*$", m.group(2), maxsplit=1, flags=re.M)
+    meta["body"] = bi(md(parts[0]), md(parts[1])) if len(parts) == 2 and parts[0].strip() else md(parts[-1])
+    meta["date_str"] = date_bi(d)
+    meta["date_long"] = date_bi(d, weekday=True)
     return meta
 
 
@@ -99,57 +158,89 @@ def load(kind, drafts):
 def check_alert(a):
     lvl = str(a.get("level", "")).lower()
     if lvl not in LEVELS:
-        raise SystemExit(f"{a['slug']}.md: level हे green / yellow / orange / red यापैकी असावे (आहे: {a.get('level')!r})")
+        raise SystemExit(f"{a['slug']}.md: level must be green / yellow / orange / red (got {a.get('level')!r})")
     a["level"] = lvl
     a["lvl"] = LEVELS[lvl]
     for key in ("regions", "hazards"):
         v = a.get(key) or []
-        a[key] = [v] if isinstance(v, str) else list(v)
+        a[key] = [v] if isinstance(v, (str, dict)) else list(v)
     return a
 
 
 def load_forecast():
-    """content/forecast/latest.json, written daily by extreme-rainfall-aiera (python -m operational.forecast --publish)."""
+    """content/forecast/latest.json, written daily by extreme-rainfall-aiera (python -m operational.forecast --publish).
+    That file is Marathi-first; the English names come from the region ids and the tables below."""
     import json
     path = CONTENT / "forecast" / "latest.json"
     if not path.exists():
         return None
     fc = json.loads(path.read_text(encoding="utf-8"))
-    fc["base_mr"] = mr_date(date.fromisoformat(fc["base_date"]), weekday=True)
+    fc["base_str"] = date_bi(date.fromisoformat(fc["base_date"]), weekday=True)
+    for b in fc.get("bands", []):
+        b["label"] = bi(BAND_EN.get(b["key"], b["key"]), b["mr"])
     for r in fc["regions"]:
+        r["name"] = bi(r.get("name_en") or r["id"], r["name_mr"])
         for d in r["days"]:
             day = date.fromisoformat(d.get("start", d["date"]))   # IMD rain day: 08:30 IST start -> 08:30 next day
-            d["date_mr"] = f"{WEEKDAYS[day.weekday()]}, {mr_num(day.day)} {MONTHS[day.month - 1]}"
-            d["pct"] = mr_num(round(d["score"] * 100))
-            d["hist_pct"] = mr_num(round(d["hist_hit_rate"] * 100)) if d.get("hist_hit_rate") is not None else "–"
+            d["date_str"] = day_bi(day)
+            d["band_label"] = bi(BAND_EN.get(d["band"], d["band"]), d["band_mr"])
+            d["pct"] = round(d["score"] * 100)
+            d["hist_pct"] = round(d["hist_hit_rate"] * 100) if d.get("hist_hit_rate") is not None else "–"
             if d.get("ifs_rain_mm") is not None:
-                d["ifs_mr"] = mr_num(f"{d['ifs_rain_mm']:.1f}")
-        r["threshold_mr"] = mr_num(f"{r['threshold_mm']:.1f}")
-    for c in fc.get("categorical", []):
+                d["ifs_str"] = f"{d['ifs_rain_mm']:.1f}"
+        r["threshold_str"] = f"{r['threshold_mm']:.1f}"
+    cats = fc.get("categorical", [])
+    # Marathi district name -> English, learned from the taluka ids "Taluka (District)"
+    dist_en = {r["group"]: m.group(1) for c in cats for r in c["regions"]
+               if r.get("group") and (m := re.search(r"\(([^()]+)\)$", r["id"]))}
+    for c in cats:
+        c["title"] = bi(CAT_TITLE_EN.get(c["id"], c.get("title_mr", c["id"])), c.get("title_mr", c["id"]))
         for d in c["days"]:
             day = date.fromisoformat(d.get("start", d["date"]))   # IMD rain day: 08:30 IST start -> 08:30 next day
-            d["date_mr"] = f"{WEEKDAYS[day.weekday()]}, {mr_num(day.day)} {MONTHS[day.month - 1]}"
-            d["short_mr"] = f"{mr_num(day.day)} {MONTHS[day.month - 1][:3]}"
+            d["date_str"] = day_bi(day)
+            d["short"] = bi(f"{day.day} {MONTHS_EN[day.month - 1][:3]}", f"{mr_num(day.day)} {MONTHS_MR[day.month - 1][:3]}")
         for k in c["classes"]:
             lo, hi = k["from"], k["to"]
-            k["range_mr"] = mr_num(f"< {hi}" if not lo else f"≥ {lo}" if hi is None else f"{lo}–{round(hi - 0.1, 1)}") + " मिमी/दिवस"
-        c["hss_mr"] = [mr_num(f"{h:.2f}") if h is not None else "–" for h in c.get("test_median_hss", [])]
-        c["hss_jjas_mr"] = [mr_num(f"{h:.2f}") if h is not None else "–" for h in c.get("test_median_hss_jjas") or []]
+            rng = f"< {hi}" if not lo else f"≥ {lo}" if hi is None else f"{lo}–{round(hi - 0.1, 1)}"
+            k["label"] = bi(CLASS_EN.get(k["key"], k["key"]), k["mr"])
+            k["range"] = bi(rng + " mm/day", mr_num(rng) + " मिमी/दिवस")
+        c["hss"] = [f"{h:.2f}" if h is not None else "–" for h in c.get("test_median_hss", [])]
+        c["hss_jjas"] = [f"{h:.2f}" if h is not None else "–" for h in c.get("test_median_hss_jjas") or []]
         for r in c["regions"]:
-            r["pct"] = [mr_num(round(max(p) * 100)) for p in r["prob"]]
+            r["pct"] = [round(max(p) * 100) for p in r["prob"]]
+            g = r.get("group") or ""
+            r["group_label"] = bi(SUBDIV_EN.get(g) or dist_en.get(g) or g, SUBDIV_MR.get(g) or g)
+            r["name"] = bi(region_name_en(r, dist_en), r["name_mr"])
         groups = {}
         for r in c["regions"]:
-            groups.setdefault(r["group"], []).append(r)
-        c["groups"] = [(SUBDIV_MR.get(g, g), sorted(rs, key=lambda r: r["name_mr"])) for g, rs in sorted(groups.items())]
+            groups.setdefault(r["group_label"]["en"], (r["group_label"], []))[1].append(r)
+        c["groups"] = [(lab, sorted(rs, key=lambda r: r["name"]["en"])) for _, (lab, rs) in sorted(groups.items())]
         c["maps"] = district_svg(CONTENT / "forecast" / f"shapes_{c['id']}.json")
         # Maharashtra-wide summary: how many regions fall in each category on each day
-        c["summary"] = [[mr_num(sum(r["cat"][i] == k for r in c["regions"])) for k in range(len(c["classes"]))]
+        c["summary"] = [[sum(r["cat"][i] == k for r in c["regions"]) for k in range(len(c["classes"]))]
                         for i in range(len(c["days"]))]
     return fc
 
 
+def region_name_en(r, dist_en):
+    rid = r["id"]
+    if m := re.fullmatch(r"(.+?) \(([^()]+)\)", rid):              # taluka: "Shahuwadi (Kolhapur)"
+        return f"{m.group(1)} — {m.group(2)}"
+    if m := re.fullmatch(r"([\d.]+)N_([\d.]+)E", rid):              # grid cell: "15.75N_73.75E"
+        g = r.get("group")
+        return f"{m.group(1)}°N, {m.group(2)}°E" + (f" ({dist_en.get(g, g)})" if g else "")
+    return rid                                                       # district: "Ahilyanagar"
+
+
 SUBDIV_MR = {"Konkan": "कोकण", "Konkan & Goa": "कोकण", "Madhya Maharashtra": "मध्य महाराष्ट्र",
              "Marathwada": "मराठवाडा", "Vidarbha": "विदर्भ"}
+SUBDIV_EN = {"Konkan & Goa": "Konkan", "Konkan": "Konkan", "Madhya Maharashtra": "Madhya Maharashtra",
+             "Marathwada": "Marathwada", "Vidarbha": "Vidarbha"}
+CLASS_EN = {"no_rain": "No rain / very light", "light": "Light", "moderate": "Moderate", "heavy": "Heavy"}
+BAND_EN = {"low": "Low", "moderate": "Moderate", "high": "High", "very_high": "Very high"}
+CAT_TITLE_EN = {"maharashtra_talukas": "Experimental AI rain forecast — pick your taluka",
+                "maharashtra_districts": "Maharashtra — district-wise rain category forecast",
+                "maharashtra_grid": "Maharashtra — IMD 0.25° grid rain category forecast"}
 
 
 def district_svg(path):
@@ -179,16 +270,21 @@ def build(drafts=False):
 
     env = Environment(loader=FileSystemLoader(ROOT / "templates"),
                       autoescape=select_autoescape(["html"]), trim_blocks=True, lstrip_blocks=True)
+    env.globals["t"] = t
+    env.filters["t"] = t
+    env.filters["num"] = num
     env.filters["mr"] = mr_num
+    env.filters["en"] = lambda x: pick(x, "en")
+    env.filters["in_mr"] = lambda x: pick(x, "mr")
     photo = ROOT / site.get("photo", "static/images/profile.jpg")
     # ?v=<hash> on CSS/photo so browsers fetch the new file right after each deploy
     h = hashlib.md5((ROOT / "static/css/style.css").read_bytes() + (photo.read_bytes() if photo.exists() else b""))
     pubs = site.get("publications", [])
-    stats = [(mr_num(sum(p["type"] in ("journal", "preprint") for p in pubs)), "शोधनिबंध व प्रीप्रिंट"),
-             (mr_num(sum(p["type"] == "conference" for p in pubs)), "परिषद सादरीकरणे"),
-             (mr_num(date.today().year - 2020) + "+", "वर्षांचा संशोधन अनुभव")]
+    stats = [(sum(p["type"] in ("journal", "preprint") for p in pubs), bi("Papers & preprints", "शोधनिबंध व प्रीप्रिंट")),
+             (sum(p["type"] == "conference" for p in pubs), bi("Conference presentations", "परिषद सादरीकरणे")),
+             (f"{date.today().year - 2020}+", bi("Years of research experience", "वर्षांचा संशोधन अनुभव"))]
     common = dict(site=site, levels=LEVELS, has_photo=photo.exists(), v=h.hexdigest()[:8], stats=stats,
-                  built=mr_date(date.today()), year=mr_num(date.today().year))
+                  built=date_bi(date.today()), year=date.today().year)
 
     # empty docs/ but keep the folder itself (a running preview server keeps it open on Windows)
     OUT.mkdir(exist_ok=True)
@@ -212,12 +308,12 @@ def build(drafts=False):
     page("index.html", "index.html", "home", latest_alert=alerts[0] if alerts else None, posts=blog[:3], fc=fc)
     page("about.html", "about/index.html", "about")
     page("publications.html", "publications/index.html", "publications",
-         groups=[(t, lab, [p for p in site.get("publications", []) if p["type"] == t])
-                 for t, lab in (("journal", "शोधनिबंध (Journal articles)"),
-                                ("preprint", "प्रीप्रिंट (Preprints)"),
-                                ("article", "लेख (Articles)"),
-                                ("report", "अहवाल व प्रकाशने (Reports)"),
-                                ("conference", "परिषदांमधील सादरीकरणे (Conference presentations)"))])
+         groups=[(t_, lab, [p for p in site.get("publications", []) if p["type"] == t_])
+                 for t_, lab in (("journal", bi("Journal articles", "शोधनिबंध")),
+                                 ("preprint", bi("Preprints", "प्रीप्रिंट")),
+                                 ("article", bi("Articles", "लेख")),
+                                 ("report", bi("Reports", "अहवाल व प्रकाशने")),
+                                 ("conference", bi("Conference presentations", "परिषदांमधील सादरीकरणे")))])
     page("blog_list.html", "blog/index.html", "blog", posts=blog)
     for p in blog:
         page("post.html", f"blog/{p['slug']}/index.html", "blog", post=p)
@@ -229,8 +325,8 @@ def build(drafts=False):
     page("thanks.html", "contact/thanks/index.html", "contact")
     page("404.html", "404.html", "")
 
-    note = " (drafts सह)" if drafts else ""
-    print(f"तयार{note}: {len(blog)} लेख, {len(alerts)} इशारे -> {OUT}")
+    note = " (with drafts)" if drafts else ""
+    print(f"Built{note}: {len(blog)} posts, {len(alerts)} alerts -> {OUT}")
 
 
 def new_alert():
@@ -241,14 +337,29 @@ def new_alert():
         path = CONTENT / "alerts" / f"{today:%Y-%m-%d}-{n}.md"
         n += 1
     path.write_text(f"""---
-title: "विदर्भ: येथे इशाऱ्याचे शीर्षक लिहा"
+title:
+  en: "Vidarbha: write the alert title here"
+  mr: "विदर्भ: येथे इशाऱ्याचे शीर्षक लिहा"
 date: {today:%Y-%m-%d}
 level: yellow            # green / yellow / orange / red
-valid: "{mr_date(today)} सकाळी ८:३० ते पुढील २४ तास"
-regions: [नागपूर, वर्धा, चंद्रपूर]
-hazards: [मुसळधार पाऊस, विजांसह वादळ]
-draft: true              # प्रसिद्ध करताना ही ओळ काढा किंवा false करा
+valid:
+  en: "{en_date(today)}, 08:30 IST for the next 24 hours"
+  mr: "{mr_date(today)} सकाळी ८:३० ते पुढील २४ तास"
+regions: [{{en: Nagpur, mr: नागपूर}}, {{en: Wardha, mr: वर्धा}}, {{en: Chandrapur, mr: चंद्रपूर}}]
+hazards: [{{en: Heavy rain, mr: मुसळधार पाऊस}}, {{en: Thunderstorm with lightning, mr: विजांसह वादळ}}]
+draft: true              # remove this line (or set false) to publish
 ---
+
+**Summary:** write the main warning here in one or two sentences.
+
+### Next 24 hours
+- ...
+
+### Advice for citizens
+- Do not shelter under trees during lightning.
+- ...
+
+<!-- mr -->
 
 **सारांश:** येथे एक-दोन वाक्यांत मुख्य इशारा लिहा.
 
@@ -259,39 +370,58 @@ draft: true              # प्रसिद्ध करताना ही �
 - विजा चमकत असताना झाडाखाली थांबू नका.
 - ...
 """, encoding="utf-8")
-    print("नवीन इशारा:", path)
+    print("New alert:", path)
 
 
 def new_blog(slug):
     if not re.fullmatch(r"[a-z0-9-]+", slug):
-        raise SystemExit("लेखाचे नाव (slug) इंग्रजी लहान अक्षरे, अंक आणि - वापरून द्या, उदा. monsoon-2026")
+        raise SystemExit("Give the post slug in lowercase letters, digits and -, e.g. monsoon-2026")
     today = date.today()
     path = CONTENT / "blog" / f"{today:%Y-%m-%d}-{slug}.md"
     if path.exists():
-        raise SystemExit(f"{path} आधीच अस्तित्वात आहे")
+        raise SystemExit(f"{path} already exists")
     path.write_text(f"""---
-title: "लेखाचे शीर्षक"
+title:
+  en: "Post title"
+  mr: "लेखाचे शीर्षक"
 date: {today:%Y-%m-%d}
-summary: "लेखाचा एका वाक्यातील सारांश (यादीत दिसतो)."
-tags: [हवामान]
-draft: true              # प्रसिद्ध करताना ही ओळ काढा किंवा false करा
+summary:
+  en: "One-sentence summary of the post (shown in the list)."
+  mr: "लेखाचा एका वाक्यातील सारांश (यादीत दिसतो)."
+tags: [{{en: Weather, mr: हवामान}}]
+draft: true              # remove this line (or set false) to publish
 ---
 
-येथे तुमचा लेख लिहा. **ठळक**, *तिरके*, यादी, [दुवे](https://mausam.imd.gov.in) आणि चित्रे वापरता येतात:
+Write the English post here. You can use **bold**, *italics*, lists, [links](https://mausam.imd.gov.in) and images:
 
-![चित्राचे वर्णन](../../static/images/chitra.jpg)
+![Image description](../../static/images/image.jpg)
+
+<!-- mr -->
+
+येथे मराठी लेख लिहा (हा भाग काढून टाकल्यास इंग्रजी लेख दोन्ही भाषांत दिसतो).
 """, encoding="utf-8")
-    print("नवीन लेख:", path)
+    print("New post:", path)
 
 
 HAWAMAN_COLOR = {1: "red", 2: "orange", 3: "yellow", 4: "green"}     # IMD district warning colour codes
-REGIONS_MR = ["कोकण", "मध्य महाराष्ट्र", "मराठवाडा", "विदर्भ"]
-HORIZON_MR = {"short": "अल्पकालीन विश्लेषण (१–३ दिवस)", "medium": "मध्यम कालावधी विश्लेषण (४–१० दिवस)",
-              "extended": "विस्तारित कालावधी विश्लेषण (२–४ आठवडे)", "seasonal": "हंगामी विश्लेषण (१–३ महिने)"}
-SLIDE_MR = {"cover": "मुखपृष्ठ", "short_range": "अल्पकालीन विश्लेषण", "satellite": "उपग्रह निरीक्षण",
-            "circulation_today": "आजची वाऱ्यांची स्थिती", "medium_range": "मध्यम कालावधी विश्लेषण",
-            "circulation_week": "आठवड्याची वाऱ्यांची स्थिती", "extended_range": "विस्तारित कालावधी विश्लेषण",
-            "seasonal": "हंगामी विश्लेषण", "outro": "समारोप"}
+# IMD district warning codes (same codes as WARNING_MR in hawaman_maharashtra/content/phrases.py)
+WARNING_EN = {2: "Heavy rain", 3: "Snowfall", 4: "Thunderstorm & lightning", 5: "Hailstorm",
+              6: "Dust storm", 7: "Dust raising winds", 8: "Strong surface winds", 9: "Heat wave",
+              10: "Hot & humid", 11: "Warm night", 12: "Cold wave", 13: "Cold day",
+              14: "Ground frost", 15: "Dense fog", 16: "Very heavy rain", 17: "Extremely heavy rain"}
+REGIONS = [bi("Konkan", "कोकण"), bi("Madhya Maharashtra", "मध्य महाराष्ट्र"),
+           bi("Marathwada", "मराठवाडा"), bi("Vidarbha", "विदर्भ")]
+HORIZON = {"short": bi("Short-range analysis (1–3 days)", "अल्पकालीन विश्लेषण (१–३ दिवस)"),
+           "medium": bi("Medium-range analysis (4–10 days)", "मध्यम कालावधी विश्लेषण (४–१० दिवस)"),
+           "extended": bi("Extended-range analysis (2–4 weeks)", "विस्तारित कालावधी विश्लेषण (२–४ आठवडे)"),
+           "seasonal": bi("Seasonal analysis (1–3 months)", "हंगामी विश्लेषण (१–३ महिने)")}
+SLIDES = {"cover": bi("Cover", "मुखपृष्ठ"), "short_range": bi("Short-range analysis", "अल्पकालीन विश्लेषण"),
+          "satellite": bi("Satellite view", "उपग्रह निरीक्षण"),
+          "circulation_today": bi("Today's wind circulation", "आजची वाऱ्यांची स्थिती"),
+          "medium_range": bi("Medium-range analysis", "मध्यम कालावधी विश्लेषण"),
+          "circulation_week": bi("This week's wind circulation", "आठवड्याची वाऱ्यांची स्थिती"),
+          "extended_range": bi("Extended-range analysis", "विस्तारित कालावधी विश्लेषण"),
+          "seasonal": bi("Seasonal analysis", "हंगामी विश्लेषण"), "outro": bi("Closing", "समारोप")}
 
 # the site presents the pipeline output as analysis, never as a forecast ("अंदाज")
 ANALYSIS_WORDS = [
@@ -311,7 +441,8 @@ def analysis_words(text):
 
 
 def hawaman(day=None):
-    """Turn the hawaman-vidnyan daily output (tweet, reel slides, discussion) into content/alerts/<date>-hawaman.md."""
+    """Turn the hawaman-vidnyan daily output (tweet, reel slides, discussion) into content/alerts/<date>-hawaman.md.
+    The pipeline writes Marathi only: labels are bilingual, the body stays Marathi (lang: mr)."""
     import json
     import os                                   # HAWAMAN_DIR is set by the GitHub Actions workflow
     from PIL import Image
@@ -322,14 +453,14 @@ def hawaman(day=None):
                   if out_root.exists() else None)
     pkg = out_root / str(day)
     if not day or not (pkg / "thread.txt").exists():
-        raise SystemExit(f"हवामान विज्ञान tweet सापडले नाही: {pkg}")
+        raise SystemExit(f"hawaman-vidnyan tweet not found: {pkg}")
     d = date.fromisoformat(day)
     meta = json.loads((pkg / "meta.json").read_text(encoding="utf-8")) if (pkg / "meta.json").exists() else {}
     runs = sorted((src / "data" / "runs").glob(f"{d:%Y%m%d}_*"))
     run = runs[-1] if runs else None
 
     # IMD warnings for that day decide the colour; without them the alert is "info" (model-based analysis only)
-    level, regions, hazards = "info", list(REGIONS_MR), []
+    level, regions, hazards = "info", list(REGIONS), []
     facts = run / "processed" / "facts.json" if run else None
     warn = json.loads(facts.read_text(encoding="utf-8")).get("warnings", {}) if facts and facts.exists() else {}
     wday = next((w for w in warn.get("days", []) if w["date"] == day), None) if warn.get("available") else None
@@ -338,14 +469,15 @@ def hawaman(day=None):
         from hawaman_maharashtra.content.phrases import WARNING_MR
         level = HAWAMAN_COLOR.get(wday["max_color"], "green")
         hit = [x for x in wday["districts"] if x["color"] < 4]
-        regions = [x["name_mr"] for x in hit] or regions
-        hazards = sorted({WARNING_MR.get(c) for x in hit for c in x["codes"]} - {None})
+        regions = [bi(x.get("district") or x["name_mr"], x["name_mr"]) for x in hit] or regions
+        codes = sorted({c for x in hit for c in x["codes"] if WARNING_MR.get(c)})
+        hazards = [bi(WARNING_EN.get(c, WARNING_MR[c]), WARNING_MR[c]) for c in codes]
 
     thread = analysis_words((pkg / "thread.txt").read_text(encoding="utf-8"))
     parts = [s.strip() for s in re.split(r"\n-{3,}\n", thread) if s.strip()]
     first = parts[0].splitlines()
     title = re.sub(r"^\W+", "", first[0]).strip() or "महाराष्ट्र हवामान विश्लेषण"
-    horizon = HORIZON_MR.get(meta.get("horizon"), "हवामान विश्लेषण")
+    horizon = HORIZON.get(meta.get("horizon"), bi("Weather analysis", "हवामान विश्लेषण"))
 
     def lines(s):                       # keep tweet line breaks, drop hashtag lines
         return "  \n".join(l for l in s.splitlines() if not l.startswith("#"))
@@ -370,7 +502,7 @@ def hawaman(day=None):
     for f in sorted((run / "graphics" / "instagram").glob("*.jpg")) if run else []:
         save(f, img_dir / "reel" / f.name, (540, 960))
         key = re.sub(r"^\d+_|(_slide)?$", "", f.stem)
-        slides.append({"src": f"{rel}/reel/{f.name}", "label": SLIDE_MR.get(key, key.replace("_", " "))})
+        slides.append({"src": f"{rel}/reel/{f.name}", "label": SLIDES.get(key, key.replace("_", " "))})
 
     # the same slides as one slow, looping GIF (360×640, 4 s per slide; ~0.6 MB)
     gif = None
@@ -380,9 +512,9 @@ def hawaman(day=None):
         frames[0].save(img_dir / "reel.gif", save_all=True, append_images=frames[1:], duration=4000, loop=0, optimize=True)
         gif = f"{rel}/reel.gif"
 
-    body = [f"**{horizon}** · वैयक्तिक विश्लेषणावर आधारित", "", lines("\n".join(first[1:])), ""]
+    body = [f"**{horizon['mr']}** · वैयक्तिक विश्लेषणावर आधारित", "", lines("\n".join(first[1:])), ""]
     if imgs:
-        body += [f"![{horizon}](../../{rel}/{imgs[0]})", ""]
+        body += [f"![{horizon['mr']}](../../{rel}/{imgs[0]})", ""]
     if len(parts) > 1:
         body += ["### हवामानामागचे कारण", ""] + [lines(s) + "\n" for s in parts[1:]]
     body += [f"![वाऱ्यांची स्थिती व दाब प्रणाली](../../{rel}/{n})\n" for n in imgs[1:]]
@@ -398,12 +530,12 @@ def hawaman(day=None):
         body += ["", f"दैनंदिन अपडेटसाठी X वर फॉलो करा: [@{tw.rstrip('/').rsplit('/', 1)[-1]}]({tw})"]
 
     q = lambda v: json.dumps(v, ensure_ascii=False)
-    front = [f"title: {q(title)}", f"date: {day}", f"level: {level}",
-             f"valid: {q(mr_date(d) + ' — ' + horizon)}",
+    valid = bi(en_date(d) + " — " + horizon["en"], mr_date(d) + " — " + horizon["mr"])
+    front = [f"title: {q(title)}", f"date: {day}", f"level: {level}", "lang: mr", f"valid: {q(valid)}",
              f"regions: {q(regions)}", f"hazards: {q(hazards)}", f"slides: {q(slides)}", f"gif: {q(gif)}", "source: hawaman-vidnyan"]
     dest = CONTENT / "alerts" / f"{day}-hawaman.md"
     dest.write_text("---\n" + "\n".join(front) + "\n---\n\n" + "\n".join(body).strip() + "\n", encoding="utf-8")
-    print(f"हवामान विज्ञान विश्लेषण ({level}, {len(slides)} slides): {dest}")
+    print(f"hawaman-vidnyan analysis ({level}, {len(slides)} slides): {dest}")
     return day
 
 
@@ -412,16 +544,16 @@ def push(msg):
     run = lambda *a: subprocess.run(["git", *a], cwd=ROOT, check=True)
     run("add", "-A")
     if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode == 0:
-        print("बदल नाहीत; push केले नाही"); return
+        print("No changes; nothing pushed"); return
     run("commit", "-q", "-m", msg)
     run("pull", "-q", "--rebase")             # laptop and GitHub Actions may both publish
     run("push", "-q")
-    print("GitHub वर push केले")
+    print("Pushed to GitHub")
 
 
 def serve(port=8000):
     handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(OUT))
-    print(f"पाहा: http://localhost:{port}   (थांबवण्यासाठी Ctrl+C)")
+    print(f"Preview: http://localhost:{port}   (Ctrl+C to stop)")
     http.server.ThreadingHTTPServer(("127.0.0.1", port), handler).serve_forever()
 
 
@@ -440,15 +572,15 @@ if __name__ == "__main__":
         day = hawaman(next((a for a in args[1:] if re.fullmatch(r"\d{4}-\d{2}-\d{2}", a)), None))
         if "--push" in sys.argv:
             build()
-            push(f"इशारा {day} (हवामान विज्ञान)")
+            push(f"Alert {day} (hawaman-vidnyan)")
     elif cmd == "forecast":                   # called by extreme-rainfall-aiera after it writes latest.json
         build()
         if "--push" in sys.argv:
             fc = load_forecast()
-            push(f"प्रायोगिक AI पाऊस अंदाज {fc['base_date'] if fc else ''}".strip())
+            push(f"Experimental AI rain forecast {fc['base_date'] if fc else ''}".strip())
     elif cmd == "new-blog":
         if len(args) < 2:
-            raise SystemExit("उदा.: python build.py new-blog monsoon-2026")
+            raise SystemExit("e.g. python build.py new-blog monsoon-2026")
         new_blog(args[1])
     else:
         raise SystemExit(__doc__)

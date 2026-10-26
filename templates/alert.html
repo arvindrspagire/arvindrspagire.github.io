@@ -1,44 +1,46 @@
 {% extends "base.html" %}
-{% from "_macros.html" import level_badge %}
-{% block title %}{{ alert.title }} — हवामान इशारा{% endblock %}
-{% block description %}{{ alert.lvl.label }} {{ "विश्लेषण" if alert.level == "info" else "इशारा" }}: {{ alert.title }} ({{ alert.date_mr }}){% endblock %}
+{% from "_macros.html" import level_badge, tlist, body %}
+{% block title %}{{ alert.title | en }} — Weather alert{% endblock %}
+{% block title_mr %}{{ alert.title | in_mr }} — हवामान इशारा{% endblock %}
+{% block description %}{{ alert.lvl.label.en }} {{ "analysis" if alert.level == "info" else "alert" }}: {{ alert.title | en }} ({{ alert.date_str.en }}){% endblock %}
 {% block content %}
 <article class="article">
-  <p class="muted"><a href="{{ root }}alerts/">← सर्व इशारे</a></p>
-  {% if alert.draft %}<p class="draft-flag">मसुदा (draft) — हा इशारा अद्याप प्रसिद्ध झालेला नाही</p>{% endif %}
+  <p class="muted"><a href="{{ root }}alerts/">{{ t("← All alerts", "← सर्व इशारे") }}</a></p>
+  {% if alert.draft %}<p class="draft-flag">{{ t("Draft — this alert has not been published yet", "मसुदा (draft) — हा इशारा अद्याप प्रसिद्ध झालेला नाही") }}</p>{% endif %}
   <div class="alert-banner level-{{ alert.level }}">
     {{ level_badge(alert.lvl, alert.level) }}
-    <h1>{{ alert.title }}</h1>
+    <h1>{{ alert.title | t }}</h1>
     <dl class="alert-facts">
-      <div><dt>दिनांक</dt><dd><time datetime="{{ alert.date.isoformat() }}">{{ alert.date_mr_long }}</time></dd></div>
-      {% if alert.valid %}<div><dt>वैधता</dt><dd>{{ alert.valid }}</dd></div>{% endif %}
-      {% if alert.regions %}<div><dt>जिल्हे/भाग</dt><dd>{{ alert.regions | join(", ") }}</dd></div>{% endif %}
-      {% if alert.hazards %}<div><dt>धोके</dt><dd>{{ alert.hazards | join(", ") }}</dd></div>{% endif %}
+      <div><dt>{{ t("Date", "दिनांक") }}</dt><dd><time datetime="{{ alert.date.isoformat() }}">{{ alert.date_long | t }}</time></dd></div>
+      {% if alert.valid %}<div><dt>{{ t("Valid", "वैधता") }}</dt><dd>{{ alert.valid | t }}</dd></div>{% endif %}
+      {% if alert.regions %}<div><dt>{{ t("Districts / regions", "जिल्हे/भाग") }}</dt><dd>{{ tlist(alert.regions) }}</dd></div>{% endif %}
+      {% if alert.hazards %}<div><dt>{{ t("Hazards", "धोके") }}</dt><dd>{{ tlist(alert.hazards) }}</dd></div>{% endif %}
     </dl>
   </div>
   {% if alert.slides %}
   <section class="reel">
-    <h2>आजचे दृश्य विश्लेषण <span class="muted">(रील स्लाइड्स)</span></h2>
+    <h2>{{ t("Today's visual analysis", "आजचे दृश्य विश्लेषण") }} <span class="muted">{{ t("(reel slides)", "(रील स्लाइड्स)") }}</span></h2>
     {% if alert.gif %}
     <figure class="reel-gif">
-      <img src="{{ root }}{{ alert.gif }}" alt="आजच्या हवामान विश्लेषणाच्या सर्व स्लाइड्स (चलचित्र)" width="360" height="640">
-      <figcaption class="muted">{{ alert.slides | length | mr }} स्लाइड्स · प्रत्येक ४ सेकंद · सतत पुनरावृत्ती</figcaption>
+      <img src="{{ root }}{{ alert.gif }}" alt="All slides of today's weather analysis (animation)" width="360" height="640">
+      <figcaption class="muted">{{ t(alert.slides | length ~ " slides · 4 seconds each · loops continuously",
+                                     (alert.slides | length | mr) ~ " स्लाइड्स · प्रत्येक ४ सेकंद · सतत पुनरावृत्ती") }}</figcaption>
     </figure>
     <details class="reel-all">
-      <summary>सर्व स्लाइड्स स्वतंत्रपणे पाहा</summary>
+      <summary>{{ t("View each slide separately", "सर्व स्लाइड्स स्वतंत्रपणे पाहा") }}</summary>
     {% endif %}
     <div class="reel-strip">
       {% for s in alert.slides %}
       <figure class="reel-slide">
-        <a href="{{ root }}{{ s.src }}" target="_blank" rel="noopener"><img src="{{ root }}{{ s.src }}" alt="{{ s.label }}" loading="lazy" width="540" height="960"></a>
-        <figcaption><span class="slide-n">{{ loop.index | mr }}</span> {{ s.label }}</figcaption>
+        <a href="{{ root }}{{ s.src }}" target="_blank" rel="noopener"><img src="{{ root }}{{ s.src }}" alt="{{ s.label | en }}" loading="lazy" width="540" height="960"></a>
+        <figcaption><span class="slide-n">{{ loop.index | num }}</span> {{ s.label | t }}</figcaption>
       </figure>
       {% endfor %}
     </div>
     {% if alert.gif %}</details>{% endif %}
   </section>
   {% endif %}
-  <div class="prose">{{ alert.body | safe }}</div>
-  <p class="disclaimer">{{ site.alert_disclaimer }}</p>
+  {{ body(alert.body, alert.lang) }}
+  <p class="disclaimer">{{ site.alert_disclaimer | t }}</p>
 </article>
 {% endblock %}

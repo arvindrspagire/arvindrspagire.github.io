@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% from "_macros.html" import post_card %}
-{% block title %}ब्लॉग — {{ site.name_mr }}{% endblock %}
+{% block title %}Blog — {{ site.name_en }}{% endblock %}
+{% block title_mr %}ब्लॉग — {{ site.name_mr }}{% endblock %}
 {% block content %}
-<h1 class="page-title">ब्लॉग</h1>
-<p class="lead">हवामान, मान्सून, संशोधन आणि विज्ञानाविषयी मराठीतून लेख.</p>
+<h1 class="page-title">{{ t("Blog", "ब्लॉग") }}</h1>
+<p class="lead">{{ t("Posts on weather, the monsoon, research and science, in English and Marathi.", "हवामान, मान्सून, संशोधन आणि विज्ञानाविषयी इंग्रजी व मराठीतून लेख.") }}</p>
 {% if posts %}
 <div class="grid">
   {% for p in posts %}{{ post_card(p, root) }}{% endfor %}
 </div>
 {% else %}
-<p class="empty">अद्याप कोणताही लेख प्रसिद्ध झालेला नाही.</p>
+<p class="empty">{{ t("No posts have been published yet.", "अद्याप कोणताही लेख प्रसिद्ध झालेला नाही.") }}</p>
 {% endif %}
 {% endblock %}

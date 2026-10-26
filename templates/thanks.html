@@ -1,9 +1,10 @@
 {% extends "base.html" %}
-{% block title %}धन्यवाद — {{ site.name_mr }}{% endblock %}
+{% block title %}Thank you — {{ site.name_en }}{% endblock %}
+{% block title_mr %}धन्यवाद — {{ site.name_mr }}{% endblock %}
 {% block content %}
 <section class="card thanks">
-  <h1 class="page-title">धन्यवाद!</h1>
-  <p>तुमचा संदेश / सदस्यता मिळाली आहे. लवकरच संपर्क करतो.</p>
-  <p><a class="btn" href="{{ root }}">मुख्यपृष्ठावर जा</a> <a class="btn btn-ghost" href="{{ root }}blog/">लेख वाचा</a></p>
+  <h1 class="page-title">{{ t("Thank you!", "धन्यवाद!") }}</h1>
+  <p>{{ t("Your message / subscription has been received. I will get back to you soon.", "तुमचा संदेश / सदस्यता मिळाली आहे. लवकरच संपर्क करतो.") }}</p>
+  <p><a class="btn" href="{{ root }}">{{ t("Go to the home page", "मुख्यपृष्ठावर जा") }}</a> <a class="btn btn-ghost" href="{{ root }}blog/">{{ t("Read posts", "लेख वाचा") }}</a></p>
 </section>
 {% endblock %}

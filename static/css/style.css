@@ -1,4 +1,4 @@
-/* ===== मराठी वैयक्तिक संकेतस्थळ — एकच stylesheet ===== */
+/* ===== Personal website (English / मराठी) — single stylesheet ===== */
 :root {
   --ink: #1b2430;
   --muted: #5d6b7a;
@@ -48,6 +48,13 @@ p { margin: 0 0 .9em; }
 .nav a:hover { background: rgba(255,255,255,.12); color: #fff; }
 .nav a.active { background: #fff; color: var(--brand); }
 .nav-toggle, .nav-burger { display: none; }
+/* two languages in every page: <html lang="en|mr"> decides which spans/blocks are shown */
+html:not([lang="mr"]) .l-mr, html[lang="mr"] .l-en { display: none !important; }
+/* English / मराठी switch: after the menu on wide screens, beside the burger on phones */
+.lang-btn { order: 3; flex: none; font: inherit; font-weight: 600; font-size: .95rem; line-height: 1.6; color: #fff; background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.55); border-radius: 999px; padding: 2px 14px; cursor: pointer; }
+.lang-btn:hover { background: #fff; color: var(--brand); }
+.lang-note { font-size: .92rem; background: #eef6fa; border-left: 3px solid var(--brand); padding: 6px 12px; border-radius: 6px; }
 
 @media (max-width: 860px) {
   .nav-burger { display: block; width: 40px; height: 40px; cursor: pointer; position: relative; }
@@ -58,6 +65,7 @@ p { margin: 0 0 .9em; }
   .nav-burger span::before { top: -7px; left: 0; right: 0; }
   .nav-burger span::after { top: 7px; left: 0; right: 0; }
   .header-inner { flex-wrap: wrap; }
+  .lang-btn { order: 0; margin-left: auto; }
   .nav { display: none; width: 100%; flex-direction: column; padding-bottom: 12px; }
   .nav-toggle:checked ~ .nav { display: flex; }
 }

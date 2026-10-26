@@ -5,66 +5,69 @@
 <section class="hero">
   <div class="hero-photo">
     {% if has_photo %}
-    <img src="{{ root }}{{ site.photo }}?v={{ v }}" alt="{{ site.name_mr }}" width="200" height="200">
+    <img src="{{ root }}{{ site.photo }}?v={{ v }}" alt="{{ site.name_en }}" width="200" height="200">
     {% else %}
-    <div class="avatar" aria-hidden="true">अ</div>
+    <div class="avatar" aria-hidden="true">A</div>
     {% endif %}
   </div>
   <div class="hero-text">
-    <p class="eyebrow">{{ site.tagline }}</p>
-    <h1>{{ site.name_mr }}</h1>
-    <p class="name-en">{{ site.name_en }}</p>
-    <p class="hero-role"><strong>{{ site.position }}</strong>, {{ site.organisation }}
-      <span class="hero-loc">{{ icon("pin") }}{{ site.location }}</span></p>
-    <p class="hero-bio">{{ site.bio[0] }}</p>
+    <p class="eyebrow">{{ site.tagline | t }}</p>
+    <h1>{{ t(site.name_en, site.name_mr) }}</h1>
+    <p class="name-en">{{ t(site.name_mr, site.name_en) }}</p>
+    <p class="hero-role"><strong>{{ site.position | t }}</strong>, {{ site.organisation | t }}
+      <span class="hero-loc">{{ icon("pin") }}{{ site.location | t }}</span></p>
+    <p class="hero-bio">{{ site.bio[0] | t }}</p>
     {{ profile_links(site, "on-dark") }}
   </div>
 </section>
 
-<section class="stats" aria-label="ठळक आकडे">
+<section class="stats" aria-label="Highlights">
   {% for n, label in stats %}
-  <div class="stat"><span class="stat-n">{{ n }}</span><span class="stat-l">{{ label }}</span></div>
+  <div class="stat"><span class="stat-n">{{ n | num }}</span><span class="stat-l">{{ label | t }}</span></div>
   {% endfor %}
 </section>
 
 <section class="section">
   <div class="section-head">
-    <h2>ताजा हवामान इशारा</h2>
-    <a href="{{ root }}alerts/">सर्व इशारे →</a>
+    <h2>{{ t("Latest weather alert", "ताजा हवामान इशारा") }}</h2>
+    <a href="{{ root }}alerts/">{{ t("All alerts →", "सर्व इशारे →") }}</a>
   </div>
   {% if latest_alert %}
     {{ alert_card(latest_alert, root) }}
     <p class="stale-note muted" data-date="{{ latest_alert.date.isoformat() }}" hidden>
-      टीप: हा इशारा {{ latest_alert.date_mr }} रोजीचा आहे; आजचा इशारा अद्याप प्रसिद्ध झालेला नाही.</p>
+      {{ t("Note: this alert is from " ~ latest_alert.date_str.en ~ "; today's alert has not been published yet.",
+           "टीप: हा इशारा " ~ latest_alert.date_str.mr ~ " रोजीचा आहे; आजचा इशारा अद्याप प्रसिद्ध झालेला नाही.") }}</p>
   {% else %}
-    <p class="empty">सध्या कोणताही इशारा प्रसिद्ध केलेला नाही.</p>
+    <p class="empty">{{ t("No alert has been published at the moment.", "सध्या कोणताही इशारा प्रसिद्ध केलेला नाही.") }}</p>
   {% endif %}
   {% if site.contact.twitter %}
-  <p class="follow"><a href="{{ site.contact.twitter }}" rel="noopener" target="_blank">𝕏 दैनंदिन महाराष्ट्र हवामान अपडेट: @{{ site.contact.twitter.rstrip('/').split('/')[-1] }}</a></p>
+  <p class="follow"><a href="{{ site.contact.twitter }}" rel="noopener" target="_blank">𝕏 {{ t("Daily Maharashtra weather updates:", "दैनंदिन महाराष्ट्र हवामान अपडेट:") }} @{{ site.contact.twitter.rstrip('/').split('/')[-1] }}</a></p>
   {% endif %}
 </section>
 
 {% if fc %}
 <section class="section">
   <div class="section-head">
-    <h2>प्रायोगिक AI पाऊस अंदाज <small class="muted">(Experimental AI forecast)</small></h2>
-    <a href="{{ root }}forecast/">संपूर्ण अंदाज →</a>
+    <h2>{{ t("Experimental AI rain forecast", "प्रायोगिक AI पाऊस अंदाज") }}</h2>
+    <a href="{{ root }}forecast/">{{ t("Full forecast →", "संपूर्ण अंदाज →") }}</a>
   </div>
   {% for c in fc.categorical if c.display == "selector" %}{{ taluka_selector(c) }}{% endfor %}
   {% for c in fc.categorical if c.display == "selector" %}
   <div class="card home-fc">
-    <p><strong>महाराष्ट्र — पुढील {{ c.days | length | mr }} दिवस: किती तालुक्यांत कोणता पाऊस?</strong></p>
+    <p><strong>{{ t("Maharashtra — next " ~ c.days | length ~ " days: how many talukas get which rain?",
+                    "महाराष्ट्र — पुढील " ~ (c.days | length | mr) ~ " दिवस: किती तालुक्यांत कोणता पाऊस?") }}</strong></p>
     <div class="fc-days">
       {% for d in c.days %}{% set i = loop.index0 %}
       <div class="fc-day">
-        <p class="fc-date">{{ d.date_mr }}</p>
-        {% for k in c.classes %}{% if c.summary[i][loop.index0] != "०" %}
-        <p class="mh-row"><span class="cat-chip cat-{{ loop.index0 }}">{{ k.mr }}</span> {{ c.summary[i][loop.index0] }}</p>
+        <p class="fc-date">{{ d.date_str | t }}</p>
+        {% for k in c.classes %}{% if c.summary[i][loop.index0] %}
+        <p class="mh-row"><span class="cat-chip cat-{{ loop.index0 }}">{{ k.label | t }}</span> {{ c.summary[i][loop.index0] | num }}</p>
         {% endif %}{% endfor %}
       </div>
       {% endfor %}
     </div>
-    <p class="muted">डीप-लर्निंग (CNN-LSTM) आधारित संशोधनात्मक अंदाज · आधार: ECMWF, {{ fc.base_mr }} · अधिकृत इशारा नाही</p>
+    <p class="muted">{{ t("Deep-learning (CNN-LSTM) research forecast · input: ECMWF, " ~ fc.base_str.en ~ " · not an official warning",
+                          "डीप-लर्निंग (CNN-LSTM) आधारित संशोधनात्मक अंदाज · आधार: ECMWF, " ~ fc.base_str.mr ~ " · अधिकृत इशारा नाही") }}</p>
   </div>
   {% endfor %}
 </section>
@@ -72,22 +75,22 @@
 
 <section class="section">
   <div class="section-head">
-    <h2>ताजे लेख</h2>
-    <a href="{{ root }}blog/">सर्व लेख →</a>
+    <h2>{{ t("Latest posts", "ताजे लेख") }}</h2>
+    <a href="{{ root }}blog/">{{ t("All posts →", "सर्व लेख →") }}</a>
   </div>
   {% if posts %}
   <div class="grid">
     {% for p in posts %}{{ post_card(p, root) }}{% endfor %}
   </div>
   {% else %}
-    <p class="empty">लवकरच नवीन लेख येत आहेत.</p>
+    <p class="empty">{{ t("New posts are coming soon.", "लवकरच नवीन लेख येत आहेत.") }}</p>
   {% endif %}
 </section>
 
 <section class="section">
-  <h2>संशोधनाचे विषय</h2>
+  <h2>{{ t("Research interests", "संशोधनाचे विषय") }}</h2>
   <ul class="chips">
-    {% for i in site.interests %}<li>{{ i }}</li>{% endfor %}
+    {% for i in site.interests %}<li>{{ i | t }}</li>{% endfor %}
   </ul>
 </section>
 

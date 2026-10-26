@@ -1,26 +1,38 @@
+{# t(en, mr) / x | t render both languages; CSS shows the one in <html lang>. Plain strings show in both. #}
+{% macro tlist(xs) -%}
+{% for x in xs %}{{ x | t }}{% if not loop.last %}, {% endif %}{% endfor %}
+{%- endmacro %}
+
+{# a Markdown body: {en, mr} -> both blocks; a single body (one language) -> shown in both #}
+{% macro body(b, lang=None) -%}
+{% if b is mapping %}<div class="prose l-en">{{ b.en | safe }}</div><div class="prose l-mr" lang="mr">{{ b.mr | safe }}</div>
+{% else %}{% if lang == "mr" %}<p class="lang-note l-en">This page is written in Marathi.</p>{% elif lang == "en" %}<p class="lang-note l-mr" lang="mr">हा मजकूर इंग्रजीत आहे.</p>{% endif %}
+<div class="prose"{% if lang %} lang="{{ lang }}"{% endif %}>{{ b | safe }}</div>{% endif %}
+{%- endmacro %}
+
 {% macro level_badge(lvl, key) -%}
-<span class="badge badge-{{ key }}">{% if key == "info" %}{{ lvl.label }} विश्लेषण{% else %}{{ lvl.label }} इशारा · {{ lvl.action }}{% endif %}</span>
+<span class="badge badge-{{ key }}">{% if key == "info" %}{{ t(lvl.label.en ~ " · analysis", lvl.label.mr ~ " विश्लेषण") }}{% else %}{{ t(lvl.label.en ~ " alert · " ~ lvl.action.en, lvl.label.mr ~ " इशारा · " ~ lvl.action.mr) }}{% endif %}</span>
 {%- endmacro %}
 
 {% macro alert_card(a, root, compact=False) -%}
 <article class="alert-card level-{{ a.level }}">
   <div class="alert-card-top">
     {{ level_badge(a.lvl, a.level) }}
-    <time datetime="{{ a.date.isoformat() }}" class="muted">{{ a.date_mr_long }}</time>
+    <time datetime="{{ a.date.isoformat() }}" class="muted">{{ a.date_long | t }}</time>
   </div>
-  <h3><a href="{{ root }}alerts/{{ a.slug }}/">{{ a.title }}</a></h3>
-  {% if a.regions %}<p class="alert-meta"><strong>जिल्हे/भाग:</strong> {{ a.regions | join(", ") }}</p>{% endif %}
-  {% if a.hazards and not compact %}<p class="alert-meta"><strong>धोके:</strong> {{ a.hazards | join(", ") }}</p>{% endif %}
-  {% if a.valid %}<p class="alert-meta"><strong>वैधता:</strong> {{ a.valid }}</p>{% endif %}
+  <h3><a href="{{ root }}alerts/{{ a.slug }}/">{{ a.title | t }}</a></h3>
+  {% if a.regions %}<p class="alert-meta"><strong>{{ t("Districts / regions:", "जिल्हे/भाग:") }}</strong> {{ tlist(a.regions) }}</p>{% endif %}
+  {% if a.hazards and not compact %}<p class="alert-meta"><strong>{{ t("Hazards:", "धोके:") }}</strong> {{ tlist(a.hazards) }}</p>{% endif %}
+  {% if a.valid %}<p class="alert-meta"><strong>{{ t("Valid:", "वैधता:") }}</strong> {{ a.valid | t }}</p>{% endif %}
 </article>
 {%- endmacro %}
 
 {% macro post_card(p, root) -%}
 <article class="post-card">
-  <time datetime="{{ p.date.isoformat() }}" class="muted">{{ p.date_mr }}</time>
-  <h3><a href="{{ root }}blog/{{ p.slug }}/">{{ p.title }}</a></h3>
-  {% if p.summary %}<p>{{ p.summary }}</p>{% endif %}
-  {% if p.tags %}<p class="tags">{% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}</p>{% endif %}
+  <time datetime="{{ p.date.isoformat() }}" class="muted">{{ p.date_str | t }}</time>
+  <h3><a href="{{ root }}blog/{{ p.slug }}/">{{ p.title | t }}</a></h3>
+  {% if p.summary %}<p>{{ p.summary | t }}</p>{% endif %}
+  {% if p.tags %}<p class="tags">{% for x in p.tags %}<span class="tag">{{ x | t }}</span>{% endfor %}</p>{% endif %}
 </article>
 {%- endmacro %}
 
@@ -47,23 +59,23 @@
   {% if site.contact.orcid %}<a class="pl" href="{{ site.contact.orcid }}" rel="noopener" target="_blank">{{ icon("orcid") }}<span>ORCID</span></a>{% endif %}
   {% if site.contact.github %}<a class="pl" href="{{ site.contact.github }}" rel="noopener" target="_blank">{{ icon("github") }}<span>GitHub</span></a>{% endif %}
   {% if site.contact.twitter %}<a class="pl" href="{{ site.contact.twitter }}" rel="noopener" target="_blank"><span class="x-ico" aria-hidden="true">𝕏</span><span>@{{ site.contact.twitter.rstrip('/').split('/')[-1] }}</span></a>{% endif %}
-  <a class="pl" href="mailto:{{ site.contact.email }}">{{ icon("mail") }}<span>ई-मेल</span></a>
+  <a class="pl" href="mailto:{{ site.contact.email }}">{{ icon("mail") }}<span>{{ t("E-mail", "ई-मेल") }}</span></a>
 </p>
 {%- endmacro %}
 
 {% macro research_card(r) -%}
 <article class="research-card">
-  <div class="rc-top"><span class="rc-icon">{{ icon(r.icon) }}</span><span class="status">सुरू आहे</span></div>
-  <h3>{{ r.title }}</h3>
-  <p class="rc-en">{{ r.en }}</p>
-  <p>{{ r.text }}</p>
-  {% if r.tags %}<p class="tags">{% for t in r.tags %}<span class="tag">{{ t }}</span>{% endfor %}</p>{% endif %}
+  <div class="rc-top"><span class="rc-icon">{{ icon(r.icon) }}</span><span class="status">{{ t("Ongoing", "सुरू आहे") }}</span></div>
+  <h3>{{ r.title | t }}</h3>
+  {% if r.en %}<p class="rc-en">{{ r.en }}</p>{% endif %}
+  <p>{{ r.text | t }}</p>
+  {% if r.tags %}<p class="tags">{% for x in r.tags %}<span class="tag">{{ x | t }}</span>{% endfor %}</p>{% endif %}
 </article>
 {%- endmacro %}
 
 {% macro doi_link(p) -%}
 {% if p.doi %}<a class="doi" href="https://doi.org/{{ p.doi }}" rel="noopener" target="_blank">{{ icon("doi") }}doi:{{ p.doi }}</a>
-{% elif p.link %}<a class="doi" href="{{ p.link }}" rel="noopener" target="_blank">{{ icon("doi") }}दुवा</a>{% endif %}
+{% elif p.link %}<a class="doi" href="{{ p.link }}" rel="noopener" target="_blank">{{ icon("doi") }}{{ t("Link", "दुवा") }}</a>{% endif %}
 {%- endmacro %}
 
 
@@ -78,10 +90,10 @@
 {% macro subscribe_form(site, cls="") %}
 {% if site.contact.form_email %}
 <form class="subscribe {{ cls }}" action="https://formsubmit.co/{{ site.contact.form_email }}" method="POST">
-  {{ form_hidden(site, "नवीन सदस्य (Subscribe) — " ~ site.name_en) }}
-  <input type="hidden" name="प्रकार" value="Subscribe: हवामान इशारे, प्रायोगिक AI अंदाज व लेख">
-  <label for="sub-{{ cls or 'x' }}" class="sr-only">ई-मेल</label>
-  <input id="sub-{{ cls or 'x' }}" type="email" name="email" required placeholder="तुमचा ई-मेल">
+  {{ form_hidden(site, "New subscriber — " ~ site.name_en) }}
+  <input type="hidden" name="type" value="Subscribe: weather alerts, experimental AI forecast and posts">
+  <label for="sub-{{ cls or 'x' }}" class="sr-only">E-mail</label>
+  <input id="sub-{{ cls or 'x' }}" type="email" name="email" required placeholder="Your e-mail" data-mr-ph="तुमचा ई-मेल">
   <button type="submit" class="btn">Subscribe</button>
 </form>
 {% endif %}
@@ -89,25 +101,24 @@
 
 {% macro contact_form(site) %}
 <form class="msg-form" action="https://formsubmit.co/{{ site.contact.form_email }}" method="POST">
-  {{ form_hidden(site, "वेबसाइटवरून संदेश — " ~ site.name_en) }}
+  {{ form_hidden(site, "Message from the website — " ~ site.name_en) }}
   <div class="form-row">
-    <label>नाव *<input type="text" name="name" required autocomplete="name"></label>
-    <label>ई-मेल *<input type="email" name="email" required autocomplete="email"></label>
+    <label>{{ t("Name *", "नाव *") }}<input type="text" name="name" required autocomplete="name"></label>
+    <label>{{ t("E-mail *", "ई-मेल *") }}<input type="email" name="email" required autocomplete="email"></label>
   </div>
   <div class="form-row">
-    <label>फोन (ऐच्छिक)<input type="tel" name="phone" autocomplete="tel"></label>
-    <label>विषय
+    <label>{{ t("Phone (optional)", "फोन (ऐच्छिक)") }}<input type="tel" name="phone" autocomplete="tel"></label>
+    <label>{{ t("Topic", "विषय") }}
       <select name="topic">
-        <option>संशोधन सहकार्य (Research collaboration)</option>
-        <option>व्याख्यान / कार्यशाळा (Talk / workshop)</option>
-        <option>हवामानविषयक प्रश्न (Weather query)</option>
-        <option>प्रायोगिक AI अंदाज अभिप्राय (Forecast feedback)</option>
-        <option>इतर (Other)</option>
+        {% for en, mr in [("Research collaboration", "संशोधन सहकार्य"), ("Talk / workshop", "व्याख्यान / कार्यशाळा"),
+                          ("Weather query", "हवामानविषयक प्रश्न"), ("AI forecast feedback", "प्रायोगिक AI अंदाज अभिप्राय"), ("Other", "इतर")] %}
+        <option value="{{ en }}" data-mr="{{ mr }}">{{ en }}</option>
+        {% endfor %}
       </select>
     </label>
   </div>
-  <label>संदेश *<textarea name="message" rows="6" required></textarea></label>
-  <label class="check"><input type="checkbox" name="subscribe" value="होय"> नवीन इशारे व लेखांसाठी मला ई-मेल पाठवा</label>
-  <button type="submit" class="btn">संदेश पाठवा</button>
+  <label>{{ t("Message *", "संदेश *") }}<textarea name="message" rows="6" required></textarea></label>
+  <label class="check"><input type="checkbox" name="subscribe" value="yes"> {{ t("E-mail me about new alerts and posts", "नवीन इशारे व लेखांसाठी मला ई-मेल पाठवा") }}</label>
+  <button type="submit" class="btn">{{ t("Send message", "संदेश पाठवा") }}</button>
 </form>
 {% endmacro %}

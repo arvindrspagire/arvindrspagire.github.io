@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 {% from "_macros.html" import alert_card, level_badge %}
-{% block title %}हवामान इशारे — {{ site.name_mr }}{% endblock %}
+{% block title %}Weather alerts — {{ site.name_en }}{% endblock %}
+{% block title_mr %}हवामान इशारे — {{ site.name_mr }}{% endblock %}
 {% block content %}
-<h1 class="page-title">दैनंदिन हवामान विश्लेषण व इशारे</h1>
-<p class="lead">महाराष्ट्रासाठी दैनंदिन हवामान विश्लेषण — वैयक्तिक विश्लेषणावर आधारित, दररोज सकाळी अद्ययावत:
-  वाऱ्यांची स्थिती, कमी दाबाची क्षेत्रे, उपग्रह निरीक्षण आणि रील स्लाइड्स. रंग फक्त IMD च्या अधिकृत जिल्हानिहाय
-  इशाऱ्यांवरून ठरतो; ते उपलब्ध नसल्यास "माहितीपर विश्लेषण" दाखवले जाते.</p>
+<h1 class="page-title">{{ t("Daily weather analysis and alerts", "दैनंदिन हवामान विश्लेषण व इशारे") }}</h1>
+<p class="lead">{{ t("Daily weather analysis for Maharashtra, based on my own analysis and updated every morning: wind circulation, low-pressure areas, satellite views and reel slides. The colour comes only from IMD's official district-wise warnings; when those are not available, an \"Information · analysis\" label is shown. The daily analysis text is written in Marathi.",
+                     "महाराष्ट्रासाठी दैनंदिन हवामान विश्लेषण — वैयक्तिक विश्लेषणावर आधारित, दररोज सकाळी अद्ययावत: वाऱ्यांची स्थिती, कमी दाबाची क्षेत्रे, उपग्रह निरीक्षण आणि रील स्लाइड्स. रंग फक्त IMD च्या अधिकृत जिल्हानिहाय इशाऱ्यांवरून ठरतो; ते उपलब्ध नसल्यास \"माहितीपर विश्लेषण\" दाखवले जाते.") }}</p>
 
 <details class="legend card">
-  <summary>इशाऱ्यांचे रंग काय सांगतात?</summary>
+  <summary>{{ t("What do the alert colours mean?", "इशाऱ्यांचे रंग काय सांगतात?") }}</summary>
   <ul class="plain">
     {% for key, lvl in levels.items() %}
-    <li>{{ level_badge(lvl, key) }} — {{ lvl.desc }}</li>
+    <li>{{ level_badge(lvl, key) }} — {{ lvl.desc | t }}</li>
     {% endfor %}
   </ul>
 </details>
@@ -21,8 +21,8 @@
   {% for a in alerts %}{{ alert_card(a, root) }}{% endfor %}
 </div>
 {% else %}
-<p class="empty">सध्या कोणताही इशारा प्रसिद्ध केलेला नाही.</p>
+<p class="empty">{{ t("No alert has been published at the moment.", "सध्या कोणताही इशारा प्रसिद्ध केलेला नाही.") }}</p>
 {% endif %}
 
-<p class="disclaimer">{{ site.alert_disclaimer }}</p>
+<p class="disclaimer">{{ site.alert_disclaimer | t }}</p>
 {% endblock %}

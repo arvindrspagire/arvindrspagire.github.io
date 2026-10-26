@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-{% block title %}पान सापडले नाही — {{ site.name_mr }}{% endblock %}
+{% block title %}Page not found — {{ site.name_en }}{% endblock %}
+{% block title_mr %}पान सापडले नाही — {{ site.name_mr }}{% endblock %}
 {% block content %}
-<h1 class="page-title">पान सापडले नाही</h1>
-<p class="lead">तुम्ही शोधत असलेले पान उपलब्ध नाही. <a href="/">मुख्यपृष्ठावर परत जा</a>.</p>
+<h1 class="page-title">{{ t("Page not found", "पान सापडले नाही") }}</h1>
+<p class="lead">{{ t("The page you are looking for is not available.", "तुम्ही शोधत असलेले पान उपलब्ध नाही.") }} <a href="/">{{ t("Back to the home page", "मुख्यपृष्ठावर परत जा") }}</a>.</p>
 {% endblock %}

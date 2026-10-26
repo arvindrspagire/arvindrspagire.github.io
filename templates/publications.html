@@ -1,20 +1,21 @@
 {% extends "base.html" %}
 {% from "_macros.html" import profile_links, research_card, doi_link %}
-{% block title %}संशोधन व प्रकाशने — {{ site.name_mr }}{% endblock %}
+{% block title %}Research and publications — {{ site.name_en }}{% endblock %}
+{% block title_mr %}संशोधन व प्रकाशने — {{ site.name_mr }}{% endblock %}
 {% block content %}
-<h1 class="page-title">संशोधन व प्रकाशने</h1>
-<p class="lead">संदर्भ शैक्षणिक प्रथेनुसार इंग्रजीत दिले आहेत. संपूर्ण व अद्ययावत यादी, उद्धरणे (citations) यांसाठी
-  Google Scholar किंवा ORCID पाहा.</p>
+<h1 class="page-title">{{ t("Research and publications", "संशोधन व प्रकाशने") }}</h1>
+<p class="lead">{{ t("For the complete, up-to-date list and citations, see Google Scholar or ORCID.",
+                     "संदर्भ शैक्षणिक प्रथेनुसार इंग्रजीत दिले आहेत. संपूर्ण व अद्ययावत यादी, उद्धरणे (citations) यांसाठी Google Scholar किंवा ORCID पाहा.") }}</p>
 {{ profile_links(site) }}
 
 {% for key, label, items in groups if items %}
 <section class="section">
-  <h2>{{ label }}</h2>
+  <h2>{{ label | t }}</h2>
   <ol class="pubs">
     {% for p in items %}
     <li>
-      <span class="pub-year">{{ p.year | mr }}</span>
-      <span>{{ p.text }}{% if p.status %} <span class="pub-status">{{ p.status }}</span>{% endif %} {{ doi_link(p) }}{% if p.note and not p.doi %} <span class="pub-note">{{ p.note }}</span>{% endif %}</span>
+      <span class="pub-year">{{ p.year | num }}</span>
+      <span>{{ p.text }}{% if p.status %} <span class="pub-status">{{ p.status | t }}</span>{% endif %} {{ doi_link(p) }}{% if p.note and not p.doi %} <span class="pub-note">{{ p.note | t }}</span>{% endif %}</span>
     </li>
     {% endfor %}
   </ol>

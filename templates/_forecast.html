@@ -1,14 +1,24 @@
 {# shared by forecast.html and index.html #}
 {% from "_macros.html" import icon %}
+{% macro skill_line(c) -%}
+{{ t("Skill in the independent test period", "स्वतंत्र चाचणी कालावधीतील कौशल्य") }}{% if c.test_span %} ({{ c.test_span | num }}){% endif %} — Heidke Skill Score
+{{ t("(median, 0 = chance, 1 = perfect):", "(मध्यक, ० = योगायोग, १ = अचूक):") }}
+{% for d in c.days %}{{ d.short | t }}: {{ c.hss[loop.index0] | num }}{% if not loop.last %} · {% endif %}{% endfor %}
+{% if c.hss_jjas %}<br>{{ t("Monsoon only (June–September):", "फक्त पावसाळा (जून–सप्टेंबर):") }}
+{% for d in c.days %}{{ d.short | t }}: {{ c.hss_jjas[loop.index0] | num }}{% if not loop.last %} · {% endif %}{% endfor %} —
+{{ t("skill is lower in the monsoon because the day-to-day category is harder to call.", "पावसाळ्यात दिवसागणिक श्रेणी सांगणे अधिक कठीण असल्याने कौशल्य कमी आहे.") }}{% endif %}
+{%- endmacro %}
+
 {% macro taluka_selector(c) %}
 <section class="card cat-fc tq" id="{{ c.id }}">
-  <h2>{{ c.title_mr }}</h2>
-  <p class="muted">तुमचा तालुका निवडा (किंवा नकाशावर क्लिक करा) — पुढील {{ c.days | length | mr }} दिवसांचा दिवसनिहाय पाऊस श्रेणी अंदाज (प्रत्येक दिवस: त्या दिवशी सकाळी ८:३० ते दुसऱ्या दिवशी सकाळी ८:३०).</p>
-  <label class="tq-pick">तालुका:
+  <h2>{{ c.title | t }}</h2>
+  <p class="muted">{{ t("Pick your taluka (or click the map) — day-by-day rain category forecast for the next " ~ c.days | length ~ " days (each day: 08:30 IST that day to 08:30 IST the next day).",
+                        "तुमचा तालुका निवडा (किंवा नकाशावर क्लिक करा) — पुढील " ~ (c.days | length | mr) ~ " दिवसांचा दिवसनिहाय पाऊस श्रेणी अंदाज (प्रत्येक दिवस: त्या दिवशी सकाळी ८:३० ते दुसऱ्या दिवशी सकाळी ८:३०).") }}</p>
+  <label class="tq-pick">{{ t("Taluka:", "तालुका:") }}
     <select id="tq-select-{{ c.id }}">
-      {% for gname, rs in c.groups %}
-      <optgroup label="{{ gname }}">
-        {% for r in rs %}<option value="{{ r.id }}">{{ r.name_mr }}</option>{% endfor %}
+      {% for g, rs in c.groups %}
+      <optgroup label="{{ g | en }}{% if g | in_mr != g | en %} / {{ g | in_mr }}{% endif %}">
+        {% for r in rs %}<option value="{{ r.id }}" data-mr="{{ r.name | in_mr }}">{{ r.name | en }}</option>{% endfor %}
       </optgroup>
       {% endfor %}
     </select>
@@ -16,23 +26,24 @@
   <div class="tq-body">
     <div class="tq-days" id="tq-out-{{ c.id }}"></div>
     {% if c.maps %}
-    <svg class="tq-map" id="tq-map-{{ c.id }}" viewBox="-2 -2 {{ c.maps.w + 4 }} {{ c.maps.h + 4 }}" role="img" aria-label="तालुका नकाशा">
+    <svg class="tq-map" id="tq-map-{{ c.id }}" viewBox="-2 -2 {{ c.maps.w + 4 }} {{ c.maps.h + 4 }}" role="img" aria-label="Taluka map / तालुका नकाशा">
       {% for r in c.regions %}{% if r.id in c.maps.paths %}
-      <path class="cat-{{ r.cat[0] }}" data-id="{{ r.id }}" d="{{ c.maps.paths[r.id] }}"><title>{{ r.name_mr }}</title></path>
+      <path class="cat-{{ r.cat[0] }}" data-id="{{ r.id }}" d="{{ c.maps.paths[r.id] }}"><title data-mr="{{ r.name | in_mr }}">{{ r.name | en }}</title></path>
       {% endif %}{% endfor %}
     </svg>
     {% endif %}
   </div>
   <p class="cat-legend">
-    {% for k in c.classes %}<span class="cat-chip cat-{{ loop.index0 }}">{{ k.mr }} <small>{{ k.range_mr }}</small></span>{% endfor %}
+    {% for k in c.classes %}<span class="cat-chip cat-{{ loop.index0 }}">{{ k.label | t }} <small>{{ k.range | t }}</small></span>{% endfor %}
   </p>
-  <p class="muted">नकाशाचे रंग: उद्याचा ({{ c.days[0].date_mr }}) अंदाज. स्वतंत्र चाचणी कालावधीतील {% if c.test_span %}({{ c.test_span | mr }}){% endif %} कौशल्य (HSS मध्यक):
-    {% for d in c.days %}{{ d.short_mr }}: {{ c.hss_mr[loop.index0] }}{% if not loop.last %} · {% endif %}{% endfor %}{% if c.hss_jjas_mr %}<br>फक्त पावसाळा (जून–सप्टेंबर): {% for d in c.days %}{{ d.short_mr }}: {{ c.hss_jjas_mr[loop.index0] }}{% if not loop.last %} · {% endif %}{% endfor %} — पावसाळ्यात दिवसागणिक श्रेणी सांगणे अधिक कठीण असल्याने कौशल्य कमी आहे.{% endif %}</p>
-  {% if c.ecmwf_checked %}<p class="muted">अंदाज डीप-लर्निंग CNN-LSTM मॉडेलचा आहे (ERA5 व IMD पावसावर प्रशिक्षित; ECMWF चे वातावरणीय क्षेत्र इनपुट). सुरक्षा तपासणी: ECMWF नुसार कोरडे (१ मिमीपेक्षा कमी) असल्यास मॉडेलचा पाऊस दाखवला जात नाही; ECMWF मॉडेलची श्रेणी कधीही वाढवत नाही.</p>{% endif %}
-  <noscript><p class="empty">तालुका निवडण्यासाठी browser मध्ये JavaScript चालू करा.</p></noscript>
-  <script type="application/json" id="tq-data-{{ c.id }}">{{ {"classes": c.classes, "days": c.days,
+  <p class="muted">{{ t("Map colours: tomorrow's forecast (" ~ c.days[0].date_str.en ~ ").", "नकाशाचे रंग: उद्याचा (" ~ c.days[0].date_str.mr ~ ") अंदाज.") }} {{ skill_line(c) }}</p>
+  {% if c.ecmwf_checked %}<p class="muted">{{ t("The forecast comes from the deep-learning CNN-LSTM model (trained on ERA5 and IMD rainfall; ECMWF atmospheric fields as input). Safety check: where ECMWF is dry (under 1 mm) the model's rain is not shown; ECMWF never raises the model's category.",
+                                                "अंदाज डीप-लर्निंग CNN-LSTM मॉडेलचा आहे (ERA5 व IMD पावसावर प्रशिक्षित; ECMWF चे वातावरणीय क्षेत्र इनपुट). सुरक्षा तपासणी: ECMWF नुसार कोरडे (१ मिमीपेक्षा कमी) असल्यास मॉडेलचा पाऊस दाखवला जात नाही; ECMWF मॉडेलची श्रेणी कधीही वाढवत नाही.") }}</p>{% endif %}
+  <noscript><p class="empty">{{ t("Turn on JavaScript in your browser to pick a taluka.", "तालुका निवडण्यासाठी browser मध्ये JavaScript चालू करा.") }}</p></noscript>
+  <script type="application/json" id="tq-data-{{ c.id }}">{{ {"classes": c.classes | map(attribute="label") | list,
+    "days": c.days | map(attribute="date_str") | list,
     "regions": c.regions | map(attribute="id") | list,
-    "names": c.regions | map(attribute="name_mr") | list,
+    "names": c.regions | map(attribute="name") | list,
     "cat": c.regions | map(attribute="cat") | list,
     "prob": c.regions | map(attribute="prob") | list,
     "ec": c.regions | map(attribute="ecmwf_mm", default=None) | list} | tojson }}</script>
@@ -41,26 +52,30 @@
     var id = {{ c.id | tojson }}, D = JSON.parse(document.getElementById('tq-data-' + id).textContent);
     var sel = document.getElementById('tq-select-' + id), out = document.getElementById('tq-out-' + id);
     var map = document.getElementById('tq-map-' + id), key = 'tq-' + id;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); };
     var mr = function (s) { return String(s).replace(/[0-9]/g, function (d) { return '०१२३४५६७८९'[d]; }); };
+    // both languages in the markup, like the rest of the page (CSS shows one)
+    var t = function (en, m) { return m === undefined || m === en ? esc(en) : '<span class="l-en">' + esc(en) + '</span><span class="l-mr" lang="mr">' + esc(m) + '</span>'; };
+    var n = function (x) { return t(String(x), mr(x)); };
     function show(rid) {
       var i = D.regions.indexOf(rid); if (i < 0) return;
       sel.value = rid;
-      out.innerHTML = '<h3>' + D.names[i] + '</h3>' + D.days.map(function (d, j) {
+      out.innerHTML = '<h3>' + t(D.names[i].en, D.names[i].mr) + '</h3>' + D.days.map(function (d, j) {
         var c = D.cat[i][j], p = D.prob[i][j], ec = D.ec[i] ? D.ec[i][j] : null;
-        return '<article class="tq-day cat-edge-' + c + '"><p class="fc-date">' + d.date_mr + '</p>' +
-          '<p class="tq-cat">अंदाज: <span class="cat-chip cat-' + c + '">' + D.classes[c].mr + '</span></p>' +
-          (ec === null ? '' : '<p class="tq-note">ECMWF पाऊस: ' + mr(ec.toFixed(1)) + ' मिमी</p>') +
-          '<p class="tq-note">AI मॉडेलची प्रत्येक श्रेणीची शक्यता:</p>' +
-          D.classes.map(function (k, n) {
-            var v = Math.round(p[n] * 100);
-            return '<div class="tq-bar"><span>' + k.mr + '</span><i><b class="cat-' + n + '" style="width:' + v + '%"></b></i><em>' + mr(v) + '%</em></div>';
+        return '<article class="tq-day cat-edge-' + c + '"><p class="fc-date">' + t(d.en, d.mr) + '</p>' +
+          '<p class="tq-cat">' + t('Forecast:', 'अंदाज:') + ' <span class="cat-chip cat-' + c + '">' + t(D.classes[c].en, D.classes[c].mr) + '</span></p>' +
+          (ec === null ? '' : '<p class="tq-note">' + t('ECMWF rain: ' + ec.toFixed(1) + ' mm', 'ECMWF पाऊस: ' + mr(ec.toFixed(1)) + ' मिमी') + '</p>') +
+          '<p class="tq-note">' + t("AI model's chance of each category:", 'AI मॉडेलची प्रत्येक श्रेणीची शक्यता:') + '</p>' +
+          D.classes.map(function (k, m) {
+            var v = Math.round(p[m] * 100);
+            return '<div class="tq-bar"><span>' + t(k.en, k.mr) + '</span><i><b class="cat-' + m + '" style="width:' + v + '%"></b></i><em>' + n(v) + '%</em></div>';
           }).join('') + '</article>';
       }).join('');
       if (map) map.querySelectorAll('path').forEach(function (el) { el.classList.toggle('on', el.dataset.id === rid); });
       try { localStorage.setItem(key, rid); } catch (e) {}
     }
     sel.addEventListener('change', function () { show(sel.value); });
-    if (map) map.addEventListener('click', function (e) { var t = e.target.closest('path'); if (t) show(t.dataset.id); });
+    if (map) map.addEventListener('click', function (e) { var p = e.target.closest('path'); if (p) show(p.dataset.id); });
     var saved = null; try { saved = localStorage.getItem(key); } catch (e) {}
     show(saved && D.regions.indexOf(saved) >= 0 ? saved : sel.value);
   })();

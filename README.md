@@ -84,7 +84,14 @@ _archive_flask_v1/   जुने Flask संकेतस्थळ (संद�
 
 ---
 
-**English summary.** Static Marathi site: profile in `site.yaml`, posts and alerts as Markdown in
-`content/`. `python build.py` renders to `docs/` (serve with GitHub Pages from `/docs`).
+**English summary.** Static bilingual site: English by default, with a मराठी / English button in the
+header (the choice is remembered in the browser; `?lang=mr` links straight to Marathi). Profile in `site.yaml`,
+posts and alerts as Markdown in `content/`. `python build.py` renders to `docs/` (serve with GitHub Pages from `/docs`).
 `new-alert` / `new-blog <slug>` scaffold files; `serve [--drafts]` previews on localhost:8000.
 Alert `level` follows IMD colour codes (green/yellow/orange/red).
+
+**Two languages.** Any text in `site.yaml` or in front matter can be `{en: "...", mr: "..."}`; a plain string
+shows the same in both. A post/alert body holds both languages as English, then a line `<!-- mr -->`, then
+Marathi; a body in one language only is shown in both (add `lang: mr` to the front matter to label it as
+Marathi). The daily hawaman-vidnyan alerts are written that way: bilingual labels, Marathi body.
+UI wording lives in the templates as `t("English", "मराठी")`.

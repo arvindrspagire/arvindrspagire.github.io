@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 {% from "_macros.html" import profile_links, subscribe_form %}
-<html lang="mr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}{{ site.site_title }}{% endblock %}</title>
-  <meta name="description" content="{% block description %}{{ site.name_mr }} — {{ site.tagline }}{% endblock %}">
+  <script>
+    // English by default; मराठी if chosen before (localStorage) or asked for with ?lang=mr — set before first paint
+    (function () {
+      var q = /[?&]lang=(en|mr)\b/.exec(location.search), l = q && q[1];
+      try { if (l) localStorage.setItem('lang', l); else l = localStorage.getItem('lang'); } catch (e) {}
+      if (l === 'mr') document.documentElement.lang = 'mr';
+    })();
+  </script>
+  <title data-mr="{% block title_mr %}{{ site.site_title | in_mr }}{% endblock %}">{% block title %}{{ site.site_title | en }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ site.name_en }} — {{ site.tagline | en }}{% endblock %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
@@ -16,15 +24,18 @@
     <div class="wrap header-inner">
       <a class="brand" href="{{ root }}">
         <span class="brand-mark" aria-hidden="true">☁</span>
-        <span>{{ site.name_mr }}</span>
+        <span>{{ t(site.name_en, site.name_mr) }}</span>
       </a>
-      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="मेनू">
+      <button type="button" id="lang-btn" class="lang-btn" aria-label="Switch language / भाषा बदला">
+        <span class="l-en" lang="mr">मराठी</span><span class="l-mr" lang="en">English</span>
+      </button>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menu">
       <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
       <nav class="nav">
-        {% set links = [("home", "", "मुख्यपृष्ठ"), ("about", "about/", "माझ्याविषयी"),
-                        ("publications", "publications/", "संशोधन"), ("blog", "blog/", "ब्लॉग"),
-                        ("alerts", "alerts/", "हवामान इशारे"), ("forecast", "forecast/", "प्रायोगिक AI अंदाज"),
-                        ("contact", "contact/", "संपर्क")] %}
+        {% set links = [("home", "", t("Home", "मुख्यपृष्ठ")), ("about", "about/", t("About", "माझ्याविषयी")),
+                        ("publications", "publications/", t("Research", "संशोधन")), ("blog", "blog/", t("Blog", "ब्लॉग")),
+                        ("alerts", "alerts/", t("Weather alerts", "हवामान इशारे")), ("forecast", "forecast/", t("AI forecast", "प्रायोगिक AI अंदाज")),
+                        ("contact", "contact/", t("Contact", "संपर्क"))] %}
         {% for key, href, label in links %}
         <a href="{{ root }}{{ href }}"{% if active == key %} class="active" aria-current="page"{% endif %}>{{ label }}</a>
         {% endfor %}
@@ -39,28 +50,52 @@
   <footer class="site-footer">
     <div class="wrap footer-cols">
       <div>
-        <h3>माझ्याशी संपर्क (Reach me)</h3>
+        <h3>{{ t("Reach me", "माझ्याशी संपर्क") }}</h3>
         <p>✉ <a href="mailto:{{ site.contact.email }}">{{ site.contact.email }}</a></p>
-        {% if site.contact.whatsapp and site.contact.phone %}<p>💬 <a href="https://wa.me/{{ site.contact.phone | replace('-', '') | replace('+', '') }}" rel="noopener">WhatsApp संदेश</a></p>{% endif %}
-        <p>📝 <a href="{{ root }}contact/">संदेश फॉर्म भरा</a></p>
+        {% if site.contact.whatsapp and site.contact.phone %}<p>💬 <a href="https://wa.me/{{ site.contact.phone | replace('-', '') | replace('+', '') }}" rel="noopener">{{ t("WhatsApp message", "WhatsApp संदेश") }}</a></p>{% endif %}
+        <p>📝 <a href="{{ root }}contact/">{{ t("Fill in the message form", "संदेश फॉर्म भरा") }}</a></p>
       </div>
       <div>
         <h3>Subscribe</h3>
-        <p class="muted">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</p>
+        <p class="muted">{{ t("New weather alerts, the experimental AI forecast and posts by e-mail.", "नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.") }}</p>
         {{ subscribe_form(site, "footer") }}
       </div>
       <div>
-        <h3>दुवे</h3>
-        <p><a href="{{ root }}alerts/">हवामान इशारे</a> · <a href="{{ root }}forecast/">प्रायोगिक AI अंदाज</a> · <a href="{{ root }}blog/">ब्लॉग</a> · <a href="{{ root }}publications/">संशोधन</a></p>
+        <h3>{{ t("Links", "दुवे") }}</h3>
+        <p><a href="{{ root }}alerts/">{{ t("Weather alerts", "हवामान इशारे") }}</a> · <a href="{{ root }}forecast/">{{ t("AI forecast", "प्रायोगिक AI अंदाज") }}</a> · <a href="{{ root }}blog/">{{ t("Blog", "ब्लॉग") }}</a> · <a href="{{ root }}publications/">{{ t("Research", "संशोधन") }}</a></p>
       </div>
     </div>
     <div class="wrap footer-inner">
       <div>
-        <p>© {{ year }} {{ site.name_mr }} · {{ site.position }}, {{ site.organisation }}</p>
-        <p class="muted">अधिकृत हवामान इशाऱ्यांसाठी: <a href="https://mausam.imd.gov.in" rel="noopener">भारतीय हवामान विभाग</a> · अद्ययावत: {{ built }}</p>
+        <p>© {{ year | num }} {{ t(site.name_en, site.name_mr) }} · {{ site.position | t }}, {{ site.organisation | t }}</p>
+        <p class="muted">{{ t("For official weather warnings:", "अधिकृत हवामान इशाऱ्यांसाठी:") }} <a href="https://mausam.imd.gov.in" rel="noopener">{{ t("India Meteorological Department", "भारतीय हवामान विभाग") }}</a> · {{ t("Updated:", "अद्ययावत:") }} {{ built | t }}</p>
       </div>
       {{ profile_links(site, "on-dark compact") }}
     </div>
   </footer>
+  <script>
+  // language switch: CSS shows .l-en or .l-mr from <html lang>; plain-text spots (title, <option>, placeholder) swap here
+  (function () {
+    var root = document.documentElement;
+    function apply() {
+      var mr = root.lang === 'mr';
+      document.querySelectorAll('[data-mr]').forEach(function (el) {
+        if (el.dataset.en === undefined) el.dataset.en = el.textContent;
+        el.textContent = mr ? el.dataset.mr : el.dataset.en;
+      });
+      document.querySelectorAll('[data-mr-ph]').forEach(function (el) {
+        if (el.dataset.enPh === undefined) el.dataset.enPh = el.placeholder;
+        el.placeholder = mr ? el.dataset.mrPh : el.dataset.enPh;
+      });
+    }
+    document.getElementById('lang-btn').addEventListener('click', function () {
+      root.lang = root.lang === 'mr' ? 'en' : 'mr';
+      try { localStorage.setItem('lang', root.lang); } catch (e) {}
+      apply();
+    });
+    window.siteLang = { apply: apply };
+    apply();
+  })();
+  </script>
 </body>
 </html>
