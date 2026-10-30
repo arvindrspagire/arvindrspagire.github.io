@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    // English by default; मराठी if chosen before (localStorage) or asked for with ?lang=mr — set before first paint
+    (function () {
+      var q = /[?&]lang=(en|mr)\b/.exec(location.search), l = q && q[1];
+      try { if (l) localStorage.setItem('lang', l); else l = localStorage.getItem('lang'); } catch (e) {}
+      if (l === 'mr') document.documentElement.lang = 'mr';
+    })();
+  </script>
+  <title data-mr="महाराष्ट्र हवामान | शुक्रवार, ३० ऑक्टो — हवामान इशारा">महाराष्ट्र हवामान | शुक्रवार, ३० ऑक्टो — Weather alert</title>
+  <meta name="description" content="Yellow alert: महाराष्ट्र हवामान | शुक्रवार, ३० ऑक्टो (30 October 2026)">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../static/css/style.css?v=7f417a43">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../index.html">
+        <span class="brand-mark" aria-hidden="true">☁</span>
+        <span><span class="l-en">Arvind Pagire</span><span class="l-mr" lang="mr">अरविंद पागिरे</span></span>
+      </a>
+      <button type="button" id="lang-btn" class="lang-btn" aria-label="Switch language / भाषा बदला">
+        <span class="l-en" lang="mr">मराठी</span><span class="l-mr" lang="en">English</span>
+      </button>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menu">
+      <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+      <nav class="nav">
+        <a href="../../index.html"><span class="l-en">Home</span><span class="l-mr" lang="mr">मुख्यपृष्ठ</span></a>
+        <a href="../../about/index.html"><span class="l-en">About</span><span class="l-mr" lang="mr">माझ्याविषयी</span></a>
+        <a href="../../publications/index.html"><span class="l-en">Research</span><span class="l-mr" lang="mr">संशोधन</span></a>
+        <a href="../../blog/index.html"><span class="l-en">Blog</span><span class="l-mr" lang="mr">ब्लॉग</span></a>
+        <a href="../../alerts/index.html" class="active" aria-current="page"><span class="l-en">Weather alerts</span><span class="l-mr" lang="mr">हवामान इशारे</span></a>
+        <a href="../../forecast/index.html"><span class="l-en">AI forecast</span><span class="l-mr" lang="mr">प्रायोगिक AI अंदाज</span></a>
+        <a href="../../contact/index.html"><span class="l-en">Contact</span><span class="l-mr" lang="mr">संपर्क</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap main">
+<article class="article">
+  <p class="muted"><a href="../../alerts/index.html"><span class="l-en">← All alerts</span><span class="l-mr" lang="mr">← सर्व इशारे</span></a></p>
+  <div class="alert-banner level-yellow">
+    <span class="badge badge-yellow"><span class="l-en">Yellow alert · Be updated</span><span class="l-mr" lang="mr">पिवळा इशारा · अद्ययावत राहा</span></span>
+    <h1>महाराष्ट्र हवामान | शुक्रवार, ३० ऑक्टो</h1>
+    <dl class="alert-facts">
+      <div><dt><span class="l-en">Date</span><span class="l-mr" lang="mr">दिनांक</span></dt><dd><time datetime="2026-10-30"><span class="l-en">Friday, 30 October 2026</span><span class="l-mr" lang="mr">शुक्रवार, ३० ऑक्टोबर २०२६</span></time></dd></div>
+<div><dt><span class="l-en">Valid</span><span class="l-mr" lang="mr">वैधता</span></dt><dd><span class="l-en">30 October 2026 — Short-range analysis (1–3 days)</span><span class="l-mr" lang="mr">३० ऑक्टोबर २०२६ — अल्पकालीन विश्लेषण (१–३ दिवस)</span></dd></div><div><dt><span class="l-en">Districts / regions</span><span class="l-mr" lang="mr">जिल्हे/भाग</span></dt><dd><span class="l-en">Ahilyanagar</span><span class="l-mr" lang="mr">अहिल्यानगर</span>, <span class="l-en">Nashik</span><span class="l-mr" lang="mr">नाशिक</span>, <span class="l-en">Gondia</span><span class="l-mr" lang="mr">गोंदिया</span>, <span class="l-en">Nagpur</span><span class="l-mr" lang="mr">नागपूर</span>, <span class="l-en">Amravati</span><span class="l-mr" lang="mr">अमरावती</span>, <span class="l-en">Bhandara</span><span class="l-mr" lang="mr">भंडारा</span>, <span class="l-en">Gadchiroli</span><span class="l-mr" lang="mr">गडचिरोली</span></dd></div><div><dt><span class="l-en">Hazards</span><span class="l-mr" lang="mr">धोके</span></dt><dd><span class="l-en">Thunderstorm &amp; lightning</span><span class="l-mr" lang="mr">मेघगर्जना व विजा</span></dd></div>    </dl>
+  </div>
+  <section class="reel">
+    <h2><span class="l-en">Today&#39;s visual analysis</span><span class="l-mr" lang="mr">आजचे दृश्य विश्लेषण</span> <span class="muted"><span class="l-en">(reel slides)</span><span class="l-mr" lang="mr">(रील स्लाइड्स)</span></span></h2>
+    <figure class="reel-gif">
+      <img src="../../static/images/alerts/2026-10-30/reel.gif" alt="All slides of today's weather analysis (animation)" width="360" height="640">
+      <figcaption class="muted"><span class="l-en">9 slides · 4 seconds each · loops continuously</span><span class="l-mr" lang="mr">९ स्लाइड्स · प्रत्येक ४ सेकंद · सतत पुनरावृत्ती</span></figcaption>
+    </figure>
+    <details class="reel-all">
+      <summary><span class="l-en">View each slide separately</span><span class="l-mr" lang="mr">सर्व स्लाइड्स स्वतंत्रपणे पाहा</span></summary>
+    <div class="reel-strip">
+      <figure class="reel-slide">
+        <a href="../../static/images/alerts/2026-10-30/reel/01_cover.jpg" target="_blank" rel="noopener"><img src="../../static/images/alerts/2026-10-30/reel/01_cover.jpg" alt="Cover" loading="lazy" width="540" height="960"></a>
+        <figcaption><span class="slide-n"><span class="l-en">1</span><span class="l-mr" lang="mr">१</span></span> <span class="l-en">Cover</span><span class="l-mr" lang="mr">मुखपृष्ठ</span></figcaption>
+      </figure>
+      <figure class="reel-slide">
+        <a href="../../static/images/alerts/2026-10-30/reel/02_short_range.jpg" target="_blank" rel="noopener"><img src="../../static/images/alerts/2026-10-30/reel/02_short_range.jpg" alt="Short-range analysis" loading="lazy" width="540" height="960"></a>
+        <figcaption><span class="slide-n"><span class="l-en">2</span><span class="l-mr" lang="mr">२</span></span> <span class="l-en">Short-range analysis</span><span class="l-mr" lang="mr">अल्पकालीन विश्लेषण</span></figcaption>
+      </figure>
+      <figure class="reel-slide">
+        <a href="../../static/images/alerts/2026-10-30/reel/03_satellite.jpg" target="_blank" rel="noopener"><img src="../../static/images/alerts/2026-10-30/reel/03_satellite.jpg" alt="Satellite view" loading="lazy" width="540" height="960"></a>
+        <figcaption><span class="slide-n"><span class="l-en">3</span><span class="l-mr" lang="mr">३</span></span> <span class="l-en">Satellite view</span><span class="l-mr" lang="mr">उपग्रह निरीक्षण</span></figcaption>
+      </figure>
+      <figure class="reel-slide">
+        <a href="../../static/images/alerts/2026-10-30/reel/04_circulation_today_slide.jpg" target="_blank" rel="noopener"><img src="../../static/images/alerts/2026-10-30/reel/04_circulation_today_slide.jpg" alt="Today&#39;s wind circulation" loading="lazy" width="540" height="960"></a>
+        <figcaption><span class="slide-n"><span class="l-en">4</span><span class="l-mr" lang="mr">४</span></span> <span class="l-en">Today&#39;s wind circulation</span><span class="l-mr" lang="mr">आजची वाऱ्यांची स्थिती</span></figcaption>
+      </figure>
+      <figure class="reel-slide">
+        <a href="../../static/images/alerts/2026-10-30/reel/05_medium_range.jpg" target="_blank" rel="noopener"><img src="../../static/images/alerts/2026-10-30/reel/05_medium_range.jpg" alt="Medium-range analysis" loading="lazy" width="540" height="960"></a>
+        <figcaption><span class="slide-n"><span class="l-en">5</span><span class="l-mr" lang="mr">५</span></span> <span class="l-en">Medium-range analysis</span><span class="l-mr" lang="mr">मध्यम कालावधी विश्लेषण</span></figcaption>
+      </figure>
+      <figure class="reel-slide">
+        <a href="../../static/images/alerts/2026-10-30/reel/06_circulation_week.jpg" target="_blank" rel="noopener"><img src="../../static/images/alerts/2026-10-30/reel/06_circulation_week.jpg" alt="This week&#39;s wind circulation" loading="lazy" width="540" height="960"></a>
+        <figcaption><span class="slide-n"><span class="l-en">6</span><span class="l-mr" lang="mr">६</span></span> <span class="l-en">This week&#39;s wind circulation</span><span class="l-mr" lang="mr">आठवड्याची वाऱ्यांची स्थिती</span></figcaption>
+      </figure>
+      <figure class="reel-slide">
+        <a href="../../static/images/alerts/2026-10-30/reel/07_extended_range.jpg" target="_blank" rel="noopener"><img src="../../static/images/alerts/2026-10-30/reel/07_extended_range.jpg" alt="Extended-range analysis" loading="lazy" width="540" height="960"></a>
+        <figcaption><span class="slide-n"><span class="l-en">7</span><span class="l-mr" lang="mr">७</span></span> <span class="l-en">Extended-range analysis</span><span class="l-mr" lang="mr">विस्तारित कालावधी विश्लेषण</span></figcaption>
+      </figure>
+      <figure class="reel-slide">
+        <a href="../../static/images/alerts/2026-10-30/reel/08_seasonal.jpg" target="_blank" rel="noopener"><img src="../../static/images/alerts/2026-10-30/reel/08_seasonal.jpg" alt="Seasonal analysis" loading="lazy" width="540" height="960"></a>
+        <figcaption><span class="slide-n"><span class="l-en">8</span><span class="l-mr" lang="mr">८</span></span> <span class="l-en">Seasonal analysis</span><span class="l-mr" lang="mr">हंगामी विश्लेषण</span></figcaption>
+      </figure>
+      <figure class="reel-slide">
+        <a href="../../static/images/alerts/2026-10-30/reel/09_outro.jpg" target="_blank" rel="noopener"><img src="../../static/images/alerts/2026-10-30/reel/09_outro.jpg" alt="Closing" loading="lazy" width="540" height="960"></a>
+        <figcaption><span class="slide-n"><span class="l-en">9</span><span class="l-mr" lang="mr">९</span></span> <span class="l-en">Closing</span><span class="l-mr" lang="mr">समारोप</span></figcaption>
+      </figure>
+    </div>
+</details>  </section>
+  <p class="lang-note l-en">This page is written in Marathi.</p><div class="prose" lang="mr"><p><strong>अल्पकालीन विश्लेषण (१–३ दिवस)</strong> · वैयक्तिक विश्लेषणावर आधारित</p>
+<p>🟡 अहिल्यानगर, नाशिक, गोंदिया, नागपूर +३: मेघगर्जना व विजा<br />
+☀️ कोकण, मराठवाडा: कोरडे हवामान<br />
+⛈️ म. महाराष्ट्र, विदर्भ: तुरळक ठिकाणी मेघगर्जनेची शक्यता<br />
+🌀 अंदमान समुद्रात कमी दाबाचे क्षेत्र आहे</p>
+<p><img src="../../static/images/alerts/2026-10-30/1_card.jpg" alt="अल्पकालीन विश्लेषण (१–३ दिवस)" /></p>
+<h3>हवामानामागचे कारण</h3>
+<p>🌀 वाऱ्यांची स्थिती व कारणमीमांसा:<br />
+• अंदमान समुद्रात कमी दाबाचे क्षेत्र आहे; ते तीव्र कमी दाबाचे क्षेत्र (डिप्रेशन) म्हणून तीव्र होण्याचे संकेत; प्रणाली पश्चिमेकडे (पश्चिम-मध्य बंगालचा उपसागर) सरकण्याची शक्यता (मॉडेल संकेत; IMD च्या अधिकृत माहितीकडे लक्ष ठेवा)</p>
+<p>• पूर्व-मध्य अरबी समुद्रात चक्राकार वाऱ्यांची स्थिती आहे; ते कमी दाबाचे क्षेत्र म्हणून तीव्र होण्याचे संकेत; प्रणाली आग्नेयेकडे (आग्नेय अरबी समुद्र) सरकण्याची शक्यता<br />
+• मध्य भारतावर कमी दाबाचे क्षेत्र आहे<br />
+• महाराष्ट्रावर सुमारे १.५ किमी उंचीवर ईशान्येकडून वारे</p>
+<p>🏙️ आज शहरांचे कमाल/किमान तापमान (हवामान विभाग):<br />
+मुंबई ३३/२०, रत्नागिरी ३३/२३, पुणे ३५/२२, नाशिक ३३/१९, कोल्हापूर ३२/२०, छ. ३३/१९, नागपूर ३०/२२</p>
+<p>📌 निरीक्षणे:<br />
+🌡️ काल सर्वाधिक: मुंबई (कुलाबा) ३६.१°<br />
+❄️ नीचांकी: महाबळेश्वर १७.२°<br />
+🛰️ उपग्रह: राज्यावर आकाश बहुतांश निरभ्र (कोकण १%, मध्य महाराष्ट्र १%, मराठवाडा ०%, विदर्भ १% ढगाच्छादन)</p>
+<p>ℹ️ स्रोत: भारतीय हवामान विभाग; युरोपियन (ECMWF), अमेरिकन (GFS), जर्मन (ICON) मॉडेल<br />
+⚠️ हे मॉडेल-आधारित विश्लेषण आहे. अधिकृत इशाऱ्यांसाठी भारतीय हवामान विभाग (IMD) व स्थानिक प्रशासनाच्या सूचना पाहा.</p>
+<p><img src="../../static/images/alerts/2026-10-30/2_circulation_chart.jpg" alt="वाऱ्यांची स्थिती व दाब प्रणाली" /></p>
+<p><img src="../../static/images/alerts/2026-10-30/3_satellite_insat.jpg" alt="वाऱ्यांची स्थिती व दाब प्रणाली" /></p>
+<h2>सविस्तर हवामान विश्लेषण</h2>
+<h3>अल्पकालीन विश्लेषण (१–३ दिवस)</h3>
+<p>नमस्कार! आज शुक्रवार, ३० ऑक्टोबर. पाहूया महाराष्ट्राचे हवामान विश्लेषण. भारतीय हवामान विभागाने अहिल्यानगर, नाशिक, गोंदिया, नागपूर, अमरावती, भंडारा, गडचिरोली जिल्ह्यांसाठी मेघगर्जना व विजा संदर्भात पिवळा इशारा दिला आहे. कोकण: कोरडे हवामान. कमाल तापमान सुमारे ३३ आणि किमान २२ अंश सेल्सिअस. मध्य महाराष्ट्र: तुरळक ठिकाणी मेघगर्जनेची शक्यता. कमाल तापमान सुमारे ३३ आणि किमान २१ अंश सेल्सिअस. मराठवाडा: कोरडे हवामान. कमाल तापमान सुमारे ३२ आणि किमान २० अंश सेल्सिअस. विदर्भ: तुरळक ठिकाणी मेघगर्जनेची शक्यता. कमाल तापमान सुमारे ३१ आणि किमान २१ अंश सेल्सिअस. काल राज्यातील सर्वाधिक तापमान मुंबई (कुलाबा) येथे ३६.१ अंश (सरासरीपेक्षा १.८° जास्त) नोंदले गेले. आता पाहूया हवामानामागचे कारण, म्हणजेच वाऱ्यांची स्थिती. अंदमान समुद्रात कमी दाबाचे क्षेत्र आहे; ते तीव्र कमी दाबाचे क्षेत्र (डिप्रेशन) म्हणून तीव्र होण्याचे संकेत; प्रणाली पश्चिमेकडे (पश्चिम-मध्य बंगालचा उपसागर) सरकण्याची शक्यता (मॉडेल संकेत; IMD च्या अधिकृत माहितीकडे लक्ष ठेवा). पूर्व-मध्य अरबी समुद्रात चक्राकार वाऱ्यांची स्थिती आहे; ते कमी दाबाचे क्षेत्र म्हणून तीव्र होण्याचे संकेत; प्रणाली आग्नेयेकडे (आग्नेय अरबी समुद्र) सरकण्याची शक्यता. मध्य भारतावर कमी दाबाचे क्षेत्र आहे. महाराष्ट्रावर सुमारे १.५ किमी उंचीवर ईशान्येकडून वारे.</p>
+<h3>मध्यम कालावधी विश्लेषण (४–१० दिवस)</h3>
+<p>आता पुढील आठवड्याचा, म्हणजे २–८ नोव्हें या काळाचे विश्लेषण. युरोपियन हवामान केंद्राच्या ५१ वेगवेगळ्या संभाव्य मॉडेल-परिणामांवर आधारित. कोकण: पावसाची शक्यता अधिक (२ नोव्हें जास्त). मध्य महाराष्ट्र: पावसाची शक्यता खूप अधिक (२ नोव्हें जास्त). मराठवाडा: पावसाची शक्यता खूप अधिक (२ नोव्हें जास्त). विदर्भ: पावसाची शक्यता अधिक (३ नोव्हें जास्त).  तापमानात विशेष बदल नाही. या काळातील वाऱ्यांची स्थिती: २ नोव्हें रोजी पश्चिम-मध्य बंगालच्या उपसागरात असलेली तीव्र कमी दाबाचे क्षेत्र (डिप्रेशन) पश्चिमेकडे (पूर्व-मध्य अरबी समुद्र) सरकण्याची शक्यता (मॉडेल संकेत; IMD च्या अधिकृत माहितीकडे लक्ष ठेवा). या प्रणालीमुळे राज्यात ढगाळ हवामान व पावसाची शक्यता वाढू शकते. २ नोव्हें रोजी आग्नेय अरबी समुद्रात असलेली कमी दाबाचे क्षेत्र उत्तरेकडे (पूर्व-मध्य अरबी समुद्र) सरकण्याची शक्यता. महाराष्ट्रावर सुमारे १.५ किमी उंचीवर पूर्वेकडून वारे. पुढील काळात हवेच्या मधल्या थरातील बाष्प कमी होत आहे.</p>
+<h3>विस्तारित विश्लेषण (२–४ आठवडे)</h3>
+<p>आता पुढील तीन आठवड्यांचा विस्तारित विश्लेषण. आठवडा १, २–८ नोव्हें: म. महाराष्ट्र, मराठवाडा, विदर्भ: पाऊस जास्त. तापमान सरासरीपेक्षा १.५ अंश जास्त राहण्याची शक्यता. आठवडा २, ९–१५ नोव्हें: राज्यभर पाऊस सरासरीपेक्षा कमी. तापमान सरासरीपेक्षा ०.७ अंश जास्त राहण्याची शक्यता. आठवडा ३, १६–२२ नोव्हें: पाऊस सरासरीइतका. तापमान सरासरीपेक्षा १.० अंश जास्त राहण्याची शक्यता. वाऱ्यांचा प्रवाह: ६–१३ नोव्हें: महाराष्ट्रावर ईशान्येकडून वारे कायम (५१ पैकी ५१ सदस्य); पूर्व/ईशान्येकडील वारे सहसा कोरडे हवामान आणतात. भारतीय हवामान विभाग व आयआयटीएम पुणे यांचे विस्तारित कालावधी नकाशेही हेच संकेत तपासण्यासाठी पाहा.</p>
+<h3>हंगामी विश्लेषण (१–३ महिने)</h3>
+<p>आता नोव्हेंबर ते जानेवारी या हंगामाचा दीर्घकालीन विश्लेषण. नोव्हेंबर: तापमान सरासरीपेक्षा बरेच जास्त, सुमारे +२.५ अंश; पाऊस सरासरीइतका. डिसेंबर: तापमान सरासरीपेक्षा बरेच जास्त, सुमारे +२.३ अंश; पाऊस सरासरीइतका. जानेवारी: तापमान सरासरीपेक्षा बरेच जास्त, सुमारे +२.१ अंश; पाऊस सरासरीइतका. प्रशांत महासागरात तीव्र एल निनो (नीनो-३.४: +३.४°से); तो अजून बळकट होत आहे. एल निनोमुळे येणारा हिवाळा सहसा उबदार; थंडीच्या लाटा कमी.</p>
+<p>हे मॉडेल-आधारित विश्लेषण आहे. अधिकृत इशाऱ्यांसाठी भारतीय हवामान विभाग (IMD) व स्थानिक प्रशासनाच्या सूचना पाहा.</p>
+<p>दैनंदिन अपडेटसाठी X वर फॉलो करा: <a href="https://x.com/arvind_weathLAB">@arvind_weathLAB</a></p>
+</div>
+  <p class="disclaimer"><span class="l-en">This alert is informational and based on my personal analysis. For official weather forecasts and warnings, please see the India Meteorological Department website mausam.imd.gov.in or the &#39;Mausam&#39; / &#39;Damini&#39; apps.</span><span class="l-mr" lang="mr">हा इशारा माझ्या वैयक्तिक विश्लेषणावर आधारित माहितीपर मजकूर आहे. अधिकृत हवामान अंदाज व इशाऱ्यांसाठी कृपया भारतीय हवामान विभागाचे संकेतस्थळ mausam.imd.gov.in किंवा &#39;मौसम&#39; / &#39;दामिनी&#39; ॲप पाहा.</span></p>
+</article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-cols">
+      <div>
+        <h3><span class="l-en">Reach me</span><span class="l-mr" lang="mr">माझ्याशी संपर्क</span></h3>
+        <p>✉ <a href="mailto:arvindrspagire@gmail.com">arvindrspagire@gmail.com</a></p>
+<p>💬 <a href="https://wa.me/919767590166" rel="noopener"><span class="l-en">WhatsApp message</span><span class="l-mr" lang="mr">WhatsApp संदेश</span></a></p>        <p>📝 <a href="../../contact/index.html"><span class="l-en">Fill in the message form</span><span class="l-mr" lang="mr">संदेश फॉर्म भरा</span></a></p>
+      </div>
+      <div>
+        <h3>Subscribe</h3>
+        <p class="muted"><span class="l-en">New weather alerts, the experimental AI forecast and posts by e-mail.</span><span class="l-mr" lang="mr">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</span></p>
+        <form class="subscribe footer" action="https://formsubmit.co/arvindrspagire@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="New subscriber — Arvind Pagire">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="https://arvindrspagire.github.io/contact/thanks/index.html">
+  <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+  <input type="hidden" name="type" value="Subscribe: weather alerts, experimental AI forecast and posts">
+  <label for="sub-footer" class="sr-only">E-mail</label>
+  <input id="sub-footer" type="email" name="email" required placeholder="Your e-mail" data-mr-ph="तुमचा ई-मेल">
+  <button type="submit" class="btn">Subscribe</button>
+</form>
+
+      </div>
+      <div>
+        <h3><span class="l-en">Links</span><span class="l-mr" lang="mr">दुवे</span></h3>
+        <p><a href="../../alerts/index.html"><span class="l-en">Weather alerts</span><span class="l-mr" lang="mr">हवामान इशारे</span></a> · <a href="../../forecast/index.html"><span class="l-en">AI forecast</span><span class="l-mr" lang="mr">प्रायोगिक AI अंदाज</span></a> · <a href="../../blog/index.html"><span class="l-en">Blog</span><span class="l-mr" lang="mr">ब्लॉग</span></a> · <a href="../../publications/index.html"><span class="l-en">Research</span><span class="l-mr" lang="mr">संशोधन</span></a></p>
+      </div>
+    </div>
+    <div class="wrap footer-inner">
+      <div>
+        <p>© <span class="l-en">2026</span><span class="l-mr" lang="mr">२०२६</span> <span class="l-en">Arvind Pagire</span><span class="l-mr" lang="mr">अरविंद पागिरे</span> · <span class="l-en">Project Scientist-I</span><span class="l-mr" lang="mr">प्रकल्प शास्त्रज्ञ-I</span>, <span class="l-en">HPC-AIML Team, Indian Institute of Tropical Meteorology (IITM), Pune</span><span class="l-mr" lang="mr">HPC-AIML टीम, भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</span></p>
+        <p class="muted"><span class="l-en">For official weather warnings:</span><span class="l-mr" lang="mr">अधिकृत हवामान इशाऱ्यांसाठी:</span> <a href="https://mausam.imd.gov.in" rel="noopener"><span class="l-en">India Meteorological Department</span><span class="l-mr" lang="mr">भारतीय हवामान विभाग</span></a> · <span class="l-en">Updated:</span><span class="l-mr" lang="mr">अद्ययावत:</span> <span class="l-en">30 October 2026</span><span class="l-mr" lang="mr">३० ऑक्टोबर २०२६</span></p>
+      </div>
+      <p class="profile-links on-dark compact">
+<a class="pl" href="https://scholar.google.com/citations?user=vkmoTSkAAAAJ&amp;hl=en" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><span>Google Scholar</span></a><a class="pl" href="https://orcid.org/0009-0000-4938-0567" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9 10v7M9 7v.01M12.5 10v7h1.8a3.5 3.5 0 0 0 0-7z"/></svg><span>ORCID</span></a><a class="pl" href="https://github.com/arvindrspagire" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.8 2.8 5.8 3.1 5.8 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4.4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a><a class="pl" href="https://x.com/arvind_weathLAB" rel="noopener" target="_blank"><span class="x-ico" aria-hidden="true">𝕏</span><span>@arvind_weathLAB</span></a>  <a class="pl" href="mailto:arvindrspagire@gmail.com"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span><span class="l-en">E-mail</span><span class="l-mr" lang="mr">ई-मेल</span></span></a>
+</p>
+    </div>
+  </footer>
+  <script>
+  // language switch: CSS shows .l-en or .l-mr from <html lang>; plain-text spots (title, <option>, placeholder) swap here
+  (function () {
+    var root = document.documentElement;
+    function apply() {
+      var mr = root.lang === 'mr';
+      document.querySelectorAll('[data-mr]').forEach(function (el) {
+        if (el.dataset.en === undefined) el.dataset.en = el.textContent;
+        el.textContent = mr ? el.dataset.mr : el.dataset.en;
+      });
+      document.querySelectorAll('[data-mr-ph]').forEach(function (el) {
+        if (el.dataset.enPh === undefined) el.dataset.enPh = el.placeholder;
+        el.placeholder = mr ? el.dataset.mrPh : el.dataset.enPh;
+      });
+    }
+    document.getElementById('lang-btn').addEventListener('click', function () {
+      root.lang = root.lang === 'mr' ? 'en' : 'mr';
+      try { localStorage.setItem('lang', root.lang); } catch (e) {}
+      apply();
+    });
+    window.siteLang = { apply: apply };
+    apply();
+  })();
+  </script>
+</body>
+</html>
