@@ -32,6 +32,9 @@
     <h2>{{ t("Latest weather alert", "ताजा हवामान इशारा") }}</h2>
     <a href="{{ root }}alerts/">{{ t("All alerts →", "सर्व इशारे →") }}</a>
   </div>
+  <p class="imd-note">{{ t("Disclaimer: for weather alerts and warnings I follow the India Meteorological Department (IMD). The alert colour and warnings shown here are taken from IMD's official district-wise warnings; the rest is my own analysis for information only. For official forecasts and warnings, please follow",
+                           "अस्वीकरण: हवामान इशाऱ्यांसाठी मी भारतीय हवामान विभागाचे (IMD) अनुसरण करतो. येथे दाखवलेला इशाऱ्याचा रंग व इशारे हे IMD च्या अधिकृत जिल्हानिहाय इशाऱ्यांवरून घेतले आहेत; उर्वरित माहिती हे केवळ माहितीसाठी केलेले माझे वैयक्तिक विश्लेषण आहे. अधिकृत अंदाज व इशाऱ्यांसाठी कृपया") }}
+    <a href="https://mausam.imd.gov.in" rel="noopener" target="_blank">{{ t("IMD (mausam.imd.gov.in)", "भारतीय हवामान विभागाचे (mausam.imd.gov.in)") }}</a>{{ t(".", " अनुसरण करा.") }}</p>
   {% if latest_alert %}
     {{ alert_card(latest_alert, root) }}
     <p class="stale-note muted" data-date="{{ latest_alert.date.isoformat() }}" hidden>

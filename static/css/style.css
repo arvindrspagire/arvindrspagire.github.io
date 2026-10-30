@@ -220,6 +220,8 @@ ul.plain li { margin-bottom: .7em; }
 .alert-facts dd { margin: 0; font-weight: 600; }
 .legend summary { cursor: pointer; font-weight: 600; color: var(--brand); }
 .legend ul { margin-top: 1em; }
+.imd-note { margin: 0 0 14px; padding: 10px 14px; font-size: .95rem; line-height: 1.55; background: #fff8e1;
+  border-left: 4px solid #f9a825; border-radius: 6px; color: var(--ink); }
 .disclaimer { margin-top: 2em; font-size: .95rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 1em; }
 .stale-note { margin-top: .6em; font-size: .95rem; }
 
