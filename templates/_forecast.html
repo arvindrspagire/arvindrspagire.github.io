@@ -64,7 +64,9 @@
   <p class="muted">{{ t("Map colours" ~ (" (above)" if daily_maps else "") ~ ": " ~ ("today's" if today else "tomorrow's") ~ " forecast (" ~ c.days[0].date_str.en ~ ").",
                         "नकाशाचे रंग" ~ (" (वरील)" if daily_maps else "") ~ ": " ~ ("आजचा" if today else "उद्याचा") ~ " (" ~ c.days[0].date_str.mr ~ ") अंदाज.") }} {{ skill_line(c) }}</p>
   {% if c.ecmwf_checked %}<p class="muted">{{ t("The forecast comes from the deep-learning CNN-LSTM model (trained on ERA5 and IMD rainfall; ECMWF atmospheric fields as input). Safety check: where ECMWF is dry (under 1 mm) the model's rain is not shown; ECMWF never raises the model's category.",
-                                                "अंदाज डीप-लर्निंग CNN-LSTM मॉडेलचा आहे (ERA5 व IMD पावसावर प्रशिक्षित; ECMWF चे वातावरणीय क्षेत्र इनपुट). सुरक्षा तपासणी: ECMWF नुसार कोरडे (१ मिमीपेक्षा कमी) असल्यास मॉडेलचा पाऊस दाखवला जात नाही; ECMWF मॉडेलची श्रेणी कधीही वाढवत नाही.") }}</p>{% endif %}
+                                                "अंदाज डीप-लर्निंग CNN-LSTM मॉडेलचा आहे (ERA5 व IMD पावसावर प्रशिक्षित; ECMWF चे वातावरणीय क्षेत्र इनपुट). सुरक्षा तपासणी: ECMWF नुसार कोरडे (१ मिमीपेक्षा कमी) असल्यास मॉडेलचा पाऊस दाखवला जात नाही; ECMWF मॉडेलची श्रेणी कधीही वाढवत नाही.") }}</p>
+  {% elif c.ecmwf_shown %}<p class="muted">{{ t("Every category shown is the deep-learning CNN-LSTM model's own forecast, fine-tuned for each taluka on IMD gridded rainfall (ECMWF atmospheric fields are its input). The \"ECMWF rain\" line is ECMWF's own rain forecast for the same area, shown only for comparison — it does not change the model's forecast.",
+                                                    "दाखवलेली प्रत्येक श्रेणी हा डीप-लर्निंग CNN-LSTM मॉडेलचाच अंदाज आहे — IMD ग्रिड पावसावर प्रत्येक तालुक्यासाठी स्वतंत्रपणे fine-tune केलेला (ECMWF चे वातावरणीय क्षेत्र इनपुट). \"ECMWF पाऊस\" ही ओळ त्याच भागासाठी ECMWF चा स्वतःचा पाऊस अंदाज आहे — केवळ तुलनेसाठी; तो मॉडेलचा अंदाज बदलत नाही.") }}</p>{% endif %}
   <noscript><p class="empty">{{ t("Turn on JavaScript in your browser to pick a taluka.", "तालुका निवडण्यासाठी browser मध्ये JavaScript चालू करा.") }}</p></noscript>
   <script type="application/json" id="tq-data-{{ c.id }}">{{ {"classes": c.classes | map(attribute="label") | list,
     "days": c.days | map(attribute="date_str") | list,
@@ -90,7 +92,7 @@
         var c = D.cat[i][j], p = D.prob[i][j], ec = D.ec[i] ? D.ec[i][j] : null;
         return '<article class="tq-day cat-edge-' + c + '"><p class="fc-date">' + t(d.en, d.mr) + '</p>' +
           '<p class="tq-cat">' + t('Forecast:', 'अंदाज:') + ' <span class="cat-chip cat-' + c + '">' + t(D.classes[c].en, D.classes[c].mr) + '</span></p>' +
-          (ec === null ? '' : '<p class="tq-note">' + t('ECMWF rain: ' + ec.toFixed(1) + ' mm', 'ECMWF पाऊस: ' + mr(ec.toFixed(1)) + ' मिमी') + '</p>') +
+          (ec === null ? '' : '<p class="tq-note">' + t('ECMWF rain (for comparison): ' + ec.toFixed(1) + ' mm', 'ECMWF पाऊस (तुलनेसाठी): ' + mr(ec.toFixed(1)) + ' मिमी') + '</p>') +
           '<p class="tq-note">' + t("AI model's chance of each category:", 'AI मॉडेलची प्रत्येक श्रेणीची शक्यता:') + '</p>' +
           D.classes.map(function (k, m) {
             var v = Math.round(p[m] * 100);
