@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    // English by default; मराठी if chosen before (localStorage) or asked for with ?lang=mr — set before first paint
+    (function () {
+      var q = /[?&]lang=(en|mr)\b/.exec(location.search), l = q && q[1];
+      try { if (l) localStorage.setItem('lang', l); else l = localStorage.getItem('lang'); } catch (e) {}
+      if (l === 'mr') document.documentElement.lang = 'mr';
+    })();
+  </script>
+  <title data-mr="हवामान अंदाजाविषयी थोडंसं मनातलं... — अरविंद पागिरे">A few thoughts from the heart about weather forecasts — Arvind Pagire</title>
+  <meta name="description" content="Why I started this Marathi blog: from childhood curiosity about the monsoon to research on extreme rainfall, how to read a weather forecast, and simple ways to be weather-aware.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../static/css/style.css?v=cf78511e">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="../../index.html">
+        <span class="brand-mark" aria-hidden="true">☁</span>
+        <span><span class="l-en">Arvind Pagire</span><span class="l-mr" lang="mr">अरविंद पागिरे</span></span>
+      </a>
+      <button type="button" id="lang-btn" class="lang-btn" aria-label="Switch language / भाषा बदला">
+        <span class="l-en" lang="mr">मराठी</span><span class="l-mr" lang="en">English</span>
+      </button>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menu">
+      <label for="nav-toggle" class="nav-burger" aria-hidden="true"><span></span></label>
+      <nav class="nav">
+        <a href="../../index.html"><span class="l-en">Home</span><span class="l-mr" lang="mr">मुख्यपृष्ठ</span></a>
+        <a href="../../about/index.html"><span class="l-en">About</span><span class="l-mr" lang="mr">माझ्याविषयी</span></a>
+        <a href="../../publications/index.html"><span class="l-en">Research</span><span class="l-mr" lang="mr">संशोधन</span></a>
+        <a href="../../blog/index.html" class="active" aria-current="page"><span class="l-en">Blog</span><span class="l-mr" lang="mr">ब्लॉग</span></a>
+        <a href="../../alerts/index.html"><span class="l-en">Weather alerts</span><span class="l-mr" lang="mr">हवामान इशारे</span></a>
+        <a href="../../forecast/index.html"><span class="l-en">AI forecast</span><span class="l-mr" lang="mr">प्रायोगिक AI अंदाज</span></a>
+        <a href="../../contact/index.html"><span class="l-en">Contact</span><span class="l-mr" lang="mr">संपर्क</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap main">
+<article class="article">
+  <p class="muted"><a href="../../blog/index.html"><span class="l-en">← All posts</span><span class="l-mr" lang="mr">← सर्व लेख</span></a></p>
+  <h1><span class="l-en">A few thoughts from the heart about weather forecasts</span><span class="l-mr" lang="mr">हवामान अंदाजाविषयी थोडंसं मनातलं...</span></h1>
+  <p class="muted byline"><span class="l-en">Arvind Pagire</span><span class="l-mr" lang="mr">अरविंद पागिरे</span> · <time datetime="2026-10-30"><span class="l-en">Friday, 30 October 2026</span><span class="l-mr" lang="mr">शुक्रवार, ३० ऑक्टोबर २०२६</span></time></p>
+  <p class="lang-note l-en">This page is written in Marathi.</p><div class="prose" lang="mr"><p>महाराष्ट्राला संतपरंपरेचा समृद्ध वारसा लाभला आहे. आपण संतांकडे बहुतेक वेळा भक्तीच्या नजरेतून पाहतो; पण त्यांच्या विचारांत एक डोळस, जिज्ञासू आणि विवेकी दृष्टिकोनही दडलेला आहे — गोष्टी आंधळेपणाने न मानता आधी समजून घेण्याचा. संत ज्ञानेश्वर म्हणतात :</p>
+<blockquote>
+<p><strong>जेथ विज्ञान काय करावें । ऐसें म्हणेसी जो आघवें ।</strong>&lt;br&gt;
+<strong>तरी आधीं जाणावें । तेंचि लागे ॥</strong></p>
+</blockquote>
+<p>तेराव्या शतकात, जेव्हा ज्ञान संस्कृतच्या चौकटीत बंदिस्त होतं, तेव्हा ज्ञानेश्वरांनी ते सामान्य माणसाच्या भाषेत — मराठीत — आणलं. &quot;आधी जाणून घ्या&quot; हाच त्यांचा आग्रह होता.</p>
+<p>हा ब्लॉग सुरू करण्यामागे हीच प्रेरणा आहे. पाऊस, ढग, वारा आणि हवामानाचे अंदाज यांच्याकडे नशिबाचा खेळ म्हणून न पाहता विज्ञानाच्या नजरेतून पाहावं, आणि हे ज्ञान आपल्या मायबोलीत, सोप्या शब्दांत प्रत्येक मराठी माणसापर्यंत पोहोचावं — एवढीच इच्छा.</p>
+<hr />
+<h2>पावसाशी आपलं नातं</h2>
+<p>पावसाची वाट पाहणं हा महाराष्ट्राच्या जगण्याचाच एक भाग आहे. जून उजाडला की शेतकरी आकाशाकडे पाहतो, शहरातला माणूस छत्री शोधतो, आणि &quot;मान्सून केरळात दाखल&quot; ही बातमी वाचून आपल्यालाही नकळत दिलासा मिळतो. पाऊस वेळेवर आला तर सण आनंदात जातात; लांबला तर घराघरात काळजी दाटते.</p>
+<p>लहानपणी मे महिन्याच्या दुपारी ऊन अंगावर भाजून काढायचं, आणि संध्याकाळी अंगणात एकच विषय असायचा — <em>&quot;यंदा पाऊस केव्हा?&quot;</em> सातच्या बातम्यांत हवामानाची बातमी लागली की घर शांत व्हायचं. कमी दाबाचा पट्टा, मान्सूनची वाटचाल — तेव्हा यातलं फारसं कळायचं नाही, पण मोठ्यांच्या चेहऱ्यावरून त्याचं महत्त्व जाणवायचं.</p>
+<p>मग एखाद्या दिवशी काळे ढग यायचे, मातीचा तो ओळखीचा वास सुटायचा आणि सगळं वातावरणच बदलून जायचं. पण कधी कधी तोच पाऊस इतका कोसळायचा की नाले फुगायचे, शेतं वाहून जायची. <strong>एकच आकाश, एकच पाऊस — कधी वरदान, तर कधी संकट.</strong> हे कोडं मनात घर करून बसलं.</p>
+<h2>कुतूहलापासून संशोधनापर्यंत</h2>
+<p>हेच कुतूहल पुढे माझ्या आयुष्याची वाट ठरलं. एनआयटी राउरकेला येथे वातावरणशास्त्राचं पदव्युत्तर शिक्षण, त्यानंतर भारतीय हवामानशास्त्र विभाग (पुणे), इस्रोची भारतीय दूरसंवेदन संस्था (देहरादून), प्रादेशिक हवामान केंद्र (नागपूर) आणि आज भारतीय उष्णकटिबंधीय हवामानशास्त्र संस्था (आयआयटीएम), पुणे येथे कृत्रिम बुद्धिमत्ता आधारित हवामान प्रारूपांवर काम — असा हा प्रवास झाला. सावित्रीबाई फुले पुणे विद्यापीठात माझं पीएच.डी. संशोधन <strong>अतिवृष्टी आणि तिचा मोठ्या प्रमाणावरील वातावरणीय अभिसरणाशी (लार्ज-स्केल सर्क्युलेशन) असलेला संबंध</strong> या विषयावर आहे. सोप्या शब्दांत सांगायचं तर — आपल्या गावात एखाद्या दिवशी कोसळणारा मुसळधार पाऊस हा केवळ स्थानिक घटना नसते. त्यामागे हजारो किलोमीटरवर पसरलेली वाऱ्यांची, कमी दाबाच्या प्रणालींची आणि ओलाव्याच्या प्रवाहाची एक मोठी मांडणी काम करत असते. ही मांडणी ओळखता आली, तर अतिवृष्टीची पूर्वसूचना अधिक लवकर देता येईल.</p>
+<p>या प्रवासात एक प्रश्न सतत सोबत राहिला — <em>अतिवृष्टी नेमकी का घडते, आणि तिचा अंदाज आपण अधिक अचूकपणे, अधिक लवकर लावू शकतो का?</em></p>
+<p>पण त्यासोबत एक गोष्ट सतत बोचत राहिली. मी जे शिकत होतो, ते सगळं इंग्रजी शोधनिबंधांत आणि परिषदांमध्येच अडकून राहत होतं. ज्यांच्यासाठी हा पाऊस जगण्या-मरण्याचा प्रश्न आहे, त्या शेतकऱ्यापर्यंत, त्या सामान्य माणसापर्यंत हे ज्ञान पोहोचतच नव्हतं. संगणकाच्या पडद्यावरचे आकडे म्हणजे केवळ संख्या नाहीत; त्यामागे कुणाचं पीक, कुणाचं घर, कुणाचं आयुष्य दडलेलं आहे.</p>
+<p>म्हणूनच हा ब्लॉग.</p>
+<hr />
+<h2>&quot;हवामान खात्याचा अंदाज नेहमी चुकतो!&quot; — खरंच?</h2>
+<p>आपल्याकडे हवामान खात्यावर विनोद करणं जणू परंपराच झाली आहे. &quot;पाऊस सांगितला की ऊन पडतं&quot; असं आपण सहज म्हणतो. पण थोडं थांबून विचार करूया.</p>
+<p><strong>निसर्ग लहरी आहे.</strong> तो माणसाच्या म्हणण्याप्रमाणे वागू लागला, तर तो निसर्ग कसला? वातावरण ही प्रचंड गुंतागुंतीची, सतत बदलणारी प्रणाली आहे. म्हणूनच जगात कुठेही शंभर टक्के अचूक अंदाजाचा दावा केला जात नाही. पण <strong>अंदाज अचूक नसणं आणि अंदाज निरुपयोगी असणं — यात मोठा फरक आहे.</strong></p>
+<p>काही गोष्टी समजून घेतल्या तर अंदाज वाचण्याची आपली पद्धतच बदलेल :</p>
+<ul>
+<li><strong>अंदाज &quot;शक्यता&quot; सांगतो, खात्री नाही.</strong> &quot;पावसाची शक्यता&quot; म्हणजे पाऊस पडेलच असं नव्हे; तर पडण्याची संधी जास्त आहे, म्हणून तयारी ठेवा — असा त्याचा अर्थ आहे.</li>
+<li><strong>अंदाज एका मोठ्या भागासाठी असतो.</strong> जिल्ह्यासाठी पावसाचा अंदाज दिला आणि आपल्या गावात थेंबही पडला नाही, तरी शेजारच्या तालुक्यात जोरदार पाऊस झालेला असू शकतो. विशेषतः मान्सूनमधला आणि वादळी पाऊस अगदी ठिकठिकाणी पडतो.</li>
+<li><strong>जवळच्या दिवसांचा अंदाज अधिक विश्वासार्ह असतो.</strong> उद्याचा अंदाज आठवड्यानंतरच्या अंदाजापेक्षा जास्त अचूक असतो. त्यामुळे नियोजन करताना ताजा अंदाज पुन्हा पुन्हा तपासावा.</li>
+<li><strong>विज्ञानाने खूप मोठा पल्ला गाठला आहे.</strong> आज चक्रीवादळांचे इशारे अनेक दिवस आधी मिळतात आणि त्यामुळे हजारो जीव वाचतात. काही दशकांपूर्वी हे शक्य नव्हतं.</li>
+</ul>
+<hr />
+<h2>हवामान-जागरूक माणूस : काही सोप्या गोष्टी</h2>
+<p>हवामान समजून घेण्यासाठी शास्त्रज्ञ असण्याची गरज नाही. थोडी जागरूकता पुरेशी आहे.</p>
+<p><strong>१. रंगीत इशारे ओळखा.</strong> भारतीय हवामान विभाग इशारे रंगांच्या स्वरूपात देतो :</p>
+<table>
+<thead>
+<tr>
+  <th>रंग</th>
+  <th>अर्थ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>🟢 हिरवा</td>
+  <td>कोणताही धोका नाही</td>
+</tr>
+<tr>
+  <td>🟡 पिवळा</td>
+  <td>लक्ष ठेवा, सावध राहा</td>
+</tr>
+<tr>
+  <td>🟠 नारिंगी</td>
+  <td>तयारी ठेवा, धोका संभवतो</td>
+</tr>
+<tr>
+  <td>🔴 लाल</td>
+  <td>तातडीने कृती करा, गंभीर धोका</td>
+</tr>
+</tbody>
+</table>
+<p>नारिंगी किंवा लाल इशारा म्हणजे &quot;बघू काय होतंय&quot; असं म्हणण्याची वेळ नव्हे.</p>
+<p><strong>२. अधिकृत स्रोतांवरच विश्वास ठेवा.</strong> व्हॉट्सॲपवर फिरणारे &quot;उद्या महाप्रलय&quot; किंवा &quot;अमुक तारखेला ढगफुटी&quot; असे संदेश बहुतेक वेळा खोटे किंवा जुने असतात. भारतीय हवामान विभागाचं संकेतस्थळ, <em>मौसम</em> ॲप, शेतकऱ्यांसाठी <em>मेघदूत</em> ॲप, आणि स्थानिक प्रशासनाचे अधिकृत संदेश — हेच खरे स्रोत.</p>
+<p><strong>३. वीज पडण्याचा धोका गांभीर्याने घ्या.</strong> महाराष्ट्रात, विशेषतः मान्सूनपूर्व आणि परतीच्या पावसात, वीज पडून अनेकांचा मृत्यू होतो. आयआयटीएमचं <em>दामिनी</em> ॲप आपल्या परिसरातील विजेची पूर्वसूचना देतं. गडगडाट ऐकू आला की मोकळ्या शेतात, उंच झाडाखाली किंवा पाण्याजवळ थांबू नका; सुरक्षित इमारतीत आसरा घ्या.</p>
+<p><strong>४. &quot;पुढील काही तासांचा&quot; अंदाज पाहा.</strong> हवामान विभाग पुढील तीन तासांसाठी तात्काळ अंदाज (नाउकास्ट) देतो. प्रवास, शेतीचं काम किंवा बाहेरचं नियोजन करताना हा अंदाज खूप उपयोगी पडतो.</p>
+<p><strong>५. पारंपरिक ज्ञान आणि विज्ञान — दोन्हीचा आदर.</strong> आपले पूर्वज मुंग्यांच्या हालचाली, पक्ष्यांचे आवाज आणि नक्षत्रांवरून पावसाचा अंदाज बांधत. त्या निरीक्षणांचा आदर आहेच; पण आज उपग्रह, रडार, महासंगणक आणि आता कृत्रिम बुद्धिमत्ता आपल्याला कितीतरी अधिक अचूक माहिती देतात. ज्ञानेश्वरांच्या शब्दांत — <em>आधी जाणावें</em>.</p>
+<hr />
+<h2>या ब्लॉगवर पुढे काय?</h2>
+<p>हवामान बदलामुळे अतिवृष्टी, उष्णतेच्या लाटा आणि अनियमित पाऊस यांचं प्रमाण वाढतं आहे. हे बदल समजून घेणं आता फक्त शास्त्रज्ञांचं काम राहिलेलं नाही; ती प्रत्येक नागरिकाची गरज बनली आहे.</p>
+<p>पुढच्या लेखांमध्ये आपण सोप्या मराठीत बोलणार आहोत —</p>
+<ul>
+<li>ढग कसे बनतात आणि पाऊस कसा पडतो?</li>
+<li>मान्सून नेमका येतो कुठून, आणि दरवर्षी वेगळा का वागतो?</li>
+<li>एल निनो, ला निना म्हणजे काय, आणि त्यांचा महाराष्ट्राच्या पावसाशी काय संबंध?</li>
+<li>हवामान विभाग अंदाज कसा तयार करतो?</li>
+<li>कृत्रिम बुद्धिमत्ता हवामानाचा अंदाज कसा बदलते आहे?</li>
+</ul>
+<p>कुठेही गणिताची भीती नाही, की अवघड संज्ञांचा भडिमार नाही. जिथे शास्त्रीय शब्द लागेल, तिथे त्याचा अर्थ रोजच्या अनुभवाशी जोडून सांगेन.</p>
+<hr />
+<p>पुढच्या वेळी आकाशात ढग जमताना पाहिले, किंवा हवामानाची बातमी ऐकली, तर मनात <em>&quot;हे का आणि कसं?&quot;</em> असा प्रश्न उमटावा. हवामानाचा अंदाज हा विनोदाचा विषय नाही; गांभीर्याने घेतला तर तो जीवित आणि वित्तहानी टाळण्यात छोटी, पण मोलाची भूमिका बजावू शकतो.</p>
+<p><strong>हवामानाशी जडलेलं हे नातं आता तुमच्याशीही जुळावं, हीच इच्छा.</strong></p>
+<p><em>— अरविंद</em></p>
+<p><em>तुमचे प्रश्न, अनुभव किंवा तुमच्या भागातल्या पावसाच्या आठवणी नक्की कळवा. पुढच्या लेखांचे विषय त्यातूनच ठरतील.</em></p>
+<hr />
+<blockquote>
+<p><strong>टीप :</strong> या ब्लॉगवरील लेखांमध्ये व्यक्त केलेली मतं ही माझी वैयक्तिक मतं आहेत; ती कोणत्याही संस्थेची अधिकृत भूमिका नाही. <strong>अधिकृत हवामान अंदाज आणि इशाऱ्यांसाठी कृपया भारतीय हवामान विभागाला (IMD) फॉलो करा</strong> — <a href="https://mausam.imd.gov.in">mausam.imd.gov.in</a>, <em>मौसम</em> ॲप किंवा IMD चे अधिकृत सोशल मीडिया हँडल.</p>
+</blockquote>
+</div>
+<p class="tags"><span class="tag"><span class="l-en">Weather</span><span class="l-mr" lang="mr">हवामान</span></span><span class="tag"><span class="l-en">Rain</span><span class="l-mr" lang="mr">पाऊस</span></span><span class="tag"><span class="l-en">Monsoon</span><span class="l-mr" lang="mr">मान्सून</span></span><span class="tag"><span class="l-en">Weather forecast</span><span class="l-mr" lang="mr">हवामान अंदाज</span></span><span class="tag"><span class="l-en">Maharashtra</span><span class="l-mr" lang="mr">महाराष्ट्र</span></span><span class="tag"><span class="l-en">Awareness</span><span class="l-mr" lang="mr">जनजागृती</span></span></p></article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-cols">
+      <div>
+        <h3><span class="l-en">Reach me</span><span class="l-mr" lang="mr">माझ्याशी संपर्क</span></h3>
+        <p>✉ <a href="mailto:arvindrspagire@gmail.com">arvindrspagire@gmail.com</a></p>
+<p>💬 <a href="https://wa.me/919767590166" rel="noopener"><span class="l-en">WhatsApp message</span><span class="l-mr" lang="mr">WhatsApp संदेश</span></a></p>        <p>📝 <a href="../../contact/index.html"><span class="l-en">Fill in the message form</span><span class="l-mr" lang="mr">संदेश फॉर्म भरा</span></a></p>
+      </div>
+      <div>
+        <h3>Subscribe</h3>
+        <p class="muted"><span class="l-en">New weather alerts, the experimental AI forecast and posts by e-mail.</span><span class="l-mr" lang="mr">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</span></p>
+        <form class="subscribe footer" action="https://formsubmit.co/arvindrspagire@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="New subscriber — Arvind Pagire">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_next" value="https://arvindrspagire.github.io/contact/thanks/index.html">
+  <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+  <input type="hidden" name="type" value="Subscribe: weather alerts, experimental AI forecast and posts">
+  <label for="sub-footer" class="sr-only">E-mail</label>
+  <input id="sub-footer" type="email" name="email" required placeholder="Your e-mail" data-mr-ph="तुमचा ई-मेल">
+  <button type="submit" class="btn">Subscribe</button>
+</form>
+
+      </div>
+      <div>
+        <h3><span class="l-en">Links</span><span class="l-mr" lang="mr">दुवे</span></h3>
+        <p><a href="../../alerts/index.html"><span class="l-en">Weather alerts</span><span class="l-mr" lang="mr">हवामान इशारे</span></a> · <a href="../../forecast/index.html"><span class="l-en">AI forecast</span><span class="l-mr" lang="mr">प्रायोगिक AI अंदाज</span></a> · <a href="../../blog/index.html"><span class="l-en">Blog</span><span class="l-mr" lang="mr">ब्लॉग</span></a> · <a href="../../publications/index.html"><span class="l-en">Research</span><span class="l-mr" lang="mr">संशोधन</span></a></p>
+      </div>
+    </div>
+    <div class="wrap footer-inner">
+      <div>
+        <p>© <span class="l-en">2026</span><span class="l-mr" lang="mr">२०२६</span> <span class="l-en">Arvind Pagire</span><span class="l-mr" lang="mr">अरविंद पागिरे</span> · <span class="l-en">Project Scientist-I</span><span class="l-mr" lang="mr">प्रकल्प शास्त्रज्ञ-I</span>, <span class="l-en">HPC-AIML Team, Indian Institute of Tropical Meteorology (IITM), Pune</span><span class="l-mr" lang="mr">HPC-AIML टीम, भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे</span></p>
+        <p class="muted"><span class="l-en">For official weather warnings:</span><span class="l-mr" lang="mr">अधिकृत हवामान इशाऱ्यांसाठी:</span> <a href="https://mausam.imd.gov.in" rel="noopener"><span class="l-en">India Meteorological Department</span><span class="l-mr" lang="mr">भारतीय हवामान विभाग</span></a> · <span class="l-en">Updated:</span><span class="l-mr" lang="mr">अद्ययावत:</span> <span class="l-en">30 October 2026</span><span class="l-mr" lang="mr">३० ऑक्टोबर २०२६</span></p>
+      </div>
+      <p class="profile-links on-dark compact">
+<a class="pl" href="https://scholar.google.com/citations?user=vkmoTSkAAAAJ&amp;hl=en" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg><span>Google Scholar</span></a><a class="pl" href="https://orcid.org/0009-0000-4938-0567" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9 10v7M9 7v.01M12.5 10v7h1.8a3.5 3.5 0 0 0 0-7z"/></svg><span>ORCID</span></a><a class="pl" href="https://github.com/arvindrspagire" rel="noopener" target="_blank"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4 1.3-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C6.8 2.8 5.8 3.1 5.8 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4.4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span></a><a class="pl" href="https://x.com/arvind_weathLAB" rel="noopener" target="_blank"><span class="x-ico" aria-hidden="true">𝕏</span><span>@arvind_weathLAB</span></a>  <a class="pl" href="mailto:arvindrspagire@gmail.com"><svg class="ico" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span><span class="l-en">E-mail</span><span class="l-mr" lang="mr">ई-मेल</span></span></a>
+</p>
+    </div>
+  </footer>
+  <script>
+  // language switch: CSS shows .l-en or .l-mr from <html lang>; plain-text spots (title, <option>, placeholder) swap here
+  (function () {
+    var root = document.documentElement;
+    function apply() {
+      var mr = root.lang === 'mr';
+      document.querySelectorAll('[data-mr]').forEach(function (el) {
+        if (el.dataset.en === undefined) el.dataset.en = el.textContent;
+        el.textContent = mr ? el.dataset.mr : el.dataset.en;
+      });
+      document.querySelectorAll('[data-mr-ph]').forEach(function (el) {
+        if (el.dataset.enPh === undefined) el.dataset.enPh = el.placeholder;
+        el.placeholder = mr ? el.dataset.mrPh : el.dataset.enPh;
+      });
+    }
+    document.getElementById('lang-btn').addEventListener('click', function () {
+      root.lang = root.lang === 'mr' ? 'en' : 'mr';
+      try { localStorage.setItem('lang', root.lang); } catch (e) {}
+      apply();
+    });
+    window.siteLang = { apply: apply };
+    apply();
+  })();
+  </script>
+</body>
+</html>
