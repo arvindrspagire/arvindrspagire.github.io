@@ -9,11 +9,17 @@
 {{ t("skill is lower in the monsoon because the day-to-day category is harder to call.", "पावसाळ्यात दिवसागणिक श्रेणी सांगणे अधिक कठीण असल्याने कौशल्य कमी आहे.") }}{% endif %}
 {%- endmacro %}
 
-{% macro taluka_selector(c) %}
+{% macro taluka_selector(c, daily_maps=False) %}
+{% set today = c.days[0].lead == 1 %}{% set n_next = c.days | length - (1 if today else 0) %}
 <section class="card cat-fc tq" id="{{ c.id }}">
   <h2>{{ c.title | t }}</h2>
+  {% if today %}
+  <p class="muted">{{ t("Pick your taluka (or click a map) — day-by-day rain category forecast for today and the next " ~ n_next ~ " days (each day: 08:30 IST that day to 08:30 IST the next day; today's forecast is issued in the afternoon, after its day has begun).",
+                        "तुमचा तालुका निवडा (किंवा नकाशावर क्लिक करा) — आजचा व पुढील " ~ (n_next | mr) ~ " दिवसांचा दिवसनिहाय पाऊस श्रेणी अंदाज (प्रत्येक दिवस: त्या दिवशी सकाळी ८:३० ते दुसऱ्या दिवशी सकाळी ८:३०; आजचा अंदाज दुपारी प्रसिद्ध होतो, तोपर्यंत तो दिवस सुरू झालेला असतो).") }}</p>
+  {% else %}
   <p class="muted">{{ t("Pick your taluka (or click the map) — day-by-day rain category forecast for the next " ~ c.days | length ~ " days (each day: 08:30 IST that day to 08:30 IST the next day).",
                         "तुमचा तालुका निवडा (किंवा नकाशावर क्लिक करा) — पुढील " ~ (c.days | length | mr) ~ " दिवसांचा दिवसनिहाय पाऊस श्रेणी अंदाज (प्रत्येक दिवस: त्या दिवशी सकाळी ८:३० ते दुसऱ्या दिवशी सकाळी ८:३०).") }}</p>
+  {% endif %}
   <label class="tq-pick">{{ t("Taluka:", "तालुका:") }}
     <select id="tq-select-{{ c.id }}">
       {% for g, rs in c.groups %}
@@ -36,7 +42,27 @@
   <p class="cat-legend">
     {% for k in c.classes %}<span class="cat-chip cat-{{ loop.index0 }}">{{ k.label | t }} <small>{{ k.range | t }}</small></span>{% endfor %}
   </p>
-  <p class="muted">{{ t("Map colours: tomorrow's forecast (" ~ c.days[0].date_str.en ~ ").", "नकाशाचे रंग: उद्याचा (" ~ c.days[0].date_str.mr ~ ") अंदाज.") }} {{ skill_line(c) }}</p>
+  {% if daily_maps and c.maps %}
+  <h3 class="tq-maps-title">{{ t("Taluka maps, day by day", "दिवसनिहाय तालुका नकाशे") }}</h3>
+  {# outlines defined once, each day's map reuses them (keeps the page small) #}
+  <svg class="tq-defs" width="0" height="0" aria-hidden="true"><defs>
+    {% for r in c.regions %}{% if r.id in c.maps.paths %}<path id="tqp-{{ c.id }}-{{ loop.index0 }}" d="{{ c.maps.paths[r.id] }}"/>{% endif %}{% endfor %}
+  </defs></svg>
+  <div class="cat-maps tq-daily" id="tq-daily-{{ c.id }}">
+    {% for d in c.days %}{% set i = loop.index0 %}
+    <figure>
+      <svg viewBox="-2 -2 {{ c.maps.w + 4 }} {{ c.maps.h + 4 }}" role="img" aria-label="{{ d.date_str | en }} — taluka forecast map">
+        {% for r in c.regions %}{% if r.id in c.maps.paths %}
+        <use href="#tqp-{{ c.id }}-{{ loop.index0 }}" class="cat-{{ r.cat[i] }}" data-id="{{ r.id }}"/>
+        {% endif %}{% endfor %}
+      </svg>
+      <figcaption>{% if today and loop.first %}{{ t("Today", "आज") }} — {% endif %}{{ d.date_str | t }}</figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <p class="muted">{{ t("Map colours" ~ (" (above)" if daily_maps else "") ~ ": " ~ ("today's" if today else "tomorrow's") ~ " forecast (" ~ c.days[0].date_str.en ~ ").",
+                        "नकाशाचे रंग" ~ (" (वरील)" if daily_maps else "") ~ ": " ~ ("आजचा" if today else "उद्याचा") ~ " (" ~ c.days[0].date_str.mr ~ ") अंदाज.") }} {{ skill_line(c) }}</p>
   {% if c.ecmwf_checked %}<p class="muted">{{ t("The forecast comes from the deep-learning CNN-LSTM model (trained on ERA5 and IMD rainfall; ECMWF atmospheric fields as input). Safety check: where ECMWF is dry (under 1 mm) the model's rain is not shown; ECMWF never raises the model's category.",
                                                 "अंदाज डीप-लर्निंग CNN-LSTM मॉडेलचा आहे (ERA5 व IMD पावसावर प्रशिक्षित; ECMWF चे वातावरणीय क्षेत्र इनपुट). सुरक्षा तपासणी: ECMWF नुसार कोरडे (१ मिमीपेक्षा कमी) असल्यास मॉडेलचा पाऊस दाखवला जात नाही; ECMWF मॉडेलची श्रेणी कधीही वाढवत नाही.") }}</p>{% endif %}
   <noscript><p class="empty">{{ t("Turn on JavaScript in your browser to pick a taluka.", "तालुका निवडण्यासाठी browser मध्ये JavaScript चालू करा.") }}</p></noscript>
@@ -71,11 +97,13 @@
             return '<div class="tq-bar"><span>' + t(k.en, k.mr) + '</span><i><b class="cat-' + m + '" style="width:' + v + '%"></b></i><em>' + n(v) + '%</em></div>';
           }).join('') + '</article>';
       }).join('');
-      if (map) map.querySelectorAll('path').forEach(function (el) { el.classList.toggle('on', el.dataset.id === rid); });
+      document.querySelectorAll('#tq-map-' + id + ' path, #tq-daily-' + id + ' use').forEach(function (el) { el.classList.toggle('on', el.dataset.id === rid); });
       try { localStorage.setItem(key, rid); } catch (e) {}
     }
     sel.addEventListener('change', function () { show(sel.value); });
     if (map) map.addEventListener('click', function (e) { var p = e.target.closest('path'); if (p) show(p.dataset.id); });
+    var daily = document.getElementById('tq-daily-' + id);
+    if (daily) daily.addEventListener('click', function (e) { var p = e.target.closest('[data-id]'); if (p) { show(p.dataset.id); sel.scrollIntoView({behavior: 'smooth', block: 'center'}); } });
     var saved = null; try { saved = localStorage.getItem(key); } catch (e) {}
     show(saved && D.regions.indexOf(saved) >= 0 ? saved : sel.value);
   })();

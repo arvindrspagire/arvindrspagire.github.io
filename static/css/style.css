@@ -337,6 +337,14 @@ ul.plain li { margin-bottom: .7em; }
 .tq-map path { stroke: #fff; stroke-width: .6; }
 .tq-map path:hover { stroke: var(--ink); stroke-width: 1.2; }
 .tq-map path.on { stroke: #e65100; stroke-width: 2.5; }
+.tq-maps-title { margin: 22px 0 0; }
+.tq-daily { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.tq-daily svg { cursor: pointer; }
+.tq-defs { position: absolute; }
+.tq-daily use { stroke: #fff; stroke-width: .5; }
+.tq-daily use:hover { stroke: var(--ink); stroke-width: 1.2; }
+.tq-daily use.on { stroke: #e65100; stroke-width: 2; }
+.tq-daily figcaption { font-weight: 600; color: var(--ink); }
 @media (max-width: 760px) { .tq-body { grid-template-columns: 1fr; } }
 .mh-row { margin: 0 0 4px; font-size: .92rem; }
 .tq-note { font-size: .78rem; color: var(--muted); margin: 0 0 4px !important; }

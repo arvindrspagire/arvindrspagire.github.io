@@ -11,7 +11,7 @@
 {% if fc %}
 
 {% for c in fc.categorical if c.display == "selector" %}
-{{ taluka_selector(c) }}
+{{ taluka_selector(c, daily_maps=True) }}
 {% endfor %}
 
 {% for r in fc.regions %}
