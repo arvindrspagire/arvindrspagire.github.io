@@ -202,6 +202,7 @@ def load_forecast():
         for k in c["classes"]:
             lo, hi = k["from"], k["to"]
             rng = f"< {hi}" if not lo else f"≥ {lo}" if hi is None else f"{lo}–{round(hi - 0.1, 1)}"
+            k["mr"] = CLASS_MR.get(k["key"], k["mr"])
             k["label"] = bi(CLASS_EN.get(k["key"], k["key"]), k["mr"])
             k["range"] = bi(rng + " mm/day", mr_num(rng) + " मिमी/दिवस")
         c["hss"] = [f"{h:.2f}" if h is not None else "–" for h in c.get("test_median_hss", [])]
@@ -236,7 +237,8 @@ SUBDIV_MR = {"Konkan": "कोकण", "Konkan & Goa": "कोकण", "Madhya M
              "Marathwada": "मराठवाडा", "Vidarbha": "विदर्भ"}
 SUBDIV_EN = {"Konkan & Goa": "Konkan", "Konkan": "Konkan", "Madhya Maharashtra": "Madhya Maharashtra",
              "Marathwada": "Marathwada", "Vidarbha": "Vidarbha"}
-CLASS_EN = {"no_rain": "No rain / very light", "light": "Light", "moderate": "Moderate", "heavy": "Heavy"}
+CLASS_EN = {"no_rain": "No rain", "light": "Light", "moderate": "Moderate", "heavy": "Heavy"}
+CLASS_MR = {"no_rain": "पाऊस नाही"}                                   # overrides the label stored in older model configs
 BAND_EN = {"low": "Low", "moderate": "Moderate", "high": "High", "very_high": "Very high"}
 CAT_TITLE_EN = {"maharashtra_talukas": "Experimental AI rain forecast — pick your taluka",
                 "maharashtra_districts": "Maharashtra — district-wise rain category forecast",
