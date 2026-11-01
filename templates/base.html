@@ -34,7 +34,7 @@
       <nav class="nav">
         {% set links = [("home", "", t("Home", "मुख्यपृष्ठ")), ("about", "about/", t("About", "माझ्याविषयी")),
                         ("publications", "publications/", t("Research", "संशोधन")), ("blog", "blog/", t("Blog", "ब्लॉग")),
-                        ("alerts", "alerts/", t("Weather alerts", "हवामान इशारे")), ("forecast", "forecast/", t("AI forecast", "प्रायोगिक AI अंदाज")),
+                        ("alerts", "alerts/", t("Weather information", "हवामान माहिती")), ("forecast", "forecast/", t("AI forecast", "प्रायोगिक AI अंदाज")),
                         ("contact", "contact/", t("Contact", "संपर्क"))] %}
         {% for key, href, label in links %}
         <a href="{{ root }}{{ href }}"{% if active == key %} class="active" aria-current="page"{% endif %}>{{ label }}</a>
@@ -62,7 +62,7 @@
       </div>
       <div>
         <h3>{{ t("Links", "दुवे") }}</h3>
-        <p><a href="{{ root }}alerts/">{{ t("Weather alerts", "हवामान इशारे") }}</a> · <a href="{{ root }}forecast/">{{ t("AI forecast", "प्रायोगिक AI अंदाज") }}</a> · <a href="{{ root }}blog/">{{ t("Blog", "ब्लॉग") }}</a> · <a href="{{ root }}publications/">{{ t("Research", "संशोधन") }}</a></p>
+        <p><a href="{{ root }}alerts/">{{ t("Weather information", "हवामान माहिती") }}</a> · <a href="{{ root }}forecast/">{{ t("AI forecast", "प्रायोगिक AI अंदाज") }}</a> · <a href="{{ root }}blog/">{{ t("Blog", "ब्लॉग") }}</a> · <a href="{{ root }}publications/">{{ t("Research", "संशोधन") }}</a></p>
       </div>
     </div>
     <div class="wrap footer-inner">

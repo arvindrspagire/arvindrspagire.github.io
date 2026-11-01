@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import alert_card, level_badge %}
-{% block title %}Weather alerts — {{ site.name_en }}{% endblock %}
-{% block title_mr %}हवामान इशारे — {{ site.name_mr }}{% endblock %}
+{% block title %}Weather information — {{ site.name_en }}{% endblock %}
+{% block title_mr %}हवामान माहिती — {{ site.name_mr }}{% endblock %}
 {% block content %}
 <h1 class="page-title">{{ t("Daily weather analysis and alerts", "दैनंदिन हवामान विश्लेषण व इशारे") }}</h1>
 <p class="lead">{{ t("Daily weather analysis for Maharashtra, based on my own analysis and updated every morning: wind circulation, low-pressure areas, satellite views and reel slides. The colour comes only from IMD's official district-wise warnings; when those are not available, an \"Information · analysis\" label is shown. The daily analysis text is written in Marathi.",
