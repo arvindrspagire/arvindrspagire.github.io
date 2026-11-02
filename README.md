@@ -23,6 +23,18 @@ python build.py hawaman --push
 इशाऱ्यांवरून ठरतो; ते उपलब्ध नसल्यास "माहितीपर अंदाज" (राखाडी) दाखवला जातो — मॉडेल अंदाज कधीही इशारा म्हणून नाही.
 हाताने एखाद्या दिवसासाठी: `python build.py hawaman 2026-10-25 --push`.
 
+## उच्च-वातावरण (रेडिओसोंड) विश्लेषण — आपोआप, दिवसातून दोनदा
+
+"हवामान माहिती" विभागात `alerts/upper-air/` हे पान: IMD च्या रेडिओसोंड निरीक्षणांवरून (University of Wyoming
+संग्रह) ८५०/७००/५००/२०० hPa प्रवाहरेषा नकाशे, चक्रीय स्थिती, उपोष्णकटिबंधीय उच्च दाब पट्टा, झोत वारे,
+स्थिरता निर्देशांक आणि प्रत्येक स्थानकाचा Skew-T आलेख.
+
+- आपोआप: `.github/workflows/upperair.yml` रोज ०८:३० IST (०० UTC निरीक्षण) व २०:३० IST (१२ UTC) ला चालते.
+- हाताने: `python build.py upperair --push` (किंवा ठराविक वेळ: `python build.py upperair 2026-11-02T00`).
+  यासाठी numpy, scipy, matplotlib लागतात (myenv मध्ये आहेत). साधे `python build.py` फक्त JSON वाचते.
+- `upperair.py` → `content/upperair/latest.json` (+ `archive/`) आणि `static/upperair/skewt_<WMO>.svg`.
+- किनारपट्टी नकाशा एकदाच: `python upperair.py coast` (cartopy).
+
 ## दैनंदिन हवामान इशारा (रोजचे काम)
 
 1. `python build.py new-alert` — `content/alerts/` मध्ये आजच्या तारखेची फाइल तयार होते.
@@ -95,3 +107,9 @@ shows the same in both. A post/alert body holds both languages as English, then 
 Marathi; a body in one language only is shown in both (add `lang: mr` to the front matter to label it as
 Marathi). The daily hawaman-vidnyan alerts are written that way: bilingual labels, Marathi body.
 UI wording lives in the templates as `t("English", "मराठी")`.
+
+**Upper-air analysis.** `python build.py upperair [YYYY-MM-DDTHH] [--push]` runs `upperair.py`: one request per IMD
+radiosonde station to the University of Wyoming archive (sequential, with pauses — the server refuses parallel
+requests), Barnes objective analysis of the winds, streamlines/vorticity/ridge line, Skew-T SVGs, and bilingual
+findings into `content/upperair/latest.json`. The page is `alerts/upper-air/`. Scheduled by `.github/workflows/upperair.yml`
+(03:00 and 15:00 UTC). `push()` now rebuilds `docs/` after pulling, since several jobs publish.

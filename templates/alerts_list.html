@@ -16,6 +16,21 @@
   </ul>
 </details>
 
+{% if ua %}
+<section class="card ua-card">
+  <div class="alert-card-top">
+    <span class="badge badge-info">{{ t("Upper air · radiosonde", "उच्च वातावरण · रेडिओसोंड") }}</span>
+    <span class="muted">{{ ua.time_str | t }} · {{ ua.n_stations | num }} {{ t("ascents", "निरीक्षणे") }}</span>
+  </div>
+  <h3><a href="{{ root }}alerts/upper-air/">{{ t("Wind circulation over India from today's weather balloons", "आजच्या हवामान फुग्यांवरून भारतावरील वाऱ्यांची स्थिती") }}</a></h3>
+  <ul class="ua-findings">
+    {% set top = ua.findings | selectattr("key") | list %}
+    {% for f in (top or ua.findings)[:4] %}<li>{{ f | t }}</li>{% endfor %}
+  </ul>
+  <p><a class="btn" href="{{ root }}alerts/upper-air/">{{ t("Streamline maps, jets, stability & Skew-T →", "प्रवाहरेषा नकाशे, झोत वारे, स्थिरता व Skew-T →") }}</a></p>
+</section>
+{% endif %}
+
 {% if alerts %}
 <div class="stack">
   {% for a in alerts %}{{ alert_card(a, root) }}{% endfor %}

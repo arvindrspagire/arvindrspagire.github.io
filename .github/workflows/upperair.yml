@@ -1,0 +1,38 @@
+name: Upper-air analysis (radiosonde, India)
+
+# Fetches the latest IMD radiosonde ascents from the University of Wyoming archive, analyses the wind
+# circulation and stability (upperair.py), rebuilds the site and pushes. Pages redeploys from main /docs.
+on:
+  workflow_dispatch:
+    inputs:
+      ascent:
+        description: "Ascent to analyse, YYYY-MM-DDTHH in UTC (blank = latest)"
+        required: false
+        default: ""
+  schedule:
+    - cron: "0 3 * * *"      # 08:30 IST — 00 UTC ascent
+    - cron: "0 15 * * *"     # 20:30 IST — 12 UTC ascent
+
+permissions:
+  contents: write
+
+concurrency:
+  group: upperair
+  cancel-in-progress: false
+
+jobs:
+  upperair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install jinja2 mistune pyyaml numpy scipy matplotlib
+      - run: |
+          git config user.name "Arvind Pagire"
+          git config user.email "arvindrspagire@gmail.com"
+      - run: python build.py upperair ${{ github.event.inputs.ascent }} --push

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Upper-air (radiosonde) analysis over India — {{ site.name_en }}{% endblock %}
+{% block title_mr %}भारतावरील उच्च-वातावरण (रेडिओसोंड) विश्लेषण — {{ site.name_mr }}{% endblock %}
+{% block description %}Wind circulation and stability over India from the latest IMD radiosonde ascents (University of Wyoming archive): streamlines, jet streams, subtropical ridge, Skew-T diagrams.{% endblock %}
+{% block content %}
+{% set lv_info = {
+  "850": t("~1.5 km · low-level flow: monsoon / trade winds, low-level circulations, moisture transport", "~१.५ किमी · खालचे वारे: मान्सून / व्यापारी वारे, खालच्या स्तरातील चक्रीय स्थिती, बाष्प वहन"),
+  "700": t("~3 km · lower mid-troposphere: steering of monsoon lows and depressions", "~३ किमी · मध्य-खालचा स्तर: कमी दाब क्षेत्रे / अवदाब यांची दिशा ठरवणारे वारे"),
+  "500": t("~5.8 km · mid-troposphere: subtropical ridge, troughs in the westerlies, western disturbances", "~५.८ किमी · मध्य स्तर: उपोष्णकटिबंधीय उच्च दाब पट्टा, पश्चिमी वाऱ्यांतील द्रोणीय स्थिती, पश्चिमी विक्षोभ"),
+  "200": t("~12 km · upper troposphere: subtropical westerly jet, tropical easterly jet, upper-level outflow", "~१२ किमी · वरचा स्तर: उपोष्णकटिबंधीय पश्चिमी झोत वारे, उष्णकटिबंधीय पूर्वी झोत वारे"),
+} %}
+<p class="muted"><a href="{{ root }}alerts/">← {{ t("Weather information", "हवामान माहिती") }}</a></p>
+<h1 class="page-title">{{ t("Upper-air analysis over India — radiosonde", "भारतावरील उच्च-वातावरण विश्लेषण — रेडिओसोंड") }}</h1>
+<p class="lead">{{ t("Wind circulation and atmospheric stability from the latest weather-balloon (radiosonde) ascents of the IMD network, analysed automatically twice a day (00 and 12 UTC). The soundings are taken from the University of Wyoming sounding archive.",
+                     "IMD च्या जाळ्यातील ताज्या हवामान फुग्यांच्या (रेडिओसोंड) निरीक्षणांवरून वाऱ्यांची स्थिती व वातावरणीय स्थिरता — दिवसातून दोनदा (०० व १२ UTC) आपोआप विश्लेषण. निरीक्षणे University of Wyoming च्या sounding संग्रहातून घेतली आहेत.") }}</p>
+
+<section class="card ua-head">
+  <dl class="alert-facts">
+    <div><dt>{{ t("Ascent", "निरीक्षण वेळ") }}</dt><dd>{{ ua.time_str | t }}</dd></div>
+    <div><dt>{{ t("Indian time", "भारतीय वेळ") }}</dt><dd>{{ ua.ist_str | t }}</dd></div>
+    <div><dt>{{ t("Stations reporting", "उपलब्ध स्थानके") }}</dt><dd>{{ ua.n_stations | num }} / {{ ua.n_network | num }}</dd></div>
+  </dl>
+  {% if ua.stale %}<p class="imd-note stale-note">{{ t("These soundings are more than 30 hours old: the latest ascent has not reached the archive yet.", "ही निरीक्षणे ३० तासांपेक्षा जुनी आहेत: नवे निरीक्षण अजून संग्रहात आलेले नाही.") }}</p>{% endif %}
+</section>
+
+<section class="section">
+  <h2>{{ t("What the soundings show", "निरीक्षणांतून दिसणारी स्थिती") }}</h2>
+  <ul class="ua-findings">
+    {% for f in ua.findings %}<li>{{ f | t }}</li>{% endfor %}
+  </ul>
+  <p class="muted ua-small">{{ t("Generated automatically from the observed winds and Wyoming's sounding indices; an analysis of observations, not a forecast.", "निरीक्षित वारे व Wyoming च्या निर्देशांकांवरून आपोआप तयार केलेले विवेचन; हे निरीक्षणांचे विश्लेषण आहे, अंदाज नाही.") }}</p>
+</section>
+
+<section class="section">
+  <h2>{{ t("Wind circulation — streamline analysis", "वाऱ्यांची स्थिती — प्रवाहरेषा विश्लेषण") }}</h2>
+  <style>.ua-panel{display:none}{% for p in ua.maps %}#ua-l{{ p }}:checked~.ua-p{{ p }}{display:block}#ua-l{{ p }}:checked+label{background:var(--brand);color:#fff;border-color:var(--brand)}{% endfor %}</style>
+  <div class="ua-tabs">
+    {% for p in ua.maps %}<input type="radio" name="ua-level" id="ua-l{{ p }}" class="sr-only"{% if loop.first %} checked{% endif %}><label for="ua-l{{ p }}">{{ p }} hPa</label>{% endfor %}
+    {% for p, svg in ua.maps.items() %}
+    {% set rg = ua.regional[p] %}
+    <figure class="ua-panel ua-p{{ p }}">
+      <p class="ua-lv">{{ lv_info[p] }}</p>
+      {{ svg | safe }}
+      <figcaption>
+        <span class="ua-legend">
+          <span>{{ t("Wind speed (kt):", "वाऱ्याचा वेग (नॉट):") }}</span>
+          {% set lo = namespace(v=10) %}{% for b, c in ua.isotach %}<span class="ua-sw" style="background:{{ c }}"></span>{{ lo.v }}{% if b < 999 %}–{{ b }}{% else %}+{% endif %}{% set lo.v = b %}{% endfor %}
+        </span>
+        <span class="ua-legend">
+          <span><svg width="26" height="10" aria-hidden="true"><path d="M2 5h22" stroke="#1b2430" stroke-width="1.3"/></svg>{{ t("streamlines", "प्रवाहरेषा") }}</span>
+          <span><svg width="26" height="12" aria-hidden="true"><path d="M2 6h22M24 6l-5-5" stroke="#1b2430" stroke-width="1.3" fill="none"/></svg>{{ t("observed wind (barb: half 5, full 10, flag 50 kt)", "निरीक्षित वारे (barb: अर्धी रेघ ५, पूर्ण १०, त्रिकोण ५० नॉट)") }}</span>
+          {% if p in ("500", "200") %}<span><svg width="26" height="10" aria-hidden="true"><path d="M2 5h22" stroke="#c45a00" stroke-width="2" stroke-dasharray="5 3"/></svg>{{ t("ridge line (easterlies ↔ westerlies)", "उच्च दाब पट्ट्याची रेषा (पूर्वी ↔ पश्चिमी वारे)") }}</span>{% endif %}
+          <span><b class="ua-cyc">C</b>/<b class="ua-anti">A</b> {{ t("closed cyclonic / anticyclonic circulation", "बंद चक्रीय / प्रतिचक्रीय स्थिती") }}</span>
+        </span>
+        <span class="muted ua-small">{{ t("Barnes objective analysis of " ~ rg.n ~ " ascents (typical spacing " ~ rg.spacing ~ "°); areas far from any station are left blank. Hover over a station for its wind.",
+                                           (rg.n | mr) ~ " निरीक्षणांचे Barnes वस्तुनिष्ठ विश्लेषण (स्थानकांमधील सरासरी अंतर " ~ (rg.spacing | mr) ~ "°); स्थानकांपासून दूरचा भाग रिकामा ठेवला आहे. स्थानकावर cursor नेल्यास वारे दिसतात.") }}</span>
+      </figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <h2>{{ t("Station by station", "स्थानकनिहाय निरीक्षणे") }}</h2>
+  <p class="muted">{{ t("Wind as direction (degrees, from) / speed (knots). K-index, Total Totals (TT), most-unstable CAPE and precipitable water (PW) are Wyoming's computed indices. Thunderstorm potential is a guide from the K-index (raised when MUCAPE ≥ 1500 J/kg).",
+                        "वारे: दिशा (अंश, जिकडून) / वेग (नॉट). K-निर्देशांक, Total Totals (TT), MUCAPE व अवक्षेपणक्षम पाणी (PW) हे Wyoming ने काढलेले निर्देशांक आहेत. गडगडाटी वादळाची शक्यता K-निर्देशांकावरून (MUCAPE ≥ १५०० J/kg असल्यास वाढवून) दाखवली आहे.") }}</p>
+  <div class="cat-table-wrap">
+    <table class="cat-table ua-table">
+      <thead><tr>
+        <th>{{ t("Station", "स्थानक") }}</th><th>850 hPa</th><th>700 hPa</th><th>500 hPa</th><th>200 hPa</th>
+        <th>K</th><th>TT</th><th>MUCAPE<br><small>J/kg</small></th><th>PW<br><small>{{ t("mm", "मिमी") }}</small></th>
+        <th>{{ t("0 °C level", "० °C स्तर") }}<br><small>m</small></th><th>{{ t("Thunderstorm potential", "गडगडाटी वादळ शक्यता") }}</th>
+      </tr></thead>
+      <tbody>
+      {% for s in ua.stations %}
+      <tr>
+        <th><a href="#st-{{ s.wmo }}">{{ s.name | t }}</a></th>
+        {% for p in ("850", "700", "500", "200") %}<td>{{ s.levels[p].wind if p in s.levels else "–" }}</td>{% endfor %}
+        <td>{{ s.k if s.k is not none else "–" }}</td><td>{{ s.tt if s.tt is not none else "–" }}</td>
+        <td>{{ s.cape | round | int if s.cape is not none else "–" }}</td><td>{{ s.pw | round | int if s.pw is not none else "–" }}</td>
+        <td>{{ s.frz if s.frz is not none else "–" }}</td>
+        <td>{% if s.pot_label %}<span class="ua-pot ua-pot{{ s.potential }}">{{ s.pot_label | t }}</span>{% else %}–{% endif %}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if ua.missing %}<p class="muted ua-small">{{ t("No sounding in the archive for this ascent:", "या वेळेचे निरीक्षण संग्रहात उपलब्ध नाही:") }} {% for m in ua.missing %}{{ m | t }}{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
+</section>
+
+<section class="section">
+  <h2>{{ t("Skew-T diagrams", "Skew-T आलेख") }}</h2>
+  <p class="muted">{{ t("Temperature (red), dew point (green) and the most-unstable parcel (dashed) on a Skew-T log-p diagram, with the observed winds on the right. Open a station:",
+                        "Skew-T log-p आलेखावर तापमान (लाल), दवबिंदू (हिरवा) आणि सर्वाधिक अस्थिर हवेचा कण (तुटक रेषा); उजवीकडे निरीक्षित वारे. स्थानक उघडा:") }}</p>
+  <div class="ua-stations">
+  {% for s in ua.stations %}
+  <details class="card ua-st-card" id="st-{{ s.wmo }}">
+    <summary><strong>{{ s.name | t }}</strong> <span class="muted">· {{ s.wmo }} · {{ s.lat }}°N {{ s.lon }}°E</span>{% if s.pot_label %} <span class="ua-pot ua-pot{{ s.potential }}">{{ s.pot_label | t }}</span>{% endif %}</summary>
+    <div class="ua-st-body">
+      <img src="{{ root }}static/upperair/skewt_{{ s.wmo }}.svg?v={{ ua.key }}" loading="lazy" width="300" height="330" alt="Skew-T {{ s.name.en }}">
+      <dl class="ua-dl">
+        <div><dt>{{ t("Ascent reached", "फुगा पोहोचला") }}</dt><dd>{{ s.top | round | int }} hPa · {{ s.nlev }} {{ t("levels", "स्तर") }}</dd></div>
+        <div><dt>K / TT / SWEAT</dt><dd>{{ s.k }} / {{ s.tt }} / {{ s.sweat }}</dd></div>
+        <div><dt>{{ t("Lifted index / Showalter", "Lifted / Showalter निर्देशांक") }}</dt><dd>{{ s.li }} / {{ s.show }}</dd></div>
+        <div><dt>MUCAPE / MUCIN</dt><dd>{{ s.cape }} / {{ s.cin }} J/kg</dd></div>
+        <div><dt>DCAPE</dt><dd>{{ s.dcape }} J/kg</dd></div>
+        <div><dt>{{ t("Precipitable water", "अवक्षेपणक्षम पाणी") }}</dt><dd>{{ s.pw }} {{ t("mm", "मिमी") }}</dd></div>
+        <div><dt>{{ t("Mean RH 850–500 hPa", "सरासरी आर्द्रता ८५०–५०० hPa") }}</dt><dd>{{ s.rh_mid if s.rh_mid is not none else "–" }}%</dd></div>
+        <div><dt>{{ t("Cloud base (LCL)", "ढगांचा तळ (LCL)") }}</dt><dd>{{ s.lcl | round | int if s.lcl is not none else "–" }} m</dd></div>
+        <div><dt>{{ t("Freezing level", "गोठणबिंदू स्तर") }}</dt><dd>{{ s.frz if s.frz is not none else "–" }} m</dd></div>
+        <div><dt>{{ t("Shear 850–200 hPa / 0–6 km", "वाऱ्याचा उभा फरक ८५०–२०० hPa / ०–६ किमी") }}</dt><dd>{{ s.shear_850_200 if s.shear_850_200 is not none else "–" }} / {{ s.shear_0_6 if s.shear_0_6 is not none else "–" }} kt</dd></div>
+        {% if s.llj %}<div><dt>{{ t("Strongest wind below 700 hPa", "७०० hPa खालील सर्वाधिक वारे") }}</dt><dd>{{ "%03d" | format(s.llj.dir) }}°/{{ s.llj.kt }} kt @ {{ s.llj.p | round | int }} hPa</dd></div>{% endif %}
+        {% if s.jet %}<div><dt>{{ t("Strongest wind 400–100 hPa", "४००–१०० hPa मधील सर्वाधिक वारे") }}</dt><dd>{{ "%03d" | format(s.jet.dir) }}°/{{ s.jet.kt }} kt @ {{ s.jet.p | round | int }} hPa</dd></div>{% endif %}
+        {% if s.adv is not none %}<div><dt>{{ t("Thermal advection 850–500 hPa", "उष्णता वहन ८५०–५०० hPa") }}</dt><dd>{{ "%+.1f" | format(s.adv) }} K/{{ t("day", "दिवस") }} {% if s.adv >= 1 %}({{ t("warm", "उष्ण") }}){% elif s.adv <= -1 %}({{ t("cold", "थंड") }}){% endif %}</dd></div>{% endif %}
+      </dl>
+    </div>
+    <p class="ua-small"><a href="https://weather.uwyo.edu/wsgi/sounding?datetime={{ ua.time[:10] }}%20{{ ua.time[11:13] }}:00:00&amp;id={{ s.wmo }}&amp;src=UNKNOWN&amp;type=TEXT:LIST" rel="noopener" target="_blank">{{ t("Original sounding (University of Wyoming)", "मूळ निरीक्षण (University of Wyoming)") }} ↗</a></p>
+  </details>
+  {% endfor %}
+  </div>
+</section>
+
+<details class="legend card">
+  <summary>{{ t("Method and limitations", "पद्धत व मर्यादा") }}</summary>
+  <div class="prose ua-method">
+    <ul class="l-en">
+      <li><strong>Data:</strong> radiosonde / rawinsonde ascents of the India Meteorological Department network, as decoded by the University of Wyoming (weather.uwyo.edu). One request per station, fetched automatically about 3 hours after each synoptic hour.</li>
+      <li><strong>Streamlines:</strong> the station winds at each level are interpolated to a 0.5° grid with a two-pass Barnes objective analysis (smoothing length set from the station spacing); grid points more than ~3.5° from any ascent are left blank. With about 25 stations, only synoptic-scale features (≳ 500 km) are resolved; there are no ascents over the open sea.</li>
+      <li><strong>Circulations:</strong> relative-vorticity extrema in the analysed wind; marked C / A only when the analysed wind turns all the way round the centre.</li>
+      <li><strong>Ridge line:</strong> latitude where the analysed zonal wind changes from easterly (south) to westerly (north), median along 70–90°E.</li>
+      <li><strong>Thermal advection:</strong> geostrophic estimate from the turning of the wind between 850 and 500 hPa (thermal-wind relation); shown only north of 18°N, where the Coriolis parameter is large enough.</li>
+      <li><strong>Indices:</strong> K-index, Total Totals, Showalter, lifted index, CAPE/CIN, PW and LCL are Wyoming's values. The parcel on the Skew-T is the most-unstable parcel in the lowest 300 hPa.</li>
+      <li>This is an analysis of observations for learning and research — not a forecast or warning. For official forecasts see <a href="https://mausam.imd.gov.in" rel="noopener">mausam.imd.gov.in</a>.</li>
+    </ul>
+    <ul class="l-mr" lang="mr">
+      <li><strong>माहिती:</strong> भारतीय हवामान विभागाच्या रेडिओसोंड / रॅविनसोंड जाळ्यातील निरीक्षणे, University of Wyoming (weather.uwyo.edu) ने उलगडलेली. प्रत्येक स्थानकासाठी एक विनंती; प्रत्येक निरीक्षण वेळेनंतर सुमारे ३ तासांनी आपोआप.</li>
+      <li><strong>प्रवाहरेषा:</strong> प्रत्येक स्तरावरील स्थानकांचे वारे दोन टप्प्यांच्या Barnes वस्तुनिष्ठ विश्लेषणाने ०.५° ग्रिडवर; कोणत्याही स्थानकापासून ~३.५° पेक्षा दूरचा भाग रिकामा. सुमारे २५ स्थानकांमुळे फक्त मोठ्या (≳ ५०० किमी) प्रणाली दिसतात; खुल्या समुद्रावर निरीक्षणे नाहीत.</li>
+      <li><strong>चक्रीय स्थिती:</strong> विश्लेषित वाऱ्यातील सापेक्ष भोवरा (vorticity) कमाल/किमान; केंद्राभोवती वारे पूर्ण फिरत असतील तरच C / A दाखवले आहे.</li>
+      <li><strong>उच्च दाब पट्टा:</strong> विश्लेषित पूर्व-पश्चिम वारे दक्षिणेकडील पूर्वी वाऱ्यांतून उत्तरेकडील पश्चिमी वाऱ्यांत बदलतात ते अक्षांश (७०–९०°E मधील मध्यक).</li>
+      <li><strong>उष्णता वहन:</strong> ८५० ते ५०० hPa दरम्यान वाऱ्याच्या वळणावरून (thermal wind) भूस्थिर अंदाज; फक्त १८°N च्या उत्तरेस.</li>
+      <li><strong>निर्देशांक:</strong> K, Total Totals, Showalter, lifted index, CAPE/CIN, PW व LCL ही Wyoming ची मूल्ये. Skew-T वरील कण हा खालच्या ३०० hPa मधील सर्वाधिक अस्थिर कण आहे.</li>
+      <li>हे शिक्षण व संशोधनासाठी निरीक्षणांचे विश्लेषण आहे — अंदाज किंवा इशारा नाही. अधिकृत अंदाजासाठी <a href="https://mausam.imd.gov.in" rel="noopener">mausam.imd.gov.in</a> पाहा.</li>
+    </ul>
+  </div>
+</details>
+
+<p class="disclaimer">{{ t("Data: India Meteorological Department radiosonde network, via the University of Wyoming upper-air archive. Analysis: " ~ site.name_en ~ ". Updated automatically at about 08:30 and 20:30 IST.",
+                           "माहिती: भारतीय हवामान विभाग रेडिओसोंड जाळे, University of Wyoming upper-air संग्रहाद्वारे. विश्लेषण: " ~ site.name_mr ~ ". दररोज सुमारे सकाळी ८:३० व रात्री ८:३० वाजता आपोआप अद्ययावत.") }}</p>
+{% endblock %}

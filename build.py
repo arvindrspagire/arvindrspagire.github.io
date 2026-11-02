@@ -8,6 +8,8 @@ Bilingual personal website builder: English by default, मराठी with the
     python build.py forecast [--push]   rebuild with the AI rain forecast (content/forecast/latest.json)
     python build.py hawaman [YYYY-MM-DD] [--push]
                                     alert from the hawaman-vidnyan daily output (--push = build + git push)
+    python build.py upperair [YYYY-MM-DDTHH] [--push]
+                                    radiosonde analysis over India (University of Wyoming data) + build
     --drafts                        include draft: true posts (preview only)
 
 Content lives in content/blog/*.md and content/alerts/*.md (YAML front matter + Markdown).
@@ -18,7 +20,7 @@ is shown in both languages. A post body may hold both: English first, then a lin
 Needs: jinja2, mistune, pyyaml.
 """
 
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pathlib import Path
 import functools
 import hashlib
@@ -223,6 +225,31 @@ def load_forecast():
     return fc
 
 
+POTENTIAL = [bi("Weak", "कमी"), bi("Isolated", "तुरळक"), bi("Scattered", "विखुरलेली"),
+             bi("Moderate–high", "मध्यम–जास्त"), bi("High", "जास्त")]          # thunderstorm potential (K-index guide)
+
+
+def load_upperair():
+    """content/upperair/latest.json, written by upperair.py (radiosonde analysis from University of Wyoming data)."""
+    import json
+    from datetime import timedelta
+    path = CONTENT / "upperair" / "latest.json"
+    if not path.exists():
+        return None
+    ua = json.loads(path.read_text(encoding="utf-8"))
+    t = datetime.strptime(ua["time"], "%Y-%m-%dT%H:00Z")
+    ist = t + timedelta(hours=5, minutes=30)
+    ua["time_str"] = bi(f"{t:%H} UTC, {en_date(t.date(), weekday=True)}", f"{mr_num(f'{t:%H}')} UTC, {mr_date(t.date(), weekday=True)}")
+    ua["ist_str"] = bi(f"{ist:%H:%M} IST, {en_date(ist.date())}", f"{mr_num(f'{ist:%H:%M}')} IST, {mr_date(ist.date())}")
+    ua["stale"] = (datetime.now(timezone.utc).replace(tzinfo=None) - t).total_seconds() > 30 * 3600
+    ua["key"] = f"{t:%Y%m%d%H}"
+    for s in ua["stations"]:
+        s["pot_label"] = POTENTIAL[s["potential"]] if s.get("potential") is not None else None
+        for p, lv in s["levels"].items():
+            lv["wind"] = f"{lv['dir']:03d}°/{lv['kt']}" if "kt" in lv else "–"
+    return ua
+
+
 def region_name_en(r, dist_en):
     rid = r["id"]
     if m := re.fullmatch(r"(.+?) \(([^()]+)\)", rid):              # taluka: "Shahuwadi (Kolhapur)"
@@ -319,7 +346,10 @@ def build(drafts=False):
     page("blog_list.html", "blog/index.html", "blog", posts=blog)
     for p in blog:
         page("post.html", f"blog/{p['slug']}/index.html", "blog", post=p)
-    page("alerts_list.html", "alerts/index.html", "alerts", alerts=alerts)
+    ua = load_upperair()
+    page("alerts_list.html", "alerts/index.html", "alerts", alerts=alerts, ua=ua)
+    if ua:
+        page("upperair.html", "alerts/upper-air/index.html", "alerts", ua=ua)
     for a in alerts:
         page("alert.html", f"alerts/{a['slug']}/index.html", "alerts", alert=a)
     page("forecast.html", "forecast/index.html", "forecast", fc=fc)
@@ -548,7 +578,13 @@ def push(msg):
     if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode == 0:
         print("No changes; nothing pushed"); return
     run("commit", "-q", "-m", msg)
-    run("pull", "-q", "--rebase")             # laptop and GitHub Actions may both publish
+    # laptop and two GitHub Actions jobs (alerts, upper air) may all publish, and every build rewrites docs/:
+    # keep our side on a docs/ conflict, then rebuild docs/ from the merged content
+    run("pull", "-q", "--rebase", "-X", "theirs")
+    build()
+    run("add", "-A")
+    if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode:
+        run("commit", "-q", "-m", "Rebuild site")
     run("push", "-q")
     print("Pushed to GitHub")
 
@@ -580,6 +616,13 @@ if __name__ == "__main__":
         if "--push" in sys.argv:
             fc = load_forecast()
             push(f"Experimental AI rain forecast {fc['base_date'] if fc else ''}".strip())
+    elif cmd == "upperair":                   # radiosonde analysis (needs numpy/scipy/matplotlib: myenv or the workflow)
+        import upperair
+        when = next((a for a in args[1:] if re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}", a)), None)
+        ua = upperair.run(datetime.strptime(when, "%Y-%m-%dT%H") if when else None)
+        build()
+        if ua and "--push" in sys.argv:
+            push(f"Upper-air analysis {ua['time']}")
     elif cmd == "new-blog":
         if len(args) < 2:
             raise SystemExit("e.g. python build.py new-blog monsoon-2026")
