@@ -27,6 +27,15 @@
 </article>
 {%- endmacro %}
 
+{# upper-air headline numbers (upperair.py tiles): value, label, short note #}
+{% macro ua_tiles(tiles, n=6) -%}
+<div class="ua-tiles">
+  {% for x in tiles[:n] %}
+  <div class="ua-tile"><span class="ua-tile-v">{{ x.value | t }}</span><span class="ua-tile-l">{{ x.label | t }}</span><span class="ua-tile-n">{{ x.note | t }}</span></div>
+  {% endfor %}
+</div>
+{%- endmacro %}
+
 {% macro post_card(p, root) -%}
 <article class="post-card">
   <time datetime="{{ p.date.isoformat() }}" class="muted">{{ p.date_str | t }}</time>

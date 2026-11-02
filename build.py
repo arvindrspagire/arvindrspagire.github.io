@@ -349,7 +349,7 @@ def build(drafts=False):
     ua = load_upperair()
     page("alerts_list.html", "alerts/index.html", "alerts", alerts=alerts, ua=ua)
     if ua:
-        page("upperair.html", "alerts/upper-air/index.html", "alerts", ua=ua)
+        page("upperair.html", "alerts/upper-air/index.html", "alerts", ua=ua, pot_labels=POTENTIAL)
     for a in alerts:
         page("alert.html", f"alerts/{a['slug']}/index.html", "alerts", alert=a)
     page("forecast.html", "forecast/index.html", "forecast", fc=fc)

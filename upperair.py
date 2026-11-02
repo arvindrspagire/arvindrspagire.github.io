@@ -4,6 +4,7 @@ Real-time upper-air (radiosonde) analysis over India, from the University of Wyo
     python upperair.py                  latest ascent (00 or 12 UTC) -> content/upperair/latest.json + SVGs
     python upperair.py 2026-11-02T00    a given ascent (UTC)
     python upperair.py coast            (once) coastline for the maps, from Natural Earth via cartopy
+    python upperair.py redraw           recompute maps, text and tiles from the saved latest.json (no download)
 
 One request per station (TEXT:LIST = profile + Wyoming's indices), one station at a time with a pause:
 the server answers "too busy" to parallel requests. Everything numeric happens here (numpy, scipy,
@@ -369,7 +370,27 @@ def ridge_line(an, lon_band=(70, 90)):
                 pts.append((float(lo), float(la)))
                 break
     band = [la for lo, la in pts if lon_band[0] <= lo <= lon_band[1]]
-    return dict(points=pts, lat=round(float(np.median(band)), 1) if len(band) >= 5 else None)
+    return dict(points=smooth_line(pts), lat=round(float(np.median(band)), 1) if len(band) >= 5 else None)
+
+
+def smooth_line(pts, gap=0.6):
+    """A per-longitude line (lon, lat) without grid steps and single-column jumps: running median, then mean,
+    within each run of adjacent columns; runs shorter than 3° are dropped."""
+    from scipy.ndimage import median_filter, uniform_filter1d
+    runs, cur = [], []
+    for p in pts:
+        if cur and p[0] - cur[-1][0] > gap:
+            runs.append(cur)
+            cur = []
+        cur.append(p)
+    runs.append(cur)
+    out = []
+    for r in runs:
+        if len(r) < 7:
+            continue
+        lat = uniform_filter1d(median_filter(np.array([b for _, b in r]), size=9, mode="nearest"), size=7, mode="nearest")
+        out += [(a, float(b)) for (a, _), b in zip(r, lat)]
+    return out
 
 
 # ------------------------------------------------------------------ SVG drawing
@@ -419,6 +440,19 @@ def path_d(path, tf):
 ISOTACH = [(20, "#cde2fb"), (40, "#9ec5f4"), (60, "#6da7ec"), (80, "#3987e5"), (999, "#1c5cab")]   # kt, sequential blue
 
 
+def grid_svg():
+    g = []
+    for lo in range(65, 100, 5):
+        x, _ = xy(lo, 0)
+        g.append(f'<line class="ua-grid" x1="{x:.1f}" y1="0" x2="{x:.1f}" y2="{MAP_H}"/>'
+                 f'<text class="ua-tick" x="{x + 2:.1f}" y="{MAP_H - 4}">{lo}°E</text>')
+    for la in range(5, 38, 5):
+        _, y = xy(0, la)
+        g.append(f'<line class="ua-grid" x1="0" y1="{y:.1f}" x2="{MAP_W}" y2="{y:.1f}"/>'
+                 f'<text class="ua-tick" x="3" y="{y - 3:.1f}">{la}°N</text>')
+    return "".join(g)
+
+
 def map_svg(an, stations, centres, ridge, coast):
     import matplotlib
     matplotlib.use("Agg")
@@ -459,15 +493,7 @@ def map_svg(an, stations, centres, ridge, coast):
             (x0, y0), (x1, y1) = pts[m - 1], pts[m + 1]
             ang = math.degrees(math.atan2(y1 - y0, x1 - x0))
             arrows.append(f'<path class="ua-arrow" d="M-4,-3.5L3,0L-4,3.5" transform="translate({pts[m][0]:.1f},{pts[m][1]:.1f}) rotate({ang:.0f})"/>')
-    grid = []
-    for lo in range(65, 100, 5):
-        x, _ = xy(lo, 0)
-        grid.append(f'<line class="ua-grid" x1="{x:.1f}" y1="0" x2="{x:.1f}" y2="{MAP_H}"/>'
-                    f'<text class="ua-tick" x="{x + 2:.1f}" y="{MAP_H - 4}">{lo}°E</text>')
-    for la in range(5, 38, 5):
-        _, y = xy(0, la)
-        grid.append(f'<line class="ua-grid" x1="0" y1="{y:.1f}" x2="{MAP_W}" y2="{y:.1f}"/>'
-                    f'<text class="ua-tick" x="3" y="{y - 3:.1f}">{la}°N</text>')
+    grid = [grid_svg()]
     marks = []
     for s in stations:
         lv = s["levels"].get(str(p), {})
@@ -601,23 +627,17 @@ def findings(stations, regional):
                       f"from {s['llj']['dir']}° near {s['llj']['p']:.0f} hPa at {s['name']['en']}.",
                       f"खालच्या स्तरात जोरदार वारे (७०० hPa खाली ≥ २५ नॉट): {names(llj)['mr']}; सर्वाधिक {mr(s['llj']['kt'])} नॉट "
                       f"({mr(s['llj']['dir'])}° कडून, सुमारे {mr(round(s['llj']['p']))} hPa) — {s['name']['mr']}."))
-    troughs = []                              # a trough already reported at a lower level is not repeated above it
-    for p in (850, 700, 500, 200):
-        for c in regional.get(str(p), {}).get("centres", []):
-            nr = c["near"]
-            where_en = f"near {c['lat']:.0f}°N, {c['lon']:.0f}°E (between {nr[0]['en']} and {nr[1]['en']})"
-            where_mr = f"{mr(round(c['lat']))}°N, {mr(round(c['lon']))}°E जवळ ({nr[0]['mr']} व {nr[1]['mr']} दरम्यान)"
-            if c["closed"]:
-                kind = bi("cyclonic circulation", "चक्रीय वाऱ्यांची स्थिती") if c["kind"] == "cyclonic" else bi("anticyclone", "प्रतिचक्रीय स्थिती")
-                low = c["kind"] == "cyclonic" or p >= 500   # an upper-level anticyclone is routine, not a headline
-                out.append((key if low else bi)(f"{p} hPa: {kind['en']} in the objective analysis {where_en}.",
-                              f"{mr(p)} hPa: वस्तुनिष्ठ विश्लेषणात {where_mr} {kind['mr']}."))
-            elif c["kind"] == "cyclonic" and p >= 700 and c["zeta"] >= 4:
-                if any(abs(c["lat"] - a) <= 2 and abs(c["lon"] - b) <= 2 for a, b in troughs):
-                    continue
-                troughs.append((c["lat"], c["lon"]))
-                z = f"{c['zeta']:.0f}"
-                out.append(key(f"{p} hPa: marked cyclonic wind shear (trough; vorticity ≈ {z}×10⁻⁵ s⁻¹) {where_en} — "
+    for c in headline_centres(regional):
+        p, nr = c["p"], c["near"]
+        where_en = f"near {c['lat']:.0f}°N, {c['lon']:.0f}°E (between {nr[0]['en']} and {nr[1]['en']})"
+        where_mr = f"{mr(round(c['lat']))}°N, {mr(round(c['lon']))}°E जवळ ({nr[0]['mr']} व {nr[1]['mr']} दरम्यान)"
+        if c["closed"]:
+            kind = bi("cyclonic circulation", "चक्रीय वाऱ्यांची स्थिती") if c["kind"] == "cyclonic" else bi("anticyclone", "प्रतिचक्रीय स्थिती")
+            out.append((key if c["headline"] else bi)(f"{p} hPa: {kind['en']} in the objective analysis {where_en}.",
+                                                      f"{mr(p)} hPa: वस्तुनिष्ठ विश्लेषणात {where_mr} {kind['mr']}."))
+        else:
+            z = f"{c['zeta']:.0f}"
+            out.append(key(f"{p} hPa: marked cyclonic wind shear (trough; vorticity ≈ {z}×10⁻⁵ s⁻¹) {where_en} — "
                               f"not confirmed as a closed circulation by the surrounding ascents.",
                               f"{mr(p)} hPa: {where_mr} ठळक चक्रीय वाऱ्यांचा फरक (द्रोणीय स्थिती; भोवरा ≈ {mr(z)}×10⁻⁵ s⁻¹) — "
                               f"आजूबाजूच्या निरीक्षणांवरून बंद चक्रीय स्थिती असल्याची खात्री होत नाही."))
@@ -681,6 +701,161 @@ def findings(stations, regional):
     return out
 
 
+def headline_centres(regional):
+    """Circulations worth showing: closed ones, and strong low-level cyclonic shear (troughs), each trough once."""
+    out = []
+    for p in (850, 700, 500, 200):
+        for c in regional.get(str(p), {}).get("centres", []):
+            if c["closed"]:
+                # an upper-level anticyclone is routine, not a headline
+                out.append(dict(c, p=p, headline=c["kind"] == "cyclonic" or p >= 500))
+            elif c["kind"] == "cyclonic" and p >= 700 and c["zeta"] >= 4:
+                if any(not o["closed"] and abs(c["lat"] - o["lat"]) <= 2 and abs(c["lon"] - o["lon"]) <= 2 for o in out):
+                    continue
+                out.append(dict(c, p=p, headline=True))
+    return out
+
+
+# ------------------------------------------------------------------ at a glance: number tiles + key-features map
+def tiles(stations, regional):
+    """Headline numbers for the page and the summary card: value, label, short note (all bilingual)."""
+    out = []
+    jets = [s for s in stations if s["jet"] and s["jet"]["u"] > 0 and (s["jet"]["kt"] or 0) >= 60]
+    if jets:
+        s = max(jets, key=lambda s: s["jet"]["kt"])
+        out.append(dict(value=bi(f"{s['jet']['kt']} kt", f"{mr(s['jet']['kt'])} नॉट"),
+                        label=bi("Westerly jet core", "पश्चिमी झोत वारे"),
+                        note=bi(f"{s['name']['en']} · {s['jet']['p']:.0f} hPa", f"{s['name']['mr']} · {mr(round(s['jet']['p']))} hPa")))
+    r = regional.get("500", {}).get("ridge_lat")
+    if r is not None:
+        out.append(dict(value=bi(f"{r:.1f}°N", f"{mr(f'{r:.1f}')}°N"),
+                        label=bi("Subtropical ridge, 500 hPa", "उच्च दाब पट्टा, ५०० hPa"),
+                        note=bi("easterlies south, westerlies north", "दक्षिणेस पूर्वी, उत्तरेस पश्चिमी वारे")))
+    lows = [c for c in headline_centres(regional) if c["headline"]]
+    out.append(dict(value=bi(str(len(lows)), mr(len(lows))),
+                    label=bi("Troughs / circulations", "द्रोणीय / चक्रीय स्थिती"),
+                    note=bi(" · ".join(f"{c['p']}: {c['near'][0]['en']}" for c in lows[:2]) or "none",
+                            " · ".join(f"{mr(c['p'])}: {c['near'][0]['mr']}" for c in lows[:2]) or "नाही")))
+    hot = sorted([s for s in stations if (s["potential"] or 0) >= 3], key=lambda s: -(s["k"] or 0))
+    out.append(dict(value=bi(f"{len(hot)} / {len(stations)}", f"{mr(len(hot))} / {mr(len(stations))}"),
+                    label=bi("Stations favouring thunderstorms", "वादळास अनुकूल स्थानके"),
+                    note=names(hot, 3) if hot else bi("none", "नाही")))
+    pw = [s for s in stations if s["pw"] is not None]
+    if pw:
+        s = max(pw, key=lambda s: s["pw"])
+        out.append(dict(value=bi(f"{s['pw']:.0f} mm", f"{mr(round(s['pw']))} मिमी"),
+                        label=bi("Most moisture (precipitable water)", "सर्वाधिक बाष्प (PW)"), note=s["name"]))
+    wy = regional.get("shear_index")
+    if wy is not None:
+        out.append(dict(value=bi(f"{wy:+.0f} m/s", f"{mr(f'{wy:+.0f}')} मी/से"),
+                        label=bi("Monsoon shear (u850 − u200)", "मान्सून वारे फरक (u850 − u200)"),
+                        note=bi("monsoon-like" if wy > 0 else "not monsoon-like",
+                                "मान्सूनसारखा" if wy > 0 else "मान्सूनसारखा नाही")))
+    return out
+
+
+POT_COLORS = ["#86b6ef", "#5598e7", "#2a78d6", "#1c5cab", "#0d366b"]     # ordinal blue: weak -> high potential
+
+
+def jet_axis(an):
+    """Latitude of the strongest westerly per longitude (north of 18°N), where it is ≥ 60 kt."""
+    pts = []
+    sel = an["lat"] >= 18
+    for i, lo in enumerate(an["lon"]):
+        col = np.where(sel, an["u"][:, i], np.nan)
+        if np.isfinite(col).any() and np.nanmax(col) * KT >= 60:
+            pts.append((float(lo), float(an["lat"][np.nanargmax(col)])))
+    return pts
+
+
+def summary_svg(stations, regional, analyses, coast):
+    """One map with today's key features: jet axis, 500 hPa ridge, troughs / circulations, stations coloured by
+    thunderstorm potential. Labels in both languages (CSS shows one)."""
+    def lab(x, y, en, mr_, cls, anchor="start"):
+        return (f'<text class="{cls} l-en" x="{x:.1f}" y="{y:.1f}" text-anchor="{anchor}">{html.escape(en)}</text>'
+                f'<text class="{cls} l-mr" x="{x:.1f}" y="{y:.1f}" text-anchor="{anchor}">{html.escape(mr_)}</text>')
+
+    def poly(pts):
+        segs, prev = [], None
+        for lo, la in pts:
+            x, y = xy(lo, la)
+            segs.append(("L" if prev is not None and abs(lo - prev) < 0.6 else "M") + f"{x:.1f},{y:.1f}")
+            prev = lo
+        return "".join(segs)
+
+    g = [f'<rect class="ua-sea" width="{MAP_W}" height="{MAP_H}"/><path class="ua-coast" d="{coast}"/>{grid_svg()}']
+    if "200" in analyses:
+        pts = smooth_line(jet_axis(analyses["200"]))
+        if len(pts) >= 6:
+            g.append(f'<path class="ua-jet" d="{poly(pts)}" marker-end="url(#ua-jet-head)"/>')
+            core = max((s for s in stations if s["jet"] and s["jet"]["u"] > 0), key=lambda s: s["jet"]["kt"])
+            x, y = xy(*pts[len(pts) // 3])
+            g.append(lab(x, y - 12, f"Jet {core['jet']['kt']} kt", f"झोत वारे {mr(core['jet']['kt'])} नॉट", "ua-jet-lab"))
+    if "500" in analyses:
+        rp = ridge_line(analyses["500"])["points"]
+        if rp:
+            g.append(f'<path class="ua-ridge" d="{poly(rp)}"/>')
+            x, y = xy(*rp[-1])
+            g.append(lab(x - 2, y - 6, "Ridge 500 hPa", "उच्च दाब पट्टा ५००", "ua-ridge-lab", "end"))
+    for c in headline_centres(regional):
+        if not c["headline"]:
+            continue
+        x, y = xy(c["lon"], c["lat"])
+        if c["closed"]:
+            letter, cls = ("C", "ua-cyc") if c["kind"] == "cyclonic" else ("A", "ua-anti")
+            g.append(f'<text class="{cls}" x="{x:.1f}" y="{y + 7:.1f}" text-anchor="middle">{letter}</text>')
+        else:
+            g.append(f'<path class="ua-trough" d="M{x - 14:.1f},{y - 10:.1f}Q{x:.1f},{y + 14:.1f} {x + 14:.1f},{y - 10:.1f}"/>')
+        g.append(lab(x, y + 24, f"{c['p']} hPa", f"{mr(c['p'])} hPa", "ua-c-lab", "middle"))
+    for s in stations:
+        x, y = xy(s["lon"], s["lat"])
+        pot = s["potential"] if s["potential"] is not None else 0
+        tip = f"{s['name']['en']}: K {s['k']}, MUCAPE {s['cape']:.0f} J/kg, PW {s['pw']:.0f} mm" if s["cape"] is not None and s["pw"] is not None else s["name"]["en"]
+        g.append(f'<circle class="ua-pdot" cx="{x:.1f}" cy="{y:.1f}" r="{4 + pot}" fill="{POT_COLORS[pot]}"><title>{html.escape(tip)}</title></circle>')
+    return (f'<svg class="ua-map ua-summary" viewBox="0 0 {MAP_W} {MAP_H}" role="img" aria-label="Key upper-air features">'
+            '<defs><marker id="ua-jet-head" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="16" markerHeight="16" markerUnits="userSpaceOnUse" orient="auto">'
+            '<path d="M0,0L10,5L0,10z" fill="#1c5cab"/></marker></defs>' + "".join(g) + "</svg>")
+
+
+def analyse(stations, coast):
+    """Everything derived from the station analyses: regional diagnostics, maps, findings, tiles, summary map."""
+    regional, maps, analyses = {}, {}, {}
+    for p in MAP_LEVELS:
+        an = analyse_level(stations, p)
+        if not an:
+            continue
+        analyses[str(p)] = an
+        cen = circulation_centres(an, stations)
+        rid = ridge_line(an) if p in (500, 200) else {"points": [], "lat": None}
+        regional[str(p)] = dict(centres=cen, ridge_lat=rid["lat"], n=an["n"], spacing=round(an["spacing"], 1),
+                                mean_kt=round(float(np.nanmean(np.hypot(an["u"], an["v"]))) * KT))
+        maps[str(p)] = map_svg(an, stations, cen, rid, coast)
+    sh = [s["levels"]["850"]["u"] - s["levels"]["200"]["u"] for s in stations
+          if s["lat"] < 20 and "u" in s["levels"].get("850", {}) and "u" in s["levels"].get("200", {})]
+    regional["shear_index"] = round(float(np.mean(sh)), 1) if len(sh) >= 3 else None
+    return dict(regional=regional, maps=maps, findings=findings(stations, regional), tiles=tiles(stations, regional),
+                summary_map=summary_svg(stations, regional, analyses, coast), isotach=[[b, c] for b, c in ISOTACH])
+
+
+def save(out, t):
+    DATA.mkdir(parents=True, exist_ok=True)
+    (DATA / "latest.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    # compact archive (no maps) for trends
+    arch = {k: v for k, v in out.items() if k not in ("maps", "summary_map")}
+    (DATA / "archive").mkdir(exist_ok=True)
+    (DATA / "archive" / f"{t:%Y%m%d%H}.json").write_text(json.dumps(arch, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+
+
+def redraw():
+    """Recompute maps, findings and tiles from the saved soundings in latest.json (no download)."""
+    out = json.loads((DATA / "latest.json").read_text(encoding="utf-8"))
+    coast = json.loads((DATA / "coast.json").read_text(encoding="utf-8"))["d"]
+    out.update(analyse(out["stations"], coast))
+    save(out, datetime.strptime(out["time"], "%Y-%m-%dT%H:00Z"))
+    print("Redrawn:", DATA / "latest.json")
+    return out
+
+
 # ------------------------------------------------------------------ main
 def latest_time(now=None):
     now = now or datetime.now(timezone.utc)
@@ -706,20 +881,6 @@ def run(t=None):
         print(f"Only {len(stations)} soundings for {t:%Y-%m-%d %H} UTC; previous analysis kept")
         return None
 
-    regional, maps = {}, {}
-    for p in MAP_LEVELS:
-        an = analyse_level(stations, p)
-        if not an:
-            continue
-        cen = circulation_centres(an, stations)
-        rid = ridge_line(an) if p in (500, 200, 300) else {"points": [], "lat": None}
-        regional[str(p)] = dict(centres=cen, ridge_lat=rid["lat"], n=an["n"], spacing=round(an["spacing"], 1),
-                                mean_kt=round(float(np.nanmean(np.hypot(an["u"], an["v"]))) * KT))
-        maps[str(p)] = map_svg(an, stations, cen, rid, coast)
-    sh = [s["levels"]["850"]["u"] - s["levels"]["200"]["u"] for s in stations
-          if s["lat"] < 20 and "u" in s["levels"].get("850", {}) and "u" in s["levels"].get("200", {})]
-    regional["shear_index"] = round(float(np.mean(sh)), 1) if len(sh) >= 3 else None
-
     SVG_DIR.mkdir(parents=True, exist_ok=True)
     for f in SVG_DIR.glob("skewt_*.svg"):
         f.unlink()
@@ -730,14 +891,9 @@ def run(t=None):
 
     out = dict(time=t.strftime("%Y-%m-%dT%H:00Z"), fetched=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
                n_stations=len(stations), n_network=len(STATIONS), missing=missing,
-               stations=sorted(stations, key=lambda s: -s["lat"]), regional=regional, maps=maps,
-               findings=findings(stations, regional), isotach=[[b, c] for b, c in ISOTACH])
-    DATA.mkdir(parents=True, exist_ok=True)
-    (DATA / "latest.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
-    # compact archive (no maps) for trends
-    arch = {k: v for k, v in out.items() if k != "maps"}
-    (DATA / "archive").mkdir(exist_ok=True)
-    (DATA / "archive" / f"{t:%Y%m%d%H}.json").write_text(json.dumps(arch, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+               stations=sorted(stations, key=lambda s: -s["lat"]))
+    out.update(analyse(stations, coast))
+    save(out, t)
     print(f"Upper-air analysis {t:%Y-%m-%d %H} UTC: {len(stations)} soundings -> {DATA / 'latest.json'}")
     return out
 
@@ -766,6 +922,8 @@ if __name__ == "__main__":
     arg = sys.argv[1] if len(sys.argv) > 1 else None
     if arg == "coast":
         make_coast()
+    elif arg == "redraw":
+        redraw()
     elif arg:
         run(datetime.strptime(arg, "%Y-%m-%dT%H"))
     else:

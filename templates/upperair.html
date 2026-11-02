@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "_macros.html" import ua_tiles %}
 {% block title %}Upper-air (radiosonde) analysis over India — {{ site.name_en }}{% endblock %}
 {% block title_mr %}भारतावरील उच्च-वातावरण (रेडिओसोंड) विश्लेषण — {{ site.name_mr }}{% endblock %}
 {% block description %}Wind circulation and stability over India from the latest IMD radiosonde ascents (University of Wyoming archive): streamlines, jet streams, subtropical ridge, Skew-T diagrams.{% endblock %}
@@ -24,11 +25,32 @@
 </section>
 
 <section class="section">
-  <h2>{{ t("What the soundings show", "निरीक्षणांतून दिसणारी स्थिती") }}</h2>
-  <ul class="ua-findings">
-    {% for f in ua.findings %}<li>{{ f | t }}</li>{% endfor %}
-  </ul>
-  <p class="muted ua-small">{{ t("Generated automatically from the observed winds and Wyoming's sounding indices; an analysis of observations, not a forecast.", "निरीक्षित वारे व Wyoming च्या निर्देशांकांवरून आपोआप तयार केलेले विवेचन; हे निरीक्षणांचे विश्लेषण आहे, अंदाज नाही.") }}</p>
+  <h2>{{ t("At a glance", "एका नजरेत") }}</h2>
+  {{ ua_tiles(ua.tiles) }}
+  {% if ua.summary_map %}
+  <figure class="ua-glance">
+    {{ ua.summary_map | safe }}
+    <figcaption>
+      <span class="ua-legend">
+        <span><svg width="30" height="12" aria-hidden="true"><path d="M2 6h20" stroke="#1c5cab" stroke-width="6" stroke-opacity=".35" stroke-linecap="round"/><path d="M20 1l8 5-8 5z" fill="#1c5cab"/></svg>{{ t("jet stream axis (200 hPa)", "झोत वाऱ्यांचा अक्ष (२०० hPa)") }}</span>
+        <span><svg width="26" height="10" aria-hidden="true"><path d="M2 5h22" stroke="#c45a00" stroke-width="2" stroke-dasharray="5 3"/></svg>{{ t("subtropical ridge (500 hPa)", "उच्च दाब पट्टा (५०० hPa)") }}</span>
+        <span><svg width="26" height="16" aria-hidden="true"><path d="M3 3Q13 19 23 3" stroke="#c62828" stroke-width="2.5" fill="none"/></svg>{{ t("trough", "द्रोणीय स्थिती") }}</span>
+        <span><b class="ua-cyc">C</b>/<b class="ua-anti">A</b> {{ t("circulation", "चक्रीय / प्रतिचक्रीय") }}</span>
+      </span>
+      <span class="ua-legend">
+        <span>{{ t("Thunderstorm potential:", "गडगडाटी वादळाची शक्यता:") }}</span>
+        {% for c in ["#86b6ef", "#5598e7", "#2a78d6", "#1c5cab", "#0d366b"] %}<span><svg width="{{ 10 + 2 * loop.index }}" height="{{ 10 + 2 * loop.index }}" aria-hidden="true"><circle cx="{{ 5 + loop.index }}" cy="{{ 5 + loop.index }}" r="{{ 3 + loop.index }}" fill="{{ c }}" stroke="#fff"/></svg>{{ pot_labels[loop.index0] | t }}</span>{% endfor %}
+      </span>
+    </figcaption>
+  </figure>
+  {% endif %}
+  <details class="ua-more">
+    <summary>{{ t("Read the full analysis", "संपूर्ण विश्लेषण वाचा") }}</summary>
+    <ul class="ua-findings">
+      {% for f in ua.findings %}<li>{{ f | t }}</li>{% endfor %}
+    </ul>
+    <p class="muted ua-small">{{ t("Generated automatically from the observed winds and Wyoming's sounding indices; an analysis of observations, not a forecast.", "निरीक्षित वारे व Wyoming च्या निर्देशांकांवरून आपोआप तयार केलेले विवेचन; हे निरीक्षणांचे विश्लेषण आहे, अंदाज नाही.") }}</p>
+  </details>
 </section>
 
 <section class="section">
