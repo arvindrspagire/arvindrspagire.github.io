@@ -157,7 +157,9 @@ contact:
   scholar: "https://scholar.google.com/citations?user=vkmoTSkAAAAJ&hl=en"
   # optional: leave empty to hide
   linkedin: ""
-  github: "https://github.com/arvindrspagire"
+  # GitHub hidden until the paper is online. To show it again, put the link back:
+  #   github: "https://github.com/arvindrspagire"
+  github: ""
   twitter: "https://x.com/arvind_weathLAB"
 
 # disclaimer shown under every weather alert

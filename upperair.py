@@ -60,6 +60,8 @@ STATIONS = [
     (43371, "Thiruvananthapuram", "तिरुवनंतपुरम", 8.48, 76.95),
 ]
 
+SKEWT_WMO = {42867, 43003, 43014, 43063}   # Skew-T diagrams only for Maharashtra (Nagpur, Mumbai, Chh. Sambhajinagar, Pune)
+
 STD = [1000, 925, 850, 700, 600, 500, 400, 300, 250, 200, 150, 100]       # standard isobaric levels (hPa)
 MAP_LEVELS = [850, 700, 500, 200]
 # map box (plate carrée, cos-lat scaled)
@@ -884,7 +886,7 @@ def run(t=None):
     SVG_DIR.mkdir(parents=True, exist_ok=True)
     for f in SVG_DIR.glob("skewt_*.svg"):
         f.unlink()
-    for s in stations:
+    for s in (s for s in stations if s["wmo"] in SKEWT_WMO):
         (SVG_DIR / f"skewt_{s['wmo']}.svg").write_text(skewt_svg(s), encoding="utf-8")
     for s in stations:
         s.pop("_skew"); s.pop("_parcel")
