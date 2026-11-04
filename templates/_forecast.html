@@ -1,12 +1,12 @@
 {# shared by forecast.html and index.html #}
 {% from "_macros.html" import icon %}
 {% macro skill_line(c) -%}
-{{ t("Skill in the independent test period", "स्वतंत्र चाचणी कालावधीतील कौशल्य") }}{% if c.test_span %} ({{ c.test_span | num }}){% endif %} — Heidke Skill Score
-{{ t("(median, 0 = chance, 1 = perfect):", "(मध्यक, ० = योगायोग, १ = अचूक):") }}
+{{ t("Skill in the independent test period", "स्वतंत्र चाचणी कालावधीतील कौशल्य") }}{% if c.test_span %} ({{ c.test_span | num }}){% endif %}, Heidke Skill Score
+{{ t("(median; 0 = chance, 1 = perfect):", "(मध्यक; ० = योगायोग, १ = अचूक):") }}
 {% for d in c.days %}{{ d.short | t }}: {{ c.hss[loop.index0] | num }}{% if not loop.last %} · {% endif %}{% endfor %}
-{% if c.hss_jjas %}<br>{{ t("Monsoon only (June–September):", "फक्त पावसाळा (जून–सप्टेंबर):") }}
-{% for d in c.days %}{{ d.short | t }}: {{ c.hss_jjas[loop.index0] | num }}{% if not loop.last %} · {% endif %}{% endfor %} —
-{{ t("skill is lower in the monsoon because the day-to-day category is harder to call.", "पावसाळ्यात दिवसागणिक श्रेणी सांगणे अधिक कठीण असल्याने कौशल्य कमी आहे.") }}{% endif %}
+{% if c.hss_jjas %}<br>{{ t("Monsoon only (June to September):", "फक्त पावसाळा (जून ते सप्टेंबर):") }}
+{% for d in c.days %}{{ d.short | t }}: {{ c.hss_jjas[loop.index0] | num }}{% if not loop.last %} · {% endif %}{% endfor %}.
+{{ t("The skill is lower in the monsoon, because the daily category is more difficult to forecast.", "पावसाळ्यात दिवसागणिक श्रेणी सांगणे अधिक कठीण असल्याने कौशल्य कमी आहे.") }}{% endif %}
 {%- endmacro %}
 
 {% macro taluka_selector(c, daily_maps=False) %}
@@ -14,11 +14,11 @@
 <section class="card cat-fc tq" id="{{ c.id }}">
   <h2>{{ c.title | t }}</h2>
   {% if today %}
-  <p class="muted">{{ t("Pick your taluka (or click a map) — day-by-day rain category forecast for today and the next " ~ n_next ~ " days (each day: 08:30 IST that day to 08:30 IST the next day; today's forecast is issued in the afternoon, after its day has begun).",
-                        "तुमचा तालुका निवडा (किंवा नकाशावर क्लिक करा) — आजचा व पुढील " ~ (n_next | mr) ~ " दिवसांचा दिवसनिहाय पाऊस श्रेणी अंदाज (प्रत्येक दिवस: त्या दिवशी सकाळी ८:३० ते दुसऱ्या दिवशी सकाळी ८:३०; आजचा अंदाज दुपारी प्रसिद्ध होतो, तोपर्यंत तो दिवस सुरू झालेला असतो).") }}</p>
+  <p class="muted">{{ t("Select your taluka, or click a map. You then see the rain category forecast for today and for each of the next " ~ n_next ~ " days. Each day starts at 08:30 IST and ends at 08:30 IST on the next day. I issue today's forecast in the afternoon, after the day has started.",
+                        "तुमचा तालुका निवडा (किंवा नकाशावर क्लिक करा): आजचा व पुढील " ~ (n_next | mr) ~ " दिवसांचा दिवसनिहाय पाऊस श्रेणी अंदाज (प्रत्येक दिवस: त्या दिवशी सकाळी ८:३० ते दुसऱ्या दिवशी सकाळी ८:३०; आजचा अंदाज दुपारी प्रसिद्ध होतो, तोपर्यंत तो दिवस सुरू झालेला असतो).") }}</p>
   {% else %}
-  <p class="muted">{{ t("Pick your taluka (or click the map) — day-by-day rain category forecast for the next " ~ c.days | length ~ " days (each day: 08:30 IST that day to 08:30 IST the next day).",
-                        "तुमचा तालुका निवडा (किंवा नकाशावर क्लिक करा) — पुढील " ~ (c.days | length | mr) ~ " दिवसांचा दिवसनिहाय पाऊस श्रेणी अंदाज (प्रत्येक दिवस: त्या दिवशी सकाळी ८:३० ते दुसऱ्या दिवशी सकाळी ८:३०).") }}</p>
+  <p class="muted">{{ t("Select your taluka, or click the map. You then see the rain category forecast for each of the next " ~ c.days | length ~ " days. Each day starts at 08:30 IST and ends at 08:30 IST on the next day.",
+                        "तुमचा तालुका निवडा (किंवा नकाशावर क्लिक करा): पुढील " ~ (c.days | length | mr) ~ " दिवसांचा दिवसनिहाय पाऊस श्रेणी अंदाज (प्रत्येक दिवस: त्या दिवशी सकाळी ८:३० ते दुसऱ्या दिवशी सकाळी ८:३०).") }}</p>
   {% endif %}
   <label class="tq-pick">{{ t("Taluka:", "तालुका:") }}
     <select id="tq-select-{{ c.id }}">
@@ -51,25 +51,25 @@
   <div class="cat-maps tq-daily" id="tq-daily-{{ c.id }}">
     {% for d in c.days %}{% set i = loop.index0 %}
     <figure>
-      <svg viewBox="-2 -2 {{ c.maps.w + 4 }} {{ c.maps.h + 4 }}" role="img" aria-label="{{ d.date_str | en }} — taluka forecast map">
+      <svg viewBox="-2 -2 {{ c.maps.w + 4 }} {{ c.maps.h + 4 }}" role="img" aria-label="Taluka forecast map, {{ d.date_str | en }}">
         {% for r in c.regions %}{% if r.id in c.maps.paths %}
         <use href="#tqp-{{ c.id }}-{{ loop.index0 }}" class="cat-{{ r.cat[i] }}" data-id="{{ r.id }}"/>
         {% endif %}{% endfor %}
       </svg>
-      <figcaption>{% if today and loop.first %}{{ t("Today", "आज") }} — {% endif %}{{ d.date_str | t }}</figcaption>
+      <figcaption>{% if today and loop.first %}{{ t("Today", "आज") }}, {% endif %}{{ d.date_str | t }}</figcaption>
     </figure>
     {% endfor %}
   </div>
   {% endif %}
   <p class="muted">{{ t("Map colours" ~ (" (above)" if daily_maps else "") ~ ": " ~ ("today's" if today else "tomorrow's") ~ " forecast (" ~ c.days[0].date_str.en ~ ").",
                         "नकाशाचे रंग" ~ (" (वरील)" if daily_maps else "") ~ ": " ~ ("आजचा" if today else "उद्याचा") ~ " (" ~ c.days[0].date_str.mr ~ ") अंदाज.") }} {{ skill_line(c) }}</p>
-  {% if c.ecmwf_check_mode == "off_season" %}<p class="muted">{{ t("The forecast comes from my deep-learning models: a CNN-LSTM that reads the large-scale monsoon circulation, and a model for each taluka trained on IMD gridded rainfall (2018–2023) that adds regional conditions — moisture, moisture transport and its convergence, instability and winds — around the taluka and over the Arabian Sea, the Bay of Bengal and the monsoon trough. Today's atmospheric state comes from the ECMWF 00 UTC analysis; the rain forecast itself is the models' own. Category thresholds were recalibrated on 2024–2025. During the monsoon (June–September) the model's own forecast is shown as it is. Outside the monsoon, when the model has little skill, a safety check is added: where ECMWF's own rain is under 1 mm, the model's rain is not shown. ECMWF never raises the model's category." ~ (" Today's forecast days are outside the monsoon, so the check is on." if c.ecmwf_checked else ""),
-                                                    "अंदाज माझ्या डीप-लर्निंग मॉडेल्सचा आहे: मोठ्या प्रमाणावरील मान्सून अभिसरण ओळखणारे CNN-LSTM, आणि IMD ग्रिड पावसावर (२०१८–२०२३) प्रशिक्षित प्रत्येक तालुक्याचे स्वतंत्र मॉडेल — जे तालुक्याभोवती तसेच अरबी समुद्र, बंगालचा उपसागर व मान्सून ट्रफवरील आर्द्रता, बाष्पवहन व त्याचे अभिसरण, अस्थिरता आणि वारे लक्षात घेते. आजची वातावरणीय स्थिती ECMWF च्या ००:०० UTC विश्लेषणातून घेतली जाते; पावसाचा अंदाज मात्र मॉडेल्सचाच आहे. २०२४–२०२५ वर श्रेणी-मर्यादा पुन्हा निश्चित केल्या आहेत. मान्सूनमध्ये (जून–सप्टेंबर) मॉडेलचा अंदाज जसाच्या तसा दाखवला जातो. मान्सूनबाहेर मॉडेलचे कौशल्य कमी असल्याने सुरक्षा तपासणी जोडली आहे: ECMWF नुसार पाऊस १ मिमीपेक्षा कमी असल्यास मॉडेलचा पाऊस दाखवला जात नाही. ECMWF मॉडेलची श्रेणी कधीही वाढवत नाही." ~ (" सध्याचे अंदाज-दिवस मान्सूनबाहेरचे असल्याने ही तपासणी चालू आहे." if c.ecmwf_checked else "")) }}</p>
-  {% elif c.ecmwf_checked %}<p class="muted">{{ t("The forecast comes from the deep-learning CNN-LSTM model (trained on ERA5 and IMD rainfall; ECMWF atmospheric fields as input). Safety check: where ECMWF is dry (under 1 mm) the model's rain is not shown; ECMWF never raises the model's category.",
+  {% if c.ecmwf_check_mode == "off_season" %}<p class="muted">{{ t("The forecast comes from my deep learning models. A CNN-LSTM reads the large-scale monsoon circulation. A second model for each taluka adds the regional conditions: moisture, moisture transport and its convergence, instability and winds. It uses these conditions around the taluka and over the Arabian Sea, the Bay of Bengal and the monsoon trough. This taluka model is trained on IMD gridded rainfall (2018 to 2023). The ECMWF 00 UTC analysis gives the current state of the atmosphere, but the rain forecast comes only from my models. I recalibrated the category limits on the 2024 and 2025 data. During the monsoon (June to September), the site shows the model forecast with no change. Outside the monsoon, the model has less skill, so I added a safety check: where ECMWF forecasts less than 1 mm of rain, the site does not show the model rain. ECMWF never increases the model category." ~ (" The current forecast days are outside the monsoon, so the check is on." if c.ecmwf_checked else ""),
+                                                    "अंदाज माझ्या डीप-लर्निंग मॉडेल्सचा आहे: मोठ्या प्रमाणावरील मान्सून अभिसरण ओळखणारे CNN-LSTM, आणि IMD ग्रिड पावसावर (२०१८ ते २०२३) प्रशिक्षित प्रत्येक तालुक्याचे स्वतंत्र मॉडेल, जे तालुक्याभोवती तसेच अरबी समुद्र, बंगालचा उपसागर व मान्सून ट्रफवरील आर्द्रता, बाष्पवहन व त्याचे अभिसरण, अस्थिरता आणि वारे लक्षात घेते. आजची वातावरणीय स्थिती ECMWF च्या ००:०० UTC विश्लेषणातून घेतली जाते; पावसाचा अंदाज मात्र मॉडेल्सचाच आहे. २०२४ व २०२५ वर श्रेणी-मर्यादा पुन्हा निश्चित केल्या आहेत. मान्सूनमध्ये (जून ते सप्टेंबर) मॉडेलचा अंदाज जसाच्या तसा दाखवला जातो. मान्सूनबाहेर मॉडेलचे कौशल्य कमी असल्याने सुरक्षा तपासणी जोडली आहे: ECMWF नुसार पाऊस १ मिमीपेक्षा कमी असल्यास मॉडेलचा पाऊस दाखवला जात नाही. ECMWF मॉडेलची श्रेणी कधीही वाढवत नाही." ~ (" सध्याचे अंदाज-दिवस मान्सूनबाहेरचे असल्याने ही तपासणी चालू आहे." if c.ecmwf_checked else "")) }}</p>
+  {% elif c.ecmwf_checked %}<p class="muted">{{ t("The forecast comes from the deep learning CNN-LSTM model. The model is trained on ERA5 and IMD rainfall, and it uses ECMWF atmospheric fields as input. Safety check: where ECMWF is dry (less than 1 mm), the site does not show the model rain. ECMWF never increases the model category.",
                                                 "अंदाज डीप-लर्निंग CNN-LSTM मॉडेलचा आहे (ERA5 व IMD पावसावर प्रशिक्षित; ECMWF चे वातावरणीय क्षेत्र इनपुट). सुरक्षा तपासणी: ECMWF नुसार कोरडे (१ मिमीपेक्षा कमी) असल्यास मॉडेलचा पाऊस दाखवला जात नाही; ECMWF मॉडेलची श्रेणी कधीही वाढवत नाही.") }}</p>
-  {% elif c.ecmwf_shown %}<p class="muted">{{ t("Every category shown is the deep-learning CNN-LSTM model's own forecast, fine-tuned for each taluka on IMD gridded rainfall (ECMWF atmospheric fields are its input). The \"ECMWF rain\" line is ECMWF's own rain forecast for the same area, shown only for comparison — it does not change the model's forecast.",
-                                                    "दाखवलेली प्रत्येक श्रेणी हा डीप-लर्निंग CNN-LSTM मॉडेलचाच अंदाज आहे — IMD ग्रिड पावसावर प्रत्येक तालुक्यासाठी स्वतंत्रपणे fine-tune केलेला (ECMWF चे वातावरणीय क्षेत्र इनपुट). \"ECMWF पाऊस\" ही ओळ त्याच भागासाठी ECMWF चा स्वतःचा पाऊस अंदाज आहे — केवळ तुलनेसाठी; तो मॉडेलचा अंदाज बदलत नाही.") }}</p>{% endif %}
-  <noscript><p class="empty">{{ t("Turn on JavaScript in your browser to pick a taluka.", "तालुका निवडण्यासाठी browser मध्ये JavaScript चालू करा.") }}</p></noscript>
+  {% elif c.ecmwf_shown %}<p class="muted">{{ t("Each category on this page is the forecast of the deep learning CNN-LSTM model. The model is fine-tuned for each taluka on IMD gridded rainfall, and it uses ECMWF atmospheric fields as input. The \"ECMWF rain\" line is the ECMWF rain forecast for the same area. It is there only for comparison and does not change the model forecast.",
+                                                    "दाखवलेली प्रत्येक श्रेणी हा डीप-लर्निंग CNN-LSTM मॉडेलचाच अंदाज आहे: IMD ग्रिड पावसावर प्रत्येक तालुक्यासाठी स्वतंत्रपणे fine-tune केलेला (ECMWF चे वातावरणीय क्षेत्र इनपुट). \"ECMWF पाऊस\" ही ओळ त्याच भागासाठी ECMWF चा स्वतःचा पाऊस अंदाज आहे, केवळ तुलनेसाठी; तो मॉडेलचा अंदाज बदलत नाही.") }}</p>{% endif %}
+  <noscript><p class="empty">{{ t("To select a taluka, turn on JavaScript in your browser.", "तालुका निवडण्यासाठी browser मध्ये JavaScript चालू करा.") }}</p></noscript>
   <script type="application/json" id="tq-data-{{ c.id }}">{{ {"classes": c.classes | map(attribute="label") | list,
     "days": c.days | map(attribute="date_str") | list,
     "regions": c.regions | map(attribute="id") | list,
@@ -95,7 +95,7 @@
         return '<article class="tq-day cat-edge-' + c + '"><p class="fc-date">' + t(d.en, d.mr) + '</p>' +
           '<p class="tq-cat">' + t('Forecast:', 'अंदाज:') + ' <span class="cat-chip cat-' + c + '">' + t(D.classes[c].en, D.classes[c].mr) + '</span></p>' +
           (ec === null ? '' : '<p class="tq-note">' + t('ECMWF rain (for comparison): ' + ec.toFixed(1) + ' mm', 'ECMWF पाऊस (तुलनेसाठी): ' + mr(ec.toFixed(1)) + ' मिमी') + '</p>') +
-          '<p class="tq-note">' + t("AI model's chance of each category:", 'AI मॉडेलची प्रत्येक श्रेणीची शक्यता:') + '</p>' +
+          '<p class="tq-note">' + t("AI model probability for each category:", 'AI मॉडेलची प्रत्येक श्रेणीची शक्यता:') + '</p>' +
           D.classes.map(function (k, m) {
             var v = Math.round(p[m] * 100);
             return '<div class="tq-bar"><span>' + t(k.en, k.mr) + '</span><i><b class="cat-' + m + '" style="width:' + v + '%"></b></i><em>' + n(v) + '%</em></div>';

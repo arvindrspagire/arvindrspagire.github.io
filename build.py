@@ -62,16 +62,16 @@ def bi(en, mr):
 # IMD colour-coded impact-based warnings
 LEVELS = {
     "green":  dict(label=bi("Green", "हिरवा"), action=bi("No warning", "कोणताही इशारा नाही"),
-                   desc=bi("Normal weather; no special precautions needed.", "सामान्य हवामान; विशेष काळजीची गरज नाही.")),
+                   desc=bi("Normal weather. No special precautions are necessary.", "सामान्य हवामान; विशेष काळजीची गरज नाही.")),
     "yellow": dict(label=bi("Yellow", "पिवळा"), action=bi("Be updated", "अद्ययावत राहा"),
-                   desc=bi("Keep an eye on the weather; conditions may change.", "हवामानावर लक्ष ठेवा; परिस्थिती बदलू शकते.")),
+                   desc=bi("Monitor the weather. Conditions can change.", "हवामानावर लक्ष ठेवा; परिस्थिती बदलू शकते.")),
     "orange": dict(label=bi("Orange", "नारंगी"), action=bi("Be prepared", "तयार राहा"),
-                   desc=bi("Hazardous weather is likely; make the necessary preparations.", "धोकादायक हवामानाची शक्यता; आवश्यक तयारी करा.")),
+                   desc=bi("Dangerous weather is likely. Make the necessary preparations.", "धोकादायक हवामानाची शक्यता; आवश्यक तयारी करा.")),
     "red":    dict(label=bi("Red", "लाल"), action=bi("Take action", "कृती करा"),
-                   desc=bi("Extreme weather; follow the instructions of local authorities.", "अतितीव्र हवामान; स्थानिक प्रशासनाच्या सूचनांचे पालन करा.")),
+                   desc=bi("Extreme weather. Obey the instructions of the local authorities.", "अतितीव्र हवामान; स्थानिक प्रशासनाच्या सूचनांचे पालन करा.")),
     # used when no IMD district warning was available: model guidance must never look like a warning
     "info":   dict(label=bi("Information", "माहितीपर"), action=bi("Model-based analysis", "मॉडेल-आधारित विश्लेषण"),
-                   desc=bi("Model-based weather analysis published when no IMD district warning is available; not an official warning.",
+                   desc=bi("Weather analysis from models. I publish it when no IMD district warning is available. It is not an official warning.",
                            "IMD चा जिल्हानिहाय इशारा उपलब्ध नसताना प्रसिद्ध केलेले मॉडेल-आधारित हवामान विश्लेषण; अधिकृत इशारा नाही.")),
 }
 
@@ -187,7 +187,7 @@ def load_forecast():
             d["date_str"] = day_bi(day)
             d["band_label"] = bi(BAND_EN.get(d["band"], d["band"]), d["band_mr"])
             d["pct"] = round(d["score"] * 100)
-            d["hist_pct"] = round(d["hist_hit_rate"] * 100) if d.get("hist_hit_rate") is not None else "–"
+            d["hist_pct"] = round(d["hist_hit_rate"] * 100) if d.get("hist_hit_rate") is not None else "n/a"
             if d.get("ifs_rain_mm") is not None:
                 d["ifs_str"] = f"{d['ifs_rain_mm']:.1f}"
         r["threshold_str"] = f"{r['threshold_mm']:.1f}"
@@ -203,12 +203,13 @@ def load_forecast():
             d["short"] = bi(f"{day.day} {MONTHS_EN[day.month - 1][:3]}", f"{mr_num(day.day)} {MONTHS_MR[day.month - 1][:3]}")
         for k in c["classes"]:
             lo, hi = k["from"], k["to"]
-            rng = f"< {hi}" if not lo else f"≥ {lo}" if hi is None else f"{lo}–{round(hi - 0.1, 1)}"
+            rng = (f"< {hi}", f"< {hi}") if not lo else (f"≥ {lo}", f"≥ {lo}") if hi is None else \
+                (f"{lo} to {round(hi - 0.1, 1)}", f"{lo} ते {round(hi - 0.1, 1)}")
             k["mr"] = CLASS_MR.get(k["key"], k["mr"])
             k["label"] = bi(CLASS_EN.get(k["key"], k["key"]), k["mr"])
-            k["range"] = bi(rng + " mm/day", mr_num(rng) + " मिमी/दिवस")
-        c["hss"] = [f"{h:.2f}" if h is not None else "–" for h in c.get("test_median_hss", [])]
-        c["hss_jjas"] = [f"{h:.2f}" if h is not None else "–" for h in c.get("test_median_hss_jjas") or []]
+            k["range"] = bi(rng[0] + " mm/day", mr_num(rng[1]) + " मिमी/दिवस")
+        c["hss"] = [f"{h:.2f}" if h is not None else "n/a" for h in c.get("test_median_hss", [])]
+        c["hss_jjas"] = [f"{h:.2f}" if h is not None else "n/a" for h in c.get("test_median_hss_jjas") or []]
         for r in c["regions"]:
             r["pct"] = [round(max(p) * 100) for p in r["prob"]]
             g = r.get("group") or ""
@@ -226,7 +227,7 @@ def load_forecast():
 
 
 POTENTIAL = [bi("Weak", "कमी"), bi("Isolated", "तुरळक"), bi("Scattered", "विखुरलेली"),
-             bi("Moderate–high", "मध्यम–जास्त"), bi("High", "जास्त")]          # thunderstorm potential (K-index guide)
+             bi("Moderate to high", "मध्यम ते जास्त"), bi("High", "जास्त")]          # thunderstorm potential (K-index guide)
 
 
 def load_upperair():
@@ -246,14 +247,14 @@ def load_upperair():
     for s in ua["stations"]:
         s["pot_label"] = POTENTIAL[s["potential"]] if s.get("potential") is not None else None
         for p, lv in s["levels"].items():
-            lv["wind"] = f"{lv['dir']:03d}°/{lv['kt']}" if "kt" in lv else "–"
+            lv["wind"] = f"{lv['dir']:03d}°/{lv['kt']}" if "kt" in lv else "n/a"
     return ua
 
 
 def region_name_en(r, dist_en):
     rid = r["id"]
     if m := re.fullmatch(r"(.+?) \(([^()]+)\)", rid):              # taluka: "Shahuwadi (Kolhapur)"
-        return f"{m.group(1)} — {m.group(2)}"
+        return f"{m.group(1)}, {m.group(2)}"
     if m := re.fullmatch(r"([\d.]+)N_([\d.]+)E", rid):              # grid cell: "15.75N_73.75E"
         g = r.get("group")
         return f"{m.group(1)}°N, {m.group(2)}°E" + (f" ({dist_en.get(g, g)})" if g else "")
@@ -267,9 +268,9 @@ SUBDIV_EN = {"Konkan & Goa": "Konkan", "Konkan": "Konkan", "Madhya Maharashtra":
 CLASS_EN = {"no_rain": "No rain", "light": "Light", "moderate": "Moderate", "heavy": "Heavy"}
 CLASS_MR = {"no_rain": "पाऊस नाही"}                                   # overrides the label stored in older model configs
 BAND_EN = {"low": "Low", "moderate": "Moderate", "high": "High", "very_high": "Very high"}
-CAT_TITLE_EN = {"maharashtra_talukas": "Experimental AI rain forecast — pick your taluka",
-                "maharashtra_districts": "Maharashtra — district-wise rain category forecast",
-                "maharashtra_grid": "Maharashtra — IMD 0.25° grid rain category forecast"}
+CAT_TITLE_EN = {"maharashtra_talukas": "Experimental AI rain forecast: select your taluka",
+                "maharashtra_districts": "Maharashtra: rain category forecast for each district",
+                "maharashtra_grid": "Maharashtra: rain category forecast on the IMD 0.25° grid"}
 
 
 def district_svg(path):
@@ -331,7 +332,7 @@ def build(drafts=False):
         html = env.get_template(template).render(root="../" * depth or "./", active=active, **common, **ctx)
         # folder links -> explicit index.html, so pages also open from disk (file://), not only on a server
         html = re.sub(r'href="((?:\.\.?/)+(?:[^"#?:]*/)?)"', r'href="\1index.html"', html)
-        dest.write_text(html, encoding="utf-8")
+        dest.write_text(undash(html), encoding="utf-8")
 
     fc = load_forecast()
     page("index.html", "index.html", "home", latest_alert=alerts[0] if alerts else None, posts=blog[:3], fc=fc)
@@ -443,10 +444,10 @@ WARNING_EN = {2: "Heavy rain", 3: "Snowfall", 4: "Thunderstorm & lightning", 5: 
               14: "Ground frost", 15: "Dense fog", 16: "Very heavy rain", 17: "Extremely heavy rain"}
 REGIONS = [bi("Konkan", "कोकण"), bi("Madhya Maharashtra", "मध्य महाराष्ट्र"),
            bi("Marathwada", "मराठवाडा"), bi("Vidarbha", "विदर्भ")]
-HORIZON = {"short": bi("Short-range analysis (1–3 days)", "अल्पकालीन विश्लेषण (१–३ दिवस)"),
-           "medium": bi("Medium-range analysis (4–10 days)", "मध्यम कालावधी विश्लेषण (४–१० दिवस)"),
-           "extended": bi("Extended-range analysis (2–4 weeks)", "विस्तारित कालावधी विश्लेषण (२–४ आठवडे)"),
-           "seasonal": bi("Seasonal analysis (1–3 months)", "हंगामी विश्लेषण (१–३ महिने)")}
+HORIZON = {"short": bi("Short-range analysis (1 to 3 days)", "अल्पकालीन विश्लेषण (१ ते ३ दिवस)"),
+           "medium": bi("Medium-range analysis (4 to 10 days)", "मध्यम कालावधी विश्लेषण (४ ते १० दिवस)"),
+           "extended": bi("Extended-range analysis (2 to 4 weeks)", "विस्तारित कालावधी विश्लेषण (२ ते ४ आठवडे)"),
+           "seasonal": bi("Seasonal analysis (1 to 3 months)", "हंगामी विश्लेषण (१ ते ३ महिने)")}
 SLIDES = {"cover": bi("Cover", "मुखपृष्ठ"), "short_range": bi("Short-range analysis", "अल्पकालीन विश्लेषण"),
           "satellite": bi("Satellite view", "उपग्रह निरीक्षण"),
           "circulation_today": bi("Today's wind circulation", "आजची वाऱ्यांची स्थिती"),
@@ -470,6 +471,16 @@ def analysis_words(text):
         text = text.replace(a, b)
     text = re.sub(r"पैकी (\S+) अंदाज\)", r"पैकी \1 सदस्य)", text)
     return re.sub(r"अंदाज(?![\u093e-\u094d\u0902])", "विश्लेषण", text)    # keep अंदाजे (approximately)
+
+
+def undash(text):
+    """The site uses no en/em dashes. Hand-written text avoids them; this catches the pipeline output
+    (alerts, forecast JSON, upper-air findings): ranges become "to" / "ते", a dash between words a comma."""
+    text = re.sub(r">\s*[–—]\s*<", ">n/a<", text)                       # empty table cell
+    text = re.sub(r"(?<=[0-9°%])\s*[–—]\s*(?=[0-9])", " to ", text)
+    text = re.sub(r"(?<=[०-९°%])\s*[–—]\s*(?=[०-९])", " ते ", text)
+    text = re.sub(r"\s+[–—]\s+", ", ", text)
+    return re.sub(r"[–—]", "-", text)                                     # joined words: पूर्व–मध्य
 
 
 def hawaman(day=None):
@@ -505,7 +516,7 @@ def hawaman(day=None):
         codes = sorted({c for x in hit for c in x["codes"] if WARNING_MR.get(c)})
         hazards = [bi(WARNING_EN.get(c, WARNING_MR[c]), WARNING_MR[c]) for c in codes]
 
-    thread = analysis_words((pkg / "thread.txt").read_text(encoding="utf-8"))
+    thread = undash(analysis_words((pkg / "thread.txt").read_text(encoding="utf-8")))
     parts = [s.strip() for s in re.split(r"\n-{3,}\n", thread) if s.strip()]
     first = parts[0].splitlines()
     title = re.sub(r"^\W+", "", first[0]).strip() or "महाराष्ट्र हवामान विश्लेषण"
@@ -552,7 +563,7 @@ def hawaman(day=None):
     body += [f"![वाऱ्यांची स्थिती व दाब प्रणाली](../../{rel}/{n})\n" for n in imgs[1:]]
     disc = run / "content" / "marathi_discussion.txt" if run else None
     if disc and disc.exists():
-        text = analysis_words(disc.read_text(encoding="utf-8")).strip().splitlines()
+        text = undash(analysis_words(disc.read_text(encoding="utf-8"))).strip().splitlines()
         if text and not text[0].startswith("#"):
             text = text[1:]                                   # first line repeats the page title/date
         text = [("### " + l.lstrip("# ").strip()) if l.startswith("#") else l for l in text]
@@ -562,7 +573,7 @@ def hawaman(day=None):
         body += ["", f"दैनंदिन अपडेटसाठी X वर फॉलो करा: [@{tw.rstrip('/').rsplit('/', 1)[-1]}]({tw})"]
 
     q = lambda v: json.dumps(v, ensure_ascii=False)
-    valid = bi(en_date(d) + " — " + horizon["en"], mr_date(d) + " — " + horizon["mr"])
+    valid = bi(en_date(d) + ", " + horizon["en"], mr_date(d) + ", " + horizon["mr"])
     front = [f"title: {q(title)}", f"date: {day}", f"level: {level}", "lang: mr", f"valid: {q(valid)}",
              f"regions: {q(regions)}", f"hazards: {q(hazards)}", f"slides: {q(slides)}", f"gif: {q(gif)}", "source: hawaman-vidnyan"]
     dest = CONTENT / "alerts" / f"{day}-hawaman.md"

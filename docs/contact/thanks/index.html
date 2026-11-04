@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-    // English by default; मराठी if chosen before (localStorage) or asked for with ?lang=mr — set before first paint
+    // English by default; मराठी if chosen before (localStorage) or asked for with ?lang=mr; set before first paint
     (function () {
       var q = /[?&]lang=(en|mr)\b/.exec(location.search), l = q && q[1];
       try { if (l) localStorage.setItem('lang', l); else l = localStorage.getItem('lang'); } catch (e) {}
       if (l === 'mr') document.documentElement.lang = 'mr';
     })();
   </script>
-  <title data-mr="धन्यवाद — अरविंद पागिरे">Thank you — Arvind Pagire</title>
-  <meta name="description" content="Arvind Pagire — Meteorologist · AI-based weather prediction · Hybrid modelling">
+  <title data-mr="धन्यवाद | अरविंद पागिरे">Thank you | Arvind Pagire</title>
+  <meta name="description" content="Arvind Pagire | Meteorologist · AI weather prediction · Hybrid modelling">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
@@ -45,7 +45,7 @@
   <main class="wrap main">
 <section class="card thanks">
   <h1 class="page-title"><span class="l-en">Thank you!</span><span class="l-mr" lang="mr">धन्यवाद!</span></h1>
-  <p><span class="l-en">Your message / subscription has been received. I will get back to you soon.</span><span class="l-mr" lang="mr">तुमचा संदेश / सदस्यता मिळाली आहे. लवकरच संपर्क करतो.</span></p>
+  <p><span class="l-en">I received your message or subscription. I will reply to you soon.</span><span class="l-mr" lang="mr">तुमचा संदेश / सदस्यता मिळाली आहे. लवकरच संपर्क करतो.</span></p>
   <p><a class="btn" href="../../index.html"><span class="l-en">Go to the home page</span><span class="l-mr" lang="mr">मुख्यपृष्ठावर जा</span></a> <a class="btn btn-ghost" href="../../blog/index.html"><span class="l-en">Read posts</span><span class="l-mr" lang="mr">लेख वाचा</span></a></p>
 </section>
   </main>
@@ -59,9 +59,9 @@
       </div>
       <div>
         <h3>Subscribe</h3>
-        <p class="muted"><span class="l-en">New weather alerts, the experimental AI forecast and posts by e-mail.</span><span class="l-mr" lang="mr">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</span></p>
+        <p class="muted"><span class="l-en">Get new weather alerts, the experimental AI forecast and new posts by e-mail.</span><span class="l-mr" lang="mr">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</span></p>
         <form class="subscribe footer" action="https://formsubmit.co/arvindrspagire@gmail.com" method="POST">
-    <input type="hidden" name="_subject" value="New subscriber — Arvind Pagire">
+    <input type="hidden" name="_subject" value="New subscriber: Arvind Pagire">
   <input type="hidden" name="_template" value="table">
   <input type="hidden" name="_next" value="https://arvindrspagire.github.io/contact/thanks/index.html">
   <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">

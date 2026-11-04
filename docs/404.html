@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-    // English by default; मराठी if chosen before (localStorage) or asked for with ?lang=mr — set before first paint
+    // English by default; मराठी if chosen before (localStorage) or asked for with ?lang=mr; set before first paint
     (function () {
       var q = /[?&]lang=(en|mr)\b/.exec(location.search), l = q && q[1];
       try { if (l) localStorage.setItem('lang', l); else l = localStorage.getItem('lang'); } catch (e) {}
       if (l === 'mr') document.documentElement.lang = 'mr';
     })();
   </script>
-  <title data-mr="पान सापडले नाही — अरविंद पागिरे">Page not found — Arvind Pagire</title>
-  <meta name="description" content="Arvind Pagire — Meteorologist · AI-based weather prediction · Hybrid modelling">
+  <title data-mr="पान सापडले नाही | अरविंद पागिरे">Page not found | Arvind Pagire</title>
+  <meta name="description" content="Arvind Pagire | Meteorologist · AI weather prediction · Hybrid modelling">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600;700&family=Noto+Serif+Devanagari:wght@600;700&display=swap" rel="stylesheet">
@@ -44,7 +44,7 @@
 
   <main class="wrap main">
 <h1 class="page-title"><span class="l-en">Page not found</span><span class="l-mr" lang="mr">पान सापडले नाही</span></h1>
-<p class="lead"><span class="l-en">The page you are looking for is not available.</span><span class="l-mr" lang="mr">तुम्ही शोधत असलेले पान उपलब्ध नाही.</span> <a href="/"><span class="l-en">Back to the home page</span><span class="l-mr" lang="mr">मुख्यपृष्ठावर परत जा</span></a>.</p>
+<p class="lead"><span class="l-en">This page is not available.</span><span class="l-mr" lang="mr">तुम्ही शोधत असलेले पान उपलब्ध नाही.</span> <a href="/"><span class="l-en">Back to the home page</span><span class="l-mr" lang="mr">मुख्यपृष्ठावर परत जा</span></a>.</p>
   </main>
 
   <footer class="site-footer">
@@ -56,9 +56,9 @@
       </div>
       <div>
         <h3>Subscribe</h3>
-        <p class="muted"><span class="l-en">New weather alerts, the experimental AI forecast and posts by e-mail.</span><span class="l-mr" lang="mr">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</span></p>
+        <p class="muted"><span class="l-en">Get new weather alerts, the experimental AI forecast and new posts by e-mail.</span><span class="l-mr" lang="mr">नवीन हवामान इशारे, प्रायोगिक AI अंदाज व लेख ई-मेलवर.</span></p>
         <form class="subscribe footer" action="https://formsubmit.co/arvindrspagire@gmail.com" method="POST">
-    <input type="hidden" name="_subject" value="New subscriber — Arvind Pagire">
+    <input type="hidden" name="_subject" value="New subscriber: Arvind Pagire">
   <input type="hidden" name="_template" value="table">
   <input type="hidden" name="_next" value="https://arvindrspagire.github.io/contact/thanks/index.html">
   <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">

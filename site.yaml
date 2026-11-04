@@ -1,8 +1,9 @@
 # ------------------------------------------------------------------
-# Site profile — edit only this file to update the profile, then run:  python build.py
+# Site profile. Edit only this file to update the profile, then run:  python build.py
 # The site is English by default with a मराठी button. Any text can be {en: "...", mr: "..."};
 # a plain "string" is shown the same in both languages.
-# संकेतस्थळाची माहिती — प्रत्येक मजकुरात en: (इंग्रजी) व mr: (मराठी) लिहा.
+# Do not use dashes (— or –) in the text: build.py removes them, but write "to" / "ते" for ranges.
+# संकेतस्थळाची माहिती: प्रत्येक मजकुरात en: (इंग्रजी) व mr: (मराठी) लिहा.
 # ------------------------------------------------------------------
 
 site_title:
@@ -13,7 +14,7 @@ site_url: "https://arvindrspagire.github.io"            # for share links / form
 name_mr: "अरविंद पागिरे"
 name_en: "Arvind Pagire"
 tagline:
-  en: "Meteorologist · AI-based weather prediction · Hybrid modelling"
+  en: "Meteorologist · AI weather prediction · Hybrid modelling"
   mr: "हवामानशास्त्रज्ञ · AI-आधारित हवामान अंदाज · हायब्रिड मॉडेलिंग"
 photo: "static/images/profile.jpg"   # round photo (square crop); full original: static/images/profile.jpeg
 
@@ -28,53 +29,53 @@ location:
   mr: "पुणे, महाराष्ट्र"
 
 bio:
-  - en: "I work as a Project Scientist-I in the HPC-AIML team at the Indian Institute of Tropical Meteorology (IITM), Pune, on artificial-intelligence (AI) based weather prediction and hybrid modelling — combining physics-based weather models with machine learning. With more than five years of experience in weather science, my main research areas are short-range weather prediction and extreme rainfall events."
-    mr: "मी भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे येथील HPC-AIML टीममध्ये प्रकल्प शास्त्रज्ञ-I म्हणून कृत्रिम बुद्धिमत्तेवर (AI) आधारित हवामान अंदाज आणि हायब्रिड मॉडेलिंगसाठी — भौतिकशास्त्रावर आधारित हवामान मॉडेल आणि मशीन लर्निंग यांची सांगड — कार्यरत आहे. हवामान विज्ञानातील पाच वर्षांहून अधिक अनुभवासह अल्पकालीन हवामान अंदाज आणि अतिवृष्टीच्या घटना हे माझे प्रमुख अभ्यासविषय आहेत."
-  - en: "I am pursuing a PhD in Atmospheric Science and Technology at Savitribai Phule Pune University. On this site I publish weather articles and daily weather alerts (the daily alerts are written in Marathi)."
+  - en: "I am a Project Scientist-I in the HPC-AIML team at the Indian Institute of Tropical Meteorology (IITM), Pune. I work on weather prediction with artificial intelligence (AI) and on hybrid models, which join physics-based weather models with machine learning. I have more than five years of experience in weather science. My main research areas are short-range weather prediction and extreme rainfall events."
+    mr: "मी भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे येथील HPC-AIML टीममध्ये प्रकल्प शास्त्रज्ञ-I म्हणून कृत्रिम बुद्धिमत्तेवर (AI) आधारित हवामान अंदाज आणि हायब्रिड मॉडेलिंगसाठी (भौतिकशास्त्रावर आधारित हवामान मॉडेल आणि मशीन लर्निंग यांची सांगड) कार्यरत आहे. हवामान विज्ञानातील पाच वर्षांहून अधिक अनुभवासह अल्पकालीन हवामान अंदाज आणि अतिवृष्टीच्या घटना हे माझे प्रमुख अभ्यासविषय आहेत."
+  - en: "I am doing a PhD in Atmospheric Science and Technology at Savitribai Phule Pune University. On this site, I publish weather articles and daily weather alerts. I write the daily alerts in Marathi."
     mr: "सावित्रीबाई फुले पुणे विद्यापीठातून वातावरणशास्त्र व तंत्रज्ञान या विषयात माझे पीएच.डी. संशोधन सुरू आहे. या संकेतस्थळावर मी हवामानविषयक लेख आणि दैनंदिन हवामान इशारे मराठीत प्रसिद्ध करतो."
 
 interests:
-  - {en: "AI-based weather prediction", mr: "AI-आधारित हवामान अंदाज"}
-  - {en: "Hybrid modelling — physics-based models + machine learning", mr: "हायब्रिड मॉडेलिंग — भौतिकी-आधारित मॉडेल + मशीन लर्निंग"}
+  - {en: "Weather prediction with AI", mr: "AI-आधारित हवामान अंदाज"}
+  - {en: "Hybrid models: physics-based models with machine learning", mr: "हायब्रिड मॉडेलिंग: भौतिकी-आधारित मॉडेल + मशीन लर्निंग"}
   - {en: "Short-range weather prediction", mr: "अल्पकालीन हवामान अंदाज"}
-  - {en: "Teleconnections — impact of El Niño (ENSO), the Indian Ocean Dipole (IOD) and the MJO on extreme rainfall",
-     mr: "दूरसंबंध अभ्यास — एल निनो (ENSO), हिंदी महासागर द्विध्रुव (IOD) व MJO यांचा अतिवृष्टीवरील प्रभाव"}
-  - {en: "Evaluation of satellite rainfall (IMERG) and the effect of terrain", mr: "उपग्रह पर्जन्य माहितीचे (IMERG) मूल्यमापन आणि भूप्रदेशाचा प्रभाव"}
+  - {en: "Teleconnections: how El Niño (ENSO), the Indian Ocean Dipole (IOD) and the MJO change extreme rainfall",
+     mr: "दूरसंबंध अभ्यास: एल निनो (ENSO), हिंदी महासागर द्विध्रुव (IOD) व MJO यांचा अतिवृष्टीवरील प्रभाव"}
+  - {en: "Satellite rainfall (IMERG): how accurate it is and how terrain changes it", mr: "उपग्रह पर्जन्य माहितीचे (IMERG) मूल्यमापन आणि भूप्रदेशाचा प्रभाव"}
 
 experience:
   - role: {en: "Project Scientist-I", mr: "प्रकल्प शास्त्रज्ञ-I"}
     org: {en: "HPC-AIML Team, Indian Institute of Tropical Meteorology (IITM), Pune", mr: "HPC-AIML टीम, भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे"}
-    period: {en: "May 2026 – present", mr: "मे २०२६ – सध्या"}
-    detail: {en: "Working in the HPC-AIML team on AI-based weather prediction and hybrid (physics + machine learning) weather modelling.",
+    period: {en: "May 2026 to present", mr: "मे २०२६ ते सध्या"}
+    detail: {en: "I work on weather prediction with AI and on hybrid weather models that join physics and machine learning.",
              mr: "HPC-AIML टीममध्ये AI-आधारित हवामान अंदाज आणि हायब्रिड (भौतिकी + मशीन लर्निंग) हवामान मॉडेलिंगसाठी कार्यरत."}
   - role: {en: "Project Scientist-II", mr: "प्रकल्प शास्त्रज्ञ-II"}
     org: {en: "Regional Meteorological Centre, Nagpur (India Meteorological Department)", mr: "प्रादेशिक हवामान केंद्र, नागपूर (भारतीय हवामान विभाग)"}
-    period: {en: "January 2025 – April 2026", mr: "जानेवारी २०२५ – एप्रिल २०२६"}
-    detail: {en: "Daily weather forecasts for Vidarbha, preparing standard operating procedures (SOPs), a gridded dataset for PET, and climate-change studies using CMIP6 models.",
+    period: {en: "January 2025 to April 2026", mr: "जानेवारी २०२५ ते एप्रिल २०२६"}
+    detail: {en: "I made the daily weather forecasts for Vidarbha. I also wrote standard operating procedures (SOPs), made a gridded PET dataset and did climate change studies with CMIP6 models.",
              mr: "विदर्भासाठी दैनंदिन हवामान अंदाज, मानक कार्यपद्धती (SOP) तयार करणे, PET साठी ग्रिडेड माहितीसंच आणि CMIP6 मॉडेल वापरून हवामान बदल अभ्यास."}
   - role: {en: "PhD Researcher", mr: "पीएच.डी. संशोधक"}
     org: {en: "India Meteorological Department, Pune", mr: "भारतीय हवामान विभाग, पुणे"}
-    period: {en: "May 2023 – present", mr: "मे २०२३ – सध्या"}
-    detail: {en: "Impact of large-scale climate drivers such as ENSO, the IOD and the MJO on the variability of extreme rainfall.",
+    period: {en: "May 2023 to present", mr: "मे २०२३ ते सध्या"}
+    detail: {en: "I study how large-scale climate drivers, such as ENSO, the IOD and the MJO, change extreme rainfall from year to year.",
              mr: "ENSO, IOD आणि MJO यांसारख्या मोठ्या हवामान घटकांचा अतिवृष्टीच्या परिवर्तनशीलतेवरील प्रभाव."}
   - role: {en: "Junior Research Fellow (JRF)", mr: "कनिष्ठ संशोधन अधिछात्र (JRF)"}
     org: {en: "Indian Institute of Remote Sensing (IIRS), Dehradun", mr: "भारतीय सुदूर संवेदन संस्था (IIRS), देहरादून"}
-    period: {en: "January 2022 – May 2023", mr: "जानेवारी २०२२ – मे २०२३"}
-    detail: {en: "Satellite-based analysis and WRF simulations of extreme rainfall over the north-western Himalaya.",
+    period: {en: "January 2022 to May 2023", mr: "जानेवारी २०२२ ते मे २०२३"}
+    detail: {en: "I studied extreme rainfall over the northwestern Himalaya with satellite data and WRF model runs.",
              mr: "वायव्य हिमालयातील अतिवृष्टीचे उपग्रह-आधारित विश्लेषण आणि WRF सिम्युलेशन."}
   - role: {en: "Junior Research Fellow (JRF)", mr: "कनिष्ठ संशोधन अधिछात्र (JRF)"}
     org: {en: "India Meteorological Department, Pune", mr: "भारतीय हवामान विभाग, पुणे"}
-    period: {en: "July 2020 – January 2022", mr: "जुलै २०२० – जानेवारी २०२२"}
-    detail: {en: "Skill verification of MMCFS model forecasts; developed verification products for RCC Pune.",
+    period: {en: "July 2020 to January 2022", mr: "जुलै २०२० ते जानेवारी २०२२"}
+    detail: {en: "I checked the forecast skill of the MMCFS model. I also made verification products for RCC Pune.",
              mr: "MMCFS मॉडेल अंदाजांचे कौशल्य-पडताळणी विश्लेषण; RCC पुणेसाठी पडताळणी उत्पादन विकसित केले."}
   - role: {en: "Summer Trainee", mr: "उन्हाळी प्रशिक्षणार्थी"}
     org: {en: "Indian Institute of Tropical Meteorology (IITM), Pune", mr: "भारतीय उष्णदेशीय हवामानशास्त्र संस्था (IITM), पुणे"}
-    period: {en: "May – July 2017", mr: "मे – जुलै २०१७"}
-    detail: {en: "Sub-seasonal variability of the large-scale atmospheric circulation in the Indian summer monsoon.",
+    period: {en: "May to July 2017", mr: "मे ते जुलै २०१७"}
+    detail: {en: "I studied how the large-scale circulation of the Indian summer monsoon changes on sub-seasonal time scales.",
              mr: "भारतीय उन्हाळी मान्सूनमधील मोठ्या वातावरणीय अभिसरणाची उप-ऋतुकालीन परिवर्तनशीलता."}
 
 education:
-  - degree: {en: "PhD (ongoing, since May 2023)", mr: "पीएच.डी. (सुरू, मे २०२३ पासून)"}
+  - degree: {en: "PhD (in progress, since May 2023)", mr: "पीएच.डी. (सुरू, मे २०२३ पासून)"}
     field: {en: "Atmospheric Science and Technology", mr: "वातावरणशास्त्र व तंत्रज्ञान"}
     place: {en: "Savitribai Phule Pune University", mr: "सावित्रीबाई फुले पुणे विद्यापीठ"}
   - degree: {en: "M.Sc.", mr: "एम.एस्सी."}
@@ -96,13 +97,13 @@ skills:
 
 training:
   - {en: "Qualified JAM (IIT Madras, 2016)", mr: "JAM उत्तीर्ण (IIT मद्रास, २०१६)"}
-  - {en: "Training on AI/ML in atmosphere–ocean applications (IITM Pune, 2021)", mr: "वातावरण-महासागर उपयोजनांमधील AI/ML प्रशिक्षण (IITM पुणे, २०२१)"}
+  - {en: "Training on AI/ML for atmosphere and ocean applications (IITM Pune, 2021)", mr: "वातावरण व महासागर उपयोजनांमधील AI/ML प्रशिक्षण (IITM पुणे, २०२१)"}
   - {en: "Participant, TROPMET 2020", mr: "TROPMET २०२० सहभाग"}
-  - {en: "Master in AI & ML (Inside AIML, December 2022 – September 2023)", mr: "Master in AI & ML (Inside AIML, डिसेंबर २०२२ – सप्टेंबर २०२३)"}
-  - {en: "Trainer — Climate Data Analysis and Visualization with Python (IMD Pune, September 2023)", mr: "प्रशिक्षक — Climate Data Analysis and Visualization with Python (IMD पुणे, सप्टेंबर २०२३)"}
-  - {en: "Resource person — Training on Seasonal Prediction (December 2023)", mr: "साधन-व्यक्ती — Training on Seasonal Prediction (डिसेंबर २०२३)"}
-  - {en: "Volunteer — Annual Monsoon Workshop (IITM Pune, March 2024)", mr: "स्वयंसेवक — वार्षिक मान्सून कार्यशाळा (IITM पुणे, मार्च २०२४)"}
-  - {en: "Trainer — Decision Support System (DSS)", mr: "प्रशिक्षक — निर्णय सहाय्य प्रणाली (DSS)"}
+  - {en: "Master in AI & ML (Inside AIML, December 2022 to September 2023)", mr: "Master in AI & ML (Inside AIML, डिसेंबर २०२२ ते सप्टेंबर २०२३)"}
+  - {en: "Trainer: Climate Data Analysis and Visualization with Python (IMD Pune, September 2023)", mr: "प्रशिक्षक: Climate Data Analysis and Visualization with Python (IMD पुणे, सप्टेंबर २०२३)"}
+  - {en: "Resource person: Training on Seasonal Prediction (December 2023)", mr: "साधन व्यक्ती: Training on Seasonal Prediction (डिसेंबर २०२३)"}
+  - {en: "Volunteer: Annual Monsoon Workshop (IITM Pune, March 2024)", mr: "स्वयंसेवक: वार्षिक मान्सून कार्यशाळा (IITM पुणे, मार्च २०२४)"}
+  - {en: "Trainer: Decision Support System (DSS)", mr: "प्रशिक्षक: निर्णय सहाय्य प्रणाली (DSS)"}
 
 # Publications: references stay in English (academic practice). type: journal | preprint | article | report | conference
 # doi: write only the DOI number (https://doi.org/ is added automatically)
@@ -111,10 +112,10 @@ publications:
     year: 2026
     text: "Pagire, A., Ratna, S. B., Chattopadhyay, R., Sreejith, O. P., & Acharya, N. (2026). Deep learning-based prediction of extreme rainfall circulation days over Vidarbha using large-scale reanalysis precursors. Bulletin of Atmospheric Science and Technology (Springer Nature)."
     status: {en: "Accepted", mr: "स्वीकृत (Accepted)"}
-    note: {en: "DOI will be added after publication", mr: "DOI प्रकाशनानंतर अद्ययावत केला जाईल"}   # once published: remove status/note and add doi: "10.1007/..."
+    note: {en: "The DOI will be added after publication", mr: "DOI प्रकाशनानंतर अद्ययावत केला जाईल"}   # once published: remove status/note and add doi: "10.1007/..."
   - type: journal
     year: 2025
-    text: "Pagire, A., Ratna, S. B., Cherchi, A., Sanap, S. D., & Sreejith, O. P. (2025). ENSO–MJO interaction and its association with monsoon extreme rainfall events over the Indian region. International Journal of Climatology, 45(14), e70093."
+    text: "Pagire, A., Ratna, S. B., Cherchi, A., Sanap, S. D., & Sreejith, O. P. (2025). ENSO-MJO interaction and its association with monsoon extreme rainfall events over the Indian region. International Journal of Climatology, 45(14), e70093."
     doi: "10.1002/joc.70093"
   - type: journal
     year: 2024
@@ -126,14 +127,14 @@ publications:
     doi: "10.22541/essoar.174759193.30009214/v1"
   - type: article
     year: 2025
-    text: "Ratna, S. B., Takle, J., Musale, M., Sharma, T., Sabeerali, C. T., Sreejith, O. P., Pagire, A., & Pillai, P. A. (2025). ENSO phase transitions in observation and Monsoon Mission Coupled Forecasting System. CLIVAR Exchanges, No. 84, 16–19."
+    text: "Ratna, S. B., Takle, J., Musale, M., Sharma, T., Sabeerali, C. T., Sreejith, O. P., Pagire, A., & Pillai, P. A. (2025). ENSO phase transitions in observation and Monsoon Mission Coupled Forecasting System. CLIVAR Exchanges, No. 84, 16-19."
     doi: "10.36071/clivar.84.2025"
   - type: report
     year: 2023
-    text: "Marine Climatological Atlas 1991–2020 (2023). India Meteorological Department, Pune."
+    text: "Marine Climatological Atlas 1991-2020 (2023). India Meteorological Department, Pune."
   - type: conference
     year: 2024
-    text: "Pagire, A. R., Ratna, S. B., Cherchi, A., Sanap, S. D., & Sreejith, O. P. Precipitation extremes and their association with ENSO–MJO phases. AGU Fall Meeting 2024."
+    text: "Pagire, A. R., Ratna, S. B., Cherchi, A., Sanap, S. D., & Sreejith, O. P. Precipitation extremes and their association with ENSO-MJO phases. AGU Fall Meeting 2024."
   - type: conference
     year: 2024
     text: "Pagire, A. R., Ratna, S. B., Chattopadhyay, R., & Sreejith, O. P. Deep learning algorithm for classification of widespread rainfall extremes. STIPMEX-2024."
@@ -142,7 +143,7 @@ publications:
     text: "Pagire, A. R., & Singh, C. (2023). Diurnal variation of extreme rainfall events over J&K using IMERG V6 dataset. National Symposium on Climate Services for Health."
   - type: conference
     year: 2022
-    text: "Pagire, A. R., & Singh, C. (2022). Extreme rainfall events over Uttarakhand region (2000–2021) using satellite data. National Seminar on Geospatial Technology, IIRS Dehradun."
+    text: "Pagire, A. R., & Singh, C. (2022). Extreme rainfall events over Uttarakhand region (2000-2021) using satellite data. National Seminar on Geospatial Technology, IIRS Dehradun."
 
 contact:
   email: "arvindrspagire@gmail.com"
@@ -160,7 +161,7 @@ contact:
 
 # disclaimer shown under every weather alert
 alert_disclaimer:
-  en: "This alert is informational and based on my personal analysis. For official weather forecasts and warnings, please see the India Meteorological Department website mausam.imd.gov.in or the 'Mausam' / 'Damini' apps."
+  en: "This alert gives information only. It comes from my own analysis. For official weather forecasts and warnings, see the India Meteorological Department website mausam.imd.gov.in or the 'Mausam' and 'Damini' apps."
   mr: "हा इशारा माझ्या वैयक्तिक विश्लेषणावर आधारित माहितीपर मजकूर आहे. अधिकृत हवामान अंदाज व इशाऱ्यांसाठी कृपया भारतीय हवामान विभागाचे संकेतस्थळ mausam.imd.gov.in किंवा 'मौसम' / 'दामिनी' ॲप पाहा."
 
 # daily alerts: folder of the hawaman-vidnyan pipeline (python build.py hawaman --push)

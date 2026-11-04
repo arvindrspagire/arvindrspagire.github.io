@@ -4,36 +4,36 @@ title:
   mr: "डोंगराळ भागात उपग्रहाचा पाऊस किती अचूक?"
 date: 2026-10-25
 summary:
-  en: "Comparing NASA's IMERG satellite rainfall with India Meteorological Department rain-gauge data — what did we find over the Western Ghats and the Himalaya?"
-  mr: "NASA च्या IMERG उपग्रह पर्जन्य माहितीची भारतीय हवामान विभागाच्या पर्जन्यमापक माहितीशी तुलना — पश्चिम घाट आणि हिमालयात काय आढळले?"
+  en: "We compared the NASA IMERG satellite rainfall with the rain gauge data of the India Meteorological Department. What did we find over the Western Ghats and the Himalaya?"
+  mr: "NASA च्या IMERG उपग्रह पर्जन्य माहितीची भारतीय हवामान विभागाच्या पर्जन्यमापक माहितीशी तुलना: पश्चिम घाट आणि हिमालयात काय आढळले?"
 tags: [{en: Research, mr: संशोधन}, {en: Monsoon, mr: मान्सून}, {en: Satellite, mr: उपग्रह}]
 draft: true              # review before publishing; remove this line to publish
 ---
 
-Rain gauges are not everywhere — especially in mountainous and remote areas. In such places, rainfall measured from satellites is an important alternative. NASA's **IMERG (version 7)** is one such global satellite rainfall product. But how reliable is it on days of extreme rainfall?
+Not all places have rain gauges. Mountains and remote areas have very few. In such places, rainfall from satellites is an important alternative. The NASA **IMERG (version 7)** is one such global satellite rainfall product. But on days of extreme rainfall, how reliable is it?
 
-In our research we compared IMERG with the India Meteorological Department's (IMD) rain-gauge-based data for the June–September monsoon over **2000–2024**.
+In our research, we compared IMERG with the rain gauge data of the India Meteorological Department (IMD). We used the June to September monsoon of the years **2000 to 2024**.
 
-### The first important thing: matching the days
+### First: match the days
 
-IMD's rainfall "day" ends at 08:30 in the morning, while the satellite day ends at midnight (UTC). If this difference is ignored in the comparison, the satellite's accuracy appears to be almost **half**. Once the days are matched correctly, the daily correlation rises from 0.30 to 0.61.
+The IMD rainfall "day" ends at 08:30 in the morning. The satellite day ends at midnight (UTC). If you do not correct for this difference, the satellite looks only **half** as accurate as it is. When the days match correctly, the daily correlation increases from 0.30 to 0.61.
 
 ### The effect of terrain
 
-- **In areas higher than 2000 metres** (the Himalaya), IMERG shows roughly half of the extreme rainfall.
-- **On the windward side of the Western Ghats** (the coast) the satellite shows less rain, while **on the plateau beyond the crest** it shows more — that is, the rainfall centre appears shifted downwind.
+- **Above 2000 metres** (the Himalaya), IMERG shows only about half of the extreme rainfall.
+- **On the windward side of the Western Ghats** (the coast), the satellite shows less rain. **On the plateau after the crest**, it shows more rain. Thus the centre of the rainfall moves downwind on the satellite maps.
 
 ### The effect of the weather regime
 
-During monsoon "break" periods, when rain is confined to the foothills, the satellite underestimates extreme rainfall. In contrast, in local severe storms that occur without large-scale atmospheric ascent, it overestimates rainfall.
+In a monsoon "break", the rain stays near the foothills. In these periods, the satellite shows less extreme rainfall than the gauges. Some local severe storms occur without large-scale rising air. In these storms, the satellite shows more rain than the gauges.
 
-> **Conclusion:** satellite rainfall data are useful, but in mountainous areas and on extreme-rainfall days they need corrections for terrain and the weather regime.
+> **Conclusion:** Satellite rainfall data are useful. But in mountains and on days of extreme rainfall, you must correct the data for terrain and for the weather regime.
 
 <!-- mr -->
 
-पावसाचे पर्जन्यमापक (rain gauge) सर्वत्र नसतात — विशेषतः डोंगराळ आणि दुर्गम भागांत. अशा ठिकाणी उपग्रहावरून मोजलेला पाऊस हा महत्त्वाचा पर्याय ठरतो. NASA चे **IMERG (आवृत्ती ७)** हे असेच एक जागतिक उपग्रह पर्जन्य उत्पादन आहे. पण अतिवृष्टीच्या दिवशी ते किती विश्वासार्ह आहे?
+पावसाचे पर्जन्यमापक (rain gauge) सर्वत्र नसतात, विशेषतः डोंगराळ आणि दुर्गम भागांत. अशा ठिकाणी उपग्रहावरून मोजलेला पाऊस हा महत्त्वाचा पर्याय ठरतो. NASA चे **IMERG (आवृत्ती ७)** हे असेच एक जागतिक उपग्रह पर्जन्य उत्पादन आहे. पण अतिवृष्टीच्या दिवशी ते किती विश्वासार्ह आहे?
 
-आमच्या संशोधनात आम्ही **२०००–२०२४** या काळातील जून–सप्टेंबर मान्सूनसाठी IMERG ची तुलना भारतीय हवामान विभागाच्या (IMD) पर्जन्यमापक-आधारित माहितीशी केली.
+आमच्या संशोधनात आम्ही **२००० ते २०२४** या काळातील जून ते सप्टेंबर मान्सूनसाठी IMERG ची तुलना भारतीय हवामान विभागाच्या (IMD) पर्जन्यमापक-आधारित माहितीशी केली.
 
 ### पहिली महत्त्वाची गोष्ट: दिवस जुळवणे
 
@@ -42,7 +42,7 @@ IMD चा पावसाचा "दिवस" सकाळी ८:३० व�
 ### भूप्रदेशाचा प्रभाव
 
 - **२००० मीटरपेक्षा उंच भागात** (हिमालय) IMERG अतिवृष्टी सुमारे निम्म्याने कमी दाखवते.
-- **पश्चिम घाटाच्या वाऱ्याच्या बाजूला** (किनारपट्टी) उपग्रह पाऊस कमी दाखवतो, तर **घाटमाथ्यापलीकडील पठारावर** जास्त दाखवतो — म्हणजे पावसाचे केंद्र वाऱ्याच्या दिशेने पुढे सरकलेले दिसते.
+- **पश्चिम घाटाच्या वाऱ्याच्या बाजूला** (किनारपट्टी) उपग्रह पाऊस कमी दाखवतो, तर **घाटमाथ्यापलीकडील पठारावर** जास्त दाखवतो; म्हणजे पावसाचे केंद्र वाऱ्याच्या दिशेने पुढे सरकलेले दिसते.
 
 ### हवामान स्थितीचा प्रभाव
 

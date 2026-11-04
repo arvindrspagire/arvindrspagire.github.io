@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% from "_macros.html" import profile_links, research_card %}
-{% block title %}About — {{ site.name_en }}{% endblock %}
-{% block title_mr %}माझ्याविषयी — {{ site.name_mr }}{% endblock %}
+{% block title %}About | {{ site.name_en }}{% endblock %}
+{% block title_mr %}माझ्याविषयी | {{ site.name_mr }}{% endblock %}
 {% block content %}
 <h1 class="page-title">{{ t("About me", "माझ्याविषयी") }}</h1>
 {{ profile_links(site) }}
@@ -31,7 +31,7 @@
     <h2>{{ t("Education", "शिक्षण") }}</h2>
     <ul class="plain">
       {% for ed in site.education %}
-      <li><strong>{{ ed.degree | t }}</strong> — {{ ed.field | t }}<br><span class="muted">{{ ed.place | t }}</span></li>
+      <li><strong>{{ ed.degree | t }}</strong>, {{ ed.field | t }}<br><span class="muted">{{ ed.place | t }}</span></li>
       {% endfor %}
     </ul>
   </section>

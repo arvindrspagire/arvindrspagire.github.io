@@ -99,7 +99,7 @@
 {% macro subscribe_form(site, cls="") %}
 {% if site.contact.form_email %}
 <form class="subscribe {{ cls }}" action="https://formsubmit.co/{{ site.contact.form_email }}" method="POST">
-  {{ form_hidden(site, "New subscriber — " ~ site.name_en) }}
+  {{ form_hidden(site, "New subscriber: " ~ site.name_en) }}
   <input type="hidden" name="type" value="Subscribe: weather alerts, experimental AI forecast and posts">
   <label for="sub-{{ cls or 'x' }}" class="sr-only">E-mail</label>
   <input id="sub-{{ cls or 'x' }}" type="email" name="email" required placeholder="Your e-mail" data-mr-ph="तुमचा ई-मेल">
@@ -110,7 +110,7 @@
 
 {% macro contact_form(site) %}
 <form class="msg-form" action="https://formsubmit.co/{{ site.contact.form_email }}" method="POST">
-  {{ form_hidden(site, "Message from the website — " ~ site.name_en) }}
+  {{ form_hidden(site, "Message from the website: " ~ site.name_en) }}
   <div class="form-row">
     <label>{{ t("Name *", "नाव *") }}<input type="text" name="name" required autocomplete="name"></label>
     <label>{{ t("E-mail *", "ई-मेल *") }}<input type="email" name="email" required autocomplete="email"></label>

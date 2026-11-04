@@ -601,7 +601,7 @@ def findings(stations, regional):
     out = []
     # 850 hPa flow by region: prevailing zonal sense + the strongest ascent (a vector mean hides opposing winds)
     for (lo, hi), reg in (((0, 16), bi("south peninsula (south of 16°N)", "दक्षिण द्वीपकल्प (१६°N च्या दक्षिणेस)")),
-                          ((16, 24), bi("central India (16–24°N)", "मध्य भारत (१६–२४°N)")),
+                          ((16, 24), bi("central India (16°N to 24°N)", "मध्य भारत (१६ ते २४°N)")),
                           ((24, 90), bi("north India (north of 24°N)", "उत्तर भारत (२४°N च्या उत्तरेस)"))):
         sts = [s for s in stations if lo <= s["lat"] < hi and "u" in s["levels"].get("850", {})]
         if len(sts) < 3:
@@ -626,7 +626,7 @@ def findings(stations, regional):
         out.append(bi(f"Strong low-level winds (≥ 25 kt below 700 hPa) at {names(llj)['en']}; strongest {s['llj']['kt']} kt "
                       f"from {s['llj']['dir']}° near {s['llj']['p']:.0f} hPa at {s['name']['en']}.",
                       f"खालच्या स्तरात जोरदार वारे (७०० hPa खाली ≥ २५ नॉट): {names(llj)['mr']}; सर्वाधिक {mr(s['llj']['kt'])} नॉट "
-                      f"({mr(s['llj']['dir'])}° कडून, सुमारे {mr(round(s['llj']['p']))} hPa) — {s['name']['mr']}."))
+                      f"({mr(s['llj']['dir'])}° कडून, सुमारे {mr(round(s['llj']['p']))} hPa), {s['name']['mr']}."))
     for c in headline_centres(regional):
         p, nr = c["p"], c["near"]
         where_en = f"near {c['lat']:.0f}°N, {c['lon']:.0f}°E (between {nr[0]['en']} and {nr[1]['en']})"
@@ -637,44 +637,44 @@ def findings(stations, regional):
                                                       f"{mr(p)} hPa: वस्तुनिष्ठ विश्लेषणात {where_mr} {kind['mr']}."))
         else:
             z = f"{c['zeta']:.0f}"
-            out.append(key(f"{p} hPa: marked cyclonic wind shear (trough; vorticity ≈ {z}×10⁻⁵ s⁻¹) {where_en} — "
-                              f"not confirmed as a closed circulation by the surrounding ascents.",
-                              f"{mr(p)} hPa: {where_mr} ठळक चक्रीय वाऱ्यांचा फरक (द्रोणीय स्थिती; भोवरा ≈ {mr(z)}×10⁻⁵ s⁻¹) — "
+            out.append(key(f"{p} hPa: marked cyclonic wind shear (trough; vorticity ≈ {z}×10⁻⁵ s⁻¹) {where_en}. "
+                              f"The nearby ascents do not confirm a closed circulation.",
+                              f"{mr(p)} hPa: {where_mr} ठळक चक्रीय वाऱ्यांचा फरक (द्रोणीय स्थिती; भोवरा ≈ {mr(z)}×10⁻⁵ s⁻¹). "
                               f"आजूबाजूच्या निरीक्षणांवरून बंद चक्रीय स्थिती असल्याची खात्री होत नाही."))
     for p in (500, 200):
         r = regional.get(str(p), {}).get("ridge_lat")
         if r is not None:
             out.append(bi(f"Subtropical ridge at {p} hPa (easterlies to the south, westerlies to the north) near {r:.1f}°N "
-                          f"along 70–90°E.",
+                          f"along 70°E to 90°E.",
                           f"{mr(p)} hPa वर उपोष्णकटिबंधीय उच्च दाब पट्टा (दक्षिणेस पूर्वेकडील, उत्तरेस पश्चिमेकडील वारे) "
-                          f"७०–९०°E दरम्यान सुमारे {mr(f'{r:.1f}')}°N वर."))
+                          f"७० ते ९०°E दरम्यान सुमारे {mr(f'{r:.1f}')}°N वर."))
     jets = sorted([s for s in stations if s["jet"] and s["jet"]["u"] > 0 and (s["jet"]["kt"] or 0) >= 60],
                   key=lambda s: -s["jet"]["kt"])
     if jets:
         s = jets[0]
         out.append(key(f"Subtropical westerly jet: winds ≥ 60 kt aloft at {names(jets)['en']}; core {s['jet']['kt']} kt "
                       f"near {s['jet']['p']:.0f} hPa over {s['name']['en']}.",
-                      f"उपोष्णकटिबंधीय पश्चिमी झोत वारे (jet stream): वरच्या स्तरात ≥ ६० नॉट — {names(jets)['mr']}; सर्वाधिक "
-                      f"{mr(s['jet']['kt'])} नॉट (सुमारे {mr(round(s['jet']['p']))} hPa) — {s['name']['mr']}."))
+                      f"उपोष्णकटिबंधीय पश्चिमी झोत वारे (jet stream): वरच्या स्तरात ≥ ६० नॉट: {names(jets)['mr']}; सर्वाधिक "
+                      f"{mr(s['jet']['kt'])} नॉट (सुमारे {mr(round(s['jet']['p']))} hPa), {s['name']['mr']}."))
     tej = sorted([s for s in stations if s["lat"] < 20 and "u" in s["levels"].get("150", {}) and s["levels"]["150"]["u"] <= -15],
                  key=lambda s: s["levels"]["150"]["u"])
     if len(tej) >= 2:
         s = tej[0]
         out.append(key(f"Tropical easterly jet: easterlies ≥ 30 kt at 150 hPa over {names(tej)['en']} "
                       f"(strongest {s['levels']['150']['kt']} kt at {s['name']['en']}).",
-                      f"उष्णकटिबंधीय पूर्वी झोत वारे: १५० hPa वर ≥ ३० नॉट पूर्वेकडील वारे — {names(tej)['mr']} "
+                      f"उष्णकटिबंधीय पूर्वी झोत वारे: १५० hPa वर ≥ ३० नॉट पूर्वेकडील वारे: {names(tej)['mr']} "
                       f"(सर्वाधिक {mr(s['levels']['150']['kt'])} नॉट, {s['name']['mr']})."))
     wy = regional.get("shear_index")
     if wy is not None:
         sense = (bi("monsoon-like (westerly below, easterly above)", "मान्सूनसारखी (खाली पश्चिमी, वर पूर्वी वारे)") if wy > 0 else
                  bi("reversed from the monsoon pattern (easterly below, westerly above)", "मान्सूनच्या उलट (खाली पूर्वी, वर पश्चिमी वारे)"))
-        out.append(bi(f"Vertical shear of the zonal wind (u850 − u200, mean of ascents south of 20°N): {wy:+.0f} m/s — {sense['en']}.",
-                      f"पूर्व-पश्चिम वाऱ्याचा उंचीनुसार फरक (u850 − u200, २०°N दक्षिणेकडील स्थानकांची सरासरी): {mr(f'{wy:+.0f}')} मी/से — {sense['mr']}."))
+        out.append(bi(f"Vertical shear of the zonal wind (u850 − u200, mean of ascents south of 20°N): {wy:+.0f} m/s, {sense['en']}.",
+                      f"पूर्व-पश्चिम वाऱ्याचा उंचीनुसार फरक (u850 − u200, २०°N दक्षिणेकडील स्थानकांची सरासरी): {mr(f'{wy:+.0f}')} मी/से, {sense['mr']}."))
     unstable = sorted([s for s in stations if (s["potential"] or 0) >= 3], key=lambda s: -(s["k"] or 0))
     if unstable:
-        out.append(key(f"Most unstable / moist columns (K-index ≥ 31 or MUCAPE ≥ 1500 J/kg): {names(unstable, 6)['en']} — "
-                      f"conditions that favour thunderstorms if there is a trigger.",
-                      f"सर्वाधिक अस्थिर / दमट वातावरण (K-निर्देशांक ≥ ३१ किंवा MUCAPE ≥ १५०० J/kg): {names(unstable, 6)['mr']} — "
+        out.append(key(f"Most unstable or moist columns (K-index ≥ 31 or MUCAPE ≥ 1500 J/kg): {names(unstable, 6)['en']}. "
+                      f"If there is a trigger, these conditions are good for thunderstorms.",
+                      f"सर्वाधिक अस्थिर / दमट वातावरण (K-निर्देशांक ≥ ३१ किंवा MUCAPE ≥ १५०० J/kg): {names(unstable, 6)['mr']}. "
                       f"उचल मिळाल्यास गडगडाटी वादळांना अनुकूल स्थिती."))
     else:
         out.append(bi("No ascent shows strong instability (all K-index < 31 and MUCAPE < 1500 J/kg).",
@@ -696,8 +696,8 @@ def findings(stations, regional):
         if cold:
             en.append(f"cold advection (backing wind) at {names(cold)['en']}")
             mrs.append(f"थंड हवेचे वहन (वारे उलट दिशेने वळतात): {names(cold)['mr']}")
-        out.append(bi("850–500 hPa thermal wind (north of 18°N): " + "; ".join(en) + ".",
-                      "८५०–५०० hPa थर्मल वारे (१८°N च्या उत्तरेस): " + "; ".join(mrs) + "."))
+        out.append(bi("850 to 500 hPa thermal wind (north of 18°N): " + "; ".join(en) + ".",
+                      "८५० ते ५०० hPa थर्मल वारे (१८°N च्या उत्तरेस): " + "; ".join(mrs) + "."))
     return out
 
 

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% from "_forecast.html" import taluka_selector, skill_line %}
-{% block title %}Experimental AI rain forecast — {{ site.name_en }}{% endblock %}
-{% block title_mr %}प्रायोगिक AI पाऊस अंदाज — {{ site.name_mr }}{% endblock %}
-{% block description %}Deep-learning (CNN-LSTM) taluka-wise rain category forecast for Maharashtra for the next 7 days, updated daily.{% endblock %}
+{% block title %}Experimental AI rain forecast | {{ site.name_en }}{% endblock %}
+{% block title_mr %}प्रायोगिक AI पाऊस अंदाज | {{ site.name_mr }}{% endblock %}
+{% block description %}Rain category forecast for each taluka of Maharashtra for the next 7 days, from a deep learning model (CNN-LSTM). Updated every day.{% endblock %}
 {% block content %}
 <h1 class="page-title">{{ t("Experimental AI rain forecast", "प्रायोगिक AI पाऊस अंदाज") }}</h1>
-<p class="lead">{{ t("Every day, the deep-learning model from my research (CNN-LSTM) uses the latest ECMWF atmospheric data to forecast rain day by day for the next 7 days — rain categories for Maharashtra by taluka, district and IMD grid cell. This is a research experiment, not an official warning.",
-                     "माझ्या संशोधनातील डीप-लर्निंग मॉडेल (CNN-LSTM) रोज ECMWF च्या ताज्या वातावरणीय माहितीवरून पुढील ७ दिवसांचा दिवसनिहाय पाऊस अंदाज देते — महाराष्ट्रासाठी तालुका, जिल्हा व IMD ग्रिडनिहाय पाऊस श्रेणी. हा संशोधनात्मक प्रयोग आहे — अधिकृत इशारा नाही.") }}</p>
+<p class="lead">{{ t("Every day, the deep learning model from my research (CNN-LSTM) uses the latest ECMWF atmospheric data. It forecasts the rain category for each of the next 7 days, for each taluka, district and IMD grid cell of Maharashtra. This is a research experiment. It is not an official warning.",
+                     "माझ्या संशोधनातील डीप-लर्निंग मॉडेल (CNN-LSTM) रोज ECMWF च्या ताज्या वातावरणीय माहितीवरून पुढील ७ दिवसांचा दिवसनिहाय पाऊस अंदाज देते: महाराष्ट्रासाठी तालुका, जिल्हा व IMD ग्रिडनिहाय पाऊस श्रेणी. हा संशोधनात्मक प्रयोग आहे; अधिकृत इशारा नाही.") }}</p>
 
 {% if fc %}
 
@@ -18,7 +18,7 @@
 <section class="card fc-region">
   <div class="fc-head">
     <h2>{{ r.name | t }}</h2>
-    <p class="muted">{{ t("Base date: " ~ fc.base_str.en ~ " · heavy rain means a subdivision-average rainfall of ≥ " ~ r.threshold_str ~ " mm/day",
+    <p class="muted">{{ t("Base date: " ~ fc.base_str.en ~ " · heavy rain: the subdivision average rainfall is " ~ r.threshold_str ~ " mm/day or more",
                           "आधार दिनांक: " ~ fc.base_str.mr ~ " · अतिवृष्टी म्हणजे उपविभागाचा सरासरी पाऊस ≥ " ~ (r.threshold_str | mr) ~ " मिमी/दिवस") }}</p>
   </div>
   <div class="fc-days">
@@ -27,9 +27,9 @@
       <p class="fc-date">{{ d.date_str | t }}</p>
       <p class="fc-band">{{ d.band_label | t }}</p>
       <p class="fc-score">{{ t("Model score", "मॉडेल गुण") }} {{ d.pct | num }}%</p>
-      <p class="fc-hist">{{ t("After similar scores in the past, heavy rain followed", "इतिहासात अशा गुणांनंतर") }} <strong>{{ d.hist_pct | num }}%</strong> {{ t("of the time", "वेळा अतिवृष्टी झाली") }}</p>
+      <p class="fc-hist">{{ t("After similar scores in the test years, heavy rain occurred", "इतिहासात अशा गुणांनंतर") }} <strong>{{ d.hist_pct | num }}%</strong> {{ t("of the time", "वेळा अतिवृष्टी झाली") }}</p>
       {% if d.ifs_str %}<p class="fc-ifs">{{ t("ECMWF forecast: " ~ d.ifs_str ~ " mm/day", "ECMWF अंदाज: " ~ (d.ifs_str | mr) ~ " मिमी/दिवस") }}</p>{% endif %}
-      {% if d.in_season is defined and not d.in_season %}<p class="fc-hist">{{ t("This model is trained for the monsoon season only", "हे मॉडेल फक्त मान्सून हंगामासाठी प्रशिक्षित आहे") }}</p>{% endif %}
+      {% if d.in_season is defined and not d.in_season %}<p class="fc-hist">{{ t("This model is trained only for the monsoon season", "हे मॉडेल फक्त मान्सून हंगामासाठी प्रशिक्षित आहे") }}</p>{% endif %}
     </article>
     {% endfor %}
   </div>
@@ -39,8 +39,8 @@
 {% for c in fc.categorical if c.display != "selector" %}
 <section class="card cat-fc" id="{{ c.id }}">
   <h2>{{ c.title | t }}</h2>
-  <p class="muted">{{ t("AI-based category forecast: the category of average rainfall in each area on that day (08:30 to 08:30 IST). Trained on ERA5 atmospheric data and IMD 0.25° gridded rainfall (1979–" ~ c.train_end[:4] ~ ").",
-                        "AI-आधारित श्रेणीनिहाय अंदाज: प्रत्येक भागात त्या दिवशी (सकाळी ८:३० ते ८:३०) पडणाऱ्या सरासरी पावसाची श्रेणी. ERA5 वातावरणीय माहिती व IMD ०.२५° ग्रिड पावसावर प्रशिक्षित (१९७९–" ~ (c.train_end[:4] | mr) ~ ").") }}</p>
+  <p class="muted">{{ t("AI category forecast. It gives the category of the average rainfall in each area for that day (08:30 to 08:30 IST). The model is trained on ERA5 atmospheric data and IMD 0.25° gridded rainfall (1979 to " ~ c.train_end[:4] ~ ").",
+                        "AI-आधारित श्रेणीनिहाय अंदाज: प्रत्येक भागात त्या दिवशी (सकाळी ८:३० ते ८:३०) पडणाऱ्या सरासरी पावसाची श्रेणी. ERA5 वातावरणीय माहिती व IMD ०.२५° ग्रिड पावसावर प्रशिक्षित (१९७९ ते " ~ (c.train_end[:4] | mr) ~ ").") }}</p>
   <p class="cat-legend">
     {% for k in c.classes %}<span class="cat-chip cat-{{ loop.index0 }}">{{ k.label | t }} <small>{{ k.range | t }}</small></span>{% endfor %}
   </p>
@@ -48,7 +48,7 @@
   <div class="cat-maps">
     {% for d in c.days %}{% set i = loop.index0 %}
     <figure>
-      <svg viewBox="-2 -2 {{ c.maps.w + 4 }} {{ c.maps.h + 4 }}" role="img" aria-label="{{ d.date_str | en }} — forecast map">
+      <svg viewBox="-2 -2 {{ c.maps.w + 4 }} {{ c.maps.h + 4 }}" role="img" aria-label="Forecast map, {{ d.date_str | en }}">
         {% for r in c.regions %}{% if r.id in c.maps.paths %}
         <path class="cat-{{ r.cat[i] }}" d="{{ c.maps.paths[r.id] }}"><title data-mr="{{ r.name | in_mr }}: {{ c.classes[r.cat[i]].label.mr }} ({{ r.pct[i] | mr }}%)">{{ r.name | en }}: {{ c.classes[r.cat[i]].label.en }} ({{ r.pct[i] }}%)</title></path>
         {% endif %}{% endfor %}
@@ -80,26 +80,26 @@
 <details class="legend card">
   <summary>{{ t("How is this forecast made?", "हा अंदाज कसा तयार होतो?") }}</summary>
   <ul class="l-en">
-    <li><strong>Data:</strong> ECMWF IFS (open data, CC BY 4.0) — 850 hPa vertical velocity and specific humidity, and
-      200 and 850 hPa wind speed for the previous 5 days, over 40°N–10°S, 60°–120°E.</li>
-    <li><strong>Model:</strong> CNN-LSTM trained on ERA5 (1979–2008); validated on 2009–2015 and tested on the
-      independent years 2016–2022. A separate model for each lead day (1 to 5 days ahead).</li>
-    <li><strong>The "model score" is not a probability.</strong> The model is trained not to miss heavy rain
-      (it caught about 90% of heavy-rain days in testing), so it often gives high scores. That is why each score is shown
-      with how often heavy rain actually followed similar scores in the test years.</li>
-    <li><strong>ECMWF forecast:</strong> for comparison, the average rain over the same area from ECMWF's numerical model.
-      When both agree, confidence is higher.</li>
-    <li><strong>District-wise category forecast:</strong> the CNN part of the Vidarbha model (which recognises large-scale
-      atmospheric patterns) is kept the same for all districts, and a separate category forecast is learned for each district
-      from IMD gridded rainfall (fine-tuning). The same method also works at taluka / block level.</li>
+    <li><strong>Data:</strong> ECMWF IFS open data (CC BY 4.0). The input is the 850 hPa vertical velocity and specific
+      humidity, and the 200 hPa and 850 hPa wind speed, for the previous 5 days. The area is 40°N to 10°S, 60°E to 120°E.</li>
+    <li><strong>Model:</strong> a CNN-LSTM, trained on ERA5 (1979 to 2008), validated on 2009 to 2015 and tested on the
+      independent years 2016 to 2022. There is a separate model for each lead day (1 to 5 days ahead).</li>
+    <li><strong>The "model score" is not a probability.</strong> I trained the model not to miss heavy rain. In the tests,
+      it found about 90% of the heavy rain days, so it often gives high scores. For this reason, each score also shows
+      how frequently heavy rain occurred after similar scores in the test years.</li>
+    <li><strong>ECMWF forecast:</strong> for comparison, this is the average rain over the same area from the ECMWF
+      numerical model. When the two forecasts agree, you can have more confidence.</li>
+    <li><strong>District category forecast:</strong> the CNN part of the Vidarbha model finds the large-scale atmospheric
+      patterns. This part stays the same for all districts. A separate category forecast for each district is then trained
+      on IMD gridded rainfall (fine-tuning). The same method also works for talukas and blocks.</li>
     <li>Score bands: {% for b in fc.bands %}<span class="fc-chip fc-{{ b.key }}">{{ b.label.en }}</span>{% endfor %}
-      (0–50%, 50–75%, 75–90%, 90%+)</li>
+      (0 to 50%, 50 to 75%, 75 to 90%, 90% and more)</li>
   </ul>
   <ul class="l-mr" lang="mr">
     <li><strong>माहिती:</strong> ECMWF IFS (मुक्त माहिती, CC BY 4.0) मधील मागील ५ दिवसांचे ८५० hPa ऊर्ध्व वेग व
-      विशिष्ट आर्द्रता आणि २०० व ८५० hPa वाऱ्याचा वेग — ४०°उ ते १०°द, ६०° ते १२०°पू क्षेत्रावर.</li>
-    <li><strong>मॉडेल:</strong> ERA5 (१९७९–२००८) वर प्रशिक्षित CNN-LSTM; २००९–२०१५ वर पडताळणी आणि
-      २०१६–२०२२ या स्वतंत्र वर्षांवर चाचणी. प्रत्येक दिवसासाठी (१ ते ५ दिवस पुढे) स्वतंत्र मॉडेल.</li>
+      विशिष्ट आर्द्रता आणि २०० व ८५० hPa वाऱ्याचा वेग, ४०°उ ते १०°द, ६०° ते १२०°पू क्षेत्रावर.</li>
+    <li><strong>मॉडेल:</strong> ERA5 (१९७९ ते २००८) वर प्रशिक्षित CNN-LSTM; २००९ ते २०१५ वर पडताळणी आणि
+      २०१६ ते २०२२ या स्वतंत्र वर्षांवर चाचणी. प्रत्येक दिवसासाठी (१ ते ५ दिवस पुढे) स्वतंत्र मॉडेल.</li>
     <li><strong>"मॉडेल गुण" ही संभाव्यता नाही.</strong> मॉडेल अतिवृष्टी चुकू नये म्हणून प्रशिक्षित आहे
       (चाचणीत सुमारे ९०% अतिवृष्टी दिवस ओळखले), त्यामुळे ते अनेकदा जास्त गुण देते. म्हणून प्रत्येक गुणासोबत
       चाचणी वर्षांत अशाच गुणांनंतर प्रत्यक्ष किती वेळा अतिवृष्टी झाली ते दाखवले आहे.</li>
@@ -109,14 +109,14 @@
       ओळखणारा) सर्व जिल्ह्यांसाठी समान ठेवून, IMD ग्रिड पावसावरून प्रत्येक जिल्ह्यासाठी स्वतंत्र श्रेणी-अंदाज शिकवला
       (fine-tuning). हीच पद्धत तालुका/ब्लॉक पातळीवरही वापरता येते.</li>
     <li>गुण पट्टे: {% for b in fc.bands %}<span class="fc-chip fc-{{ b.key }}">{{ b.label.mr }}</span>{% endfor %}
-      (०–५०%, ५०–७५%, ७५–९०%, ९०%+)</li>
+      (० ते ५०%, ५० ते ७५%, ७५ ते ९०%, ९०%+)</li>
   </ul>
   <p class="muted">{{ t("Updated:", "अद्ययावत:") }} {{ fc.issued_utc }} UTC</p>
 </details>
 {% else %}
-<p class="empty">{{ t("The forecast has not been published yet.", "अंदाज अद्याप प्रसिद्ध झालेला नाही.") }}</p>
+<p class="empty">{{ t("The forecast is not published yet.", "अंदाज अद्याप प्रसिद्ध झालेला नाही.") }}</p>
 {% endif %}
 
-<p class="disclaimer">{{ t("This is an automated research model forecast, not an official weather warning. For decisions, see the warnings of the", "हा संशोधनात्मक, स्वयंचलित मॉडेल अंदाज आहे; तो अधिकृत हवामान इशारा नाही. निर्णयांसाठी") }}
+<p class="disclaimer">{{ t("This is an automatic forecast from a research model. It is not an official weather warning. Before you make decisions, see the warnings of the", "हा संशोधनात्मक, स्वयंचलित मॉडेल अंदाज आहे; तो अधिकृत हवामान इशारा नाही. निर्णयांसाठी") }}
   <a href="https://mausam.imd.gov.in" rel="noopener">{{ t("India Meteorological Department", "भारतीय हवामान विभागाचे") }}</a>{{ t(".", " इशारे पाहा.") }}</p>
 {% endblock %}
