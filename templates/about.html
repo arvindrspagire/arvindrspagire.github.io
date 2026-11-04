@@ -18,9 +18,17 @@
     {% for e in site.experience %}
     <li>
       <p class="tl-period muted">{{ e.period | t }}</p>
+      {% if e.roles %}
+      <h3>{{ e.org | t }}</h3>
+      {% for r in e.roles %}
+      <p class="tl-org"><strong>{{ r.role | t }}</strong> · {{ r.place | t }}</p>
+      <p>{{ r.detail | t }}</p>
+      {% endfor %}
+      {% else %}
       <h3>{{ e.role | t }}</h3>
       <p class="tl-org">{{ e.org | t }}</p>
       <p>{{ e.detail | t }}</p>
+      {% endif %}
     </li>
     {% endfor %}
   </ol>
@@ -31,7 +39,7 @@
     <h2>{{ t("Education", "शिक्षण") }}</h2>
     <ul class="plain">
       {% for ed in site.education %}
-      <li><strong>{{ ed.degree | t }}</strong>, {{ ed.field | t }}<br><span class="muted">{{ ed.place | t }}</span></li>
+      <li><strong>{{ ed.degree | t }}</strong>, {{ ed.field | t }}{% if ed.thesis %}<br><em>{{ ed.thesis | t }}</em>{% endif %}<br><span class="muted">{{ ed.place | t }}</span></li>
       {% endfor %}
     </ul>
   </section>
