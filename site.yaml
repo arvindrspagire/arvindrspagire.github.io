@@ -60,7 +60,7 @@ experience:
         place: {en: "Regional Meteorological Centre, Nagpur · January 2025 to April 2026", mr: "प्रादेशिक हवामान केंद्र, नागपूर · जानेवारी २०२५ ते एप्रिल २०२६"}
         detail: {en: "I was a member of the operational team that forecasts the daily weather for Vidarbha. I also worked on standard operating procedures (SOPs), a gridded PET dataset and climate change studies with CMIP6 models.",
                  mr: "विदर्भासाठी दैनंदिन हवामान अंदाज देणाऱ्या ऑपरेशनल टीममध्ये कार्य; मानक कार्यपद्धती (SOP) तयार करणे, PET साठी ग्रिडेड माहितीसंच आणि CMIP6 मॉडेल वापरून हवामान बदल अभ्यास."}
-  - role: {en: "Junior Research Fellow (JRF)", mr: "कनिष्ठ संशोधन अधिछात्र (JRF)"}
+  - role: {en: "Research Fellow", mr: "संशोधन अधिछात्र"}
     org: {en: "Indian Institute of Remote Sensing (IIRS), Dehradun", mr: "भारतीय सुदूर संवेदन संस्था (IIRS), देहरादून"}
     period: {en: "January 2022 to May 2023", mr: "जानेवारी २०२२ ते मे २०२३"}
     detail: {en: "I studied extreme rainfall over the northwestern Himalaya with satellite data and WRF model runs.",
