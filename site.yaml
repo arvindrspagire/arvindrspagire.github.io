@@ -162,6 +162,10 @@ contact:
   github: ""
   twitter: "https://x.com/arvind_weathLAB"
 
+# Upper-air page: true = station table and Skew-T diagrams for Maharashtra only
+# (Nagpur, Mumbai, Chh. Sambhajinagar, Pune); false = all Indian stations. Maps always use all stations.
+upperair_maharashtra_only: true
+
 # disclaimer shown under every weather alert
 alert_disclaimer:
   en: "This alert gives information only. It comes from my own analysis. For official weather forecasts and warnings, see the India Meteorological Department website mausam.imd.gov.in or the 'Mausam' and 'Damini' apps."
