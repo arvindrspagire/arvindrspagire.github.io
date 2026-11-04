@@ -54,8 +54,8 @@ experience:
     roles:                  # several roles at one institute: shown under one heading
       - role: {en: "PhD Researcher", mr: "पीएच.डी. संशोधक"}
         place: {en: "IMD Pune · May 2023 to present", mr: "IMD पुणे · मे २०२३ ते सध्या"}
-        detail: {en: "PhD thesis: \"Extreme rainfall variability over India and its association with large-scale circulation\". I study how large-scale climate drivers, such as ENSO, the IOD and the MJO, change extreme rainfall from year to year.",
-                 mr: "पीएच.डी. प्रबंध: \"भारतातील अतिवृष्टीची परिवर्तनशीलता आणि तिचा मोठ्या प्रमाणावरील वातावरणीय अभिसरणाशी संबंध\" (Extreme rainfall variability over India and its association with large-scale circulation). ENSO, IOD आणि MJO यांसारख्या मोठ्या हवामान घटकांचा अतिवृष्टीच्या परिवर्तनशीलतेवरील प्रभाव."}
+        detail: {en: "PhD thesis: \"Extreme rainfall variability over India and its association with large-scale circulation\".",
+                 mr: "पीएच.डी. प्रबंध: \"भारतातील अतिवृष्टीची परिवर्तनशीलता आणि तिचा मोठ्या प्रमाणावरील वातावरणीय अभिसरणाशी संबंध\" (Extreme rainfall variability over India and its association with large-scale circulation)."}
       - role: {en: "Project Scientist-II", mr: "प्रकल्प शास्त्रज्ञ-II"}
         place: {en: "Regional Meteorological Centre, Nagpur · January 2025 to April 2026", mr: "प्रादेशिक हवामान केंद्र, नागपूर · जानेवारी २०२५ ते एप्रिल २०२६"}
         detail: {en: "I was a member of the operational team that forecasts the daily weather for Vidarbha. I also worked on standard operating procedures (SOPs), a gridded PET dataset and climate change studies with CMIP6 models.",
