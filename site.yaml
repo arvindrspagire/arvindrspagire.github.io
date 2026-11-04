@@ -38,7 +38,7 @@ interests:
   - {en: "Downscaling of weather and climate data", mr: "हवामान माहितीचे डाउनस्केलिंग"}
   - {en: "Weather prediction with AI", mr: "AI-आधारित हवामान अंदाज"}
   - {en: "Hybrid models: physics-based models with machine learning", mr: "हायब्रिड मॉडेलिंग: भौतिकी-आधारित मॉडेल + मशीन लर्निंग"}
-  - {en: "Short-range weather prediction", mr: "अल्पकालीन हवामान अंदाज"}
+  - {en: "Short-range prediction", mr: "अल्पकालीन अंदाज"}
   - {en: "Teleconnection studies",
      mr: "दूरसंबंध अभ्यास"}
   - {en: "Satellite rainfall (IMERG): how accurate it is and how terrain changes it", mr: "उपग्रह पर्जन्य माहितीचे (IMERG) मूल्यमापन आणि भूप्रदेशाचा प्रभाव"}
