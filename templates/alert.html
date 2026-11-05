@@ -18,26 +18,41 @@
     </dl>
   </div>
   {% if alert.slides %}
-  <section class="reel{% if alert.gif %} has-gif{% endif %}">
-    {% if alert.gif %}
-    <figure class="reel-gif">
-      <img src="{{ root }}{{ alert.gif }}" alt="All slides of today's weather analysis (animation)" width="360" height="640">
-    </figure>
-    {% endif %}
-    <div class="reel-side">
-      <h2>{{ t("Today's visual analysis", "आजचे दृश्य विश्लेषण") }}</h2>
-      <p class="muted reel-note">{{ t(alert.slides | length ~ " slides" ~ (", played one after another in the animation" if alert.gif else "") ~ ". Click a slide to open it full size.",
-                                      (alert.slides | length | mr) ~ " स्लाइड्स" ~ (", ॲनिमेशनमध्ये एकामागून एक" if alert.gif else "") ~ ". मोठी पाहण्यासाठी स्लाइडवर क्लिक करा.") }}</p>
-      <div class="reel-grid">
+  <section class="viewer" aria-roledescription="carousel" aria-label="{{ t("Today's visual analysis", "आजचे दृश्य विश्लेषण") | striptags }}">
+    <h2>{{ t("Today's visual analysis", "आजचे दृश्य विश्लेषण") }}</h2>
+    <div class="viewer-stage">
+      <button class="viewer-btn prev" type="button" aria-label="Previous slide">&#8249;</button>
+      <div class="viewer-track" tabindex="0">
         {% for s in alert.slides %}
-        <figure class="reel-slide">
-          <a href="{{ root }}{{ s.src }}" target="_blank" rel="noopener"><img src="{{ root }}{{ s.src }}" alt="{{ s.label | en }}" loading="lazy" width="540" height="960"></a>
-          <figcaption><span class="slide-n">{{ loop.index | num }}</span> {{ s.label | t }}</figcaption>
+        <figure class="viewer-slide" aria-label="{{ loop.index }} / {{ loop.length }}">
+          <a href="{{ root }}{{ s.src }}" target="_blank" rel="noopener"><img src="{{ root }}{{ s.src }}" alt="{{ s.label | en }}" {% if not loop.first %}loading="lazy" {% endif %}width="540" height="960"></a>
+          <figcaption><span class="slide-n">{{ loop.index | num }}</span> {{ s.label | t }} <span class="muted">· {{ loop.index | num }}/{{ loop.length | num }}</span></figcaption>
         </figure>
         {% endfor %}
       </div>
+      <button class="viewer-btn next" type="button" aria-label="Next slide">&#8250;</button>
+    </div>
+    <div class="viewer-dots">
+      {% for s in alert.slides %}<button type="button" aria-label="Slide {{ loop.index }}"{% if loop.first %} class="on"{% endif %}></button>{% endfor %}
     </div>
   </section>
+  <script>
+  document.querySelectorAll(".viewer").forEach(function (v) {
+    var track = v.querySelector(".viewer-track"), slides = track.children, dots = v.querySelectorAll(".viewer-dots button");
+    function cur() { return Math.round(track.scrollLeft / track.clientWidth); }
+    function go(i) { i = Math.max(0, Math.min(slides.length - 1, i)); track.scrollTo({ left: i * track.clientWidth, behavior: "smooth" }); }
+    v.querySelector(".prev").onclick = function () { go(cur() - 1); };
+    v.querySelector(".next").onclick = function () { go(cur() + 1); };
+    dots.forEach(function (d, i) { d.onclick = function () { go(i); }; });
+    track.addEventListener("keydown", function (e) { if (e.key === "ArrowLeft") go(cur() - 1); if (e.key === "ArrowRight") go(cur() + 1); });
+    track.addEventListener("scroll", function () {
+      var c = cur();
+      dots.forEach(function (d, i) { d.classList.toggle("on", i === c); });
+      v.querySelector(".prev").disabled = c === 0; v.querySelector(".next").disabled = c === slides.length - 1;
+    }, { passive: true });
+    v.querySelector(".prev").disabled = true;
+  });
+  </script>
   {% endif %}
   {{ body(alert.body, alert.lang) }}
   <p class="disclaimer">{{ site.alert_disclaimer | t }}</p>
