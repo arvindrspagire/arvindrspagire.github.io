@@ -18,26 +18,25 @@
     </dl>
   </div>
   {% if alert.slides %}
-  <section class="reel">
-    <h2>{{ t("Today's visual analysis", "आजचे दृश्य विश्लेषण") }} <span class="muted">{{ t("(reel slides)", "(रील स्लाइड्स)") }}</span></h2>
+  <section class="reel{% if alert.gif %} has-gif{% endif %}">
     {% if alert.gif %}
     <figure class="reel-gif">
       <img src="{{ root }}{{ alert.gif }}" alt="All slides of today's weather analysis (animation)" width="360" height="640">
-      <figcaption class="muted">{{ t(alert.slides | length ~ " slides · 4 seconds each · the animation repeats",
-                                     (alert.slides | length | mr) ~ " स्लाइड्स · प्रत्येक ४ सेकंद · सतत पुनरावृत्ती") }}</figcaption>
     </figure>
-    <details class="reel-all">
-      <summary>{{ t("See each slide separately", "सर्व स्लाइड्स स्वतंत्रपणे पाहा") }}</summary>
     {% endif %}
-    <div class="reel-strip">
-      {% for s in alert.slides %}
-      <figure class="reel-slide">
-        <a href="{{ root }}{{ s.src }}" target="_blank" rel="noopener"><img src="{{ root }}{{ s.src }}" alt="{{ s.label | en }}" loading="lazy" width="540" height="960"></a>
-        <figcaption><span class="slide-n">{{ loop.index | num }}</span> {{ s.label | t }}</figcaption>
-      </figure>
-      {% endfor %}
+    <div class="reel-side">
+      <h2>{{ t("Today's visual analysis", "आजचे दृश्य विश्लेषण") }}</h2>
+      <p class="muted reel-note">{{ t(alert.slides | length ~ " slides" ~ (", played one after another in the animation" if alert.gif else "") ~ ". Click a slide to open it full size.",
+                                      (alert.slides | length | mr) ~ " स्लाइड्स" ~ (", ॲनिमेशनमध्ये एकामागून एक" if alert.gif else "") ~ ". मोठी पाहण्यासाठी स्लाइडवर क्लिक करा.") }}</p>
+      <div class="reel-grid">
+        {% for s in alert.slides %}
+        <figure class="reel-slide">
+          <a href="{{ root }}{{ s.src }}" target="_blank" rel="noopener"><img src="{{ root }}{{ s.src }}" alt="{{ s.label | en }}" loading="lazy" width="540" height="960"></a>
+          <figcaption><span class="slide-n">{{ loop.index | num }}</span> {{ s.label | t }}</figcaption>
+        </figure>
+        {% endfor %}
+      </div>
     </div>
-    {% if alert.gif %}</details>{% endif %}
   </section>
   {% endif %}
   {{ body(alert.body, alert.lang) }}
