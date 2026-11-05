@@ -448,14 +448,6 @@ HORIZON = {"short": bi("Short-range analysis (1 to 3 days)", "अल्पका
            "medium": bi("Medium-range analysis (4 to 10 days)", "मध्यम कालावधी विश्लेषण (४ ते १० दिवस)"),
            "extended": bi("Extended-range analysis (2 to 4 weeks)", "विस्तारित कालावधी विश्लेषण (२ ते ४ आठवडे)"),
            "seasonal": bi("Seasonal analysis (1 to 3 months)", "हंगामी विश्लेषण (१ ते ३ महिने)")}
-SLIDES = {"cover": bi("Cover", "मुखपृष्ठ"), "short_range": bi("Short-range analysis", "अल्पकालीन विश्लेषण"),
-          "satellite": bi("Satellite view", "उपग्रह निरीक्षण"),
-          "circulation_today": bi("Today's wind circulation", "आजची वाऱ्यांची स्थिती"),
-          "medium_range": bi("Medium-range analysis", "मध्यम कालावधी विश्लेषण"),
-          "circulation_week": bi("This week's wind circulation", "आठवड्याची वाऱ्यांची स्थिती"),
-          "extended_range": bi("Extended-range analysis", "विस्तारित कालावधी विश्लेषण"),
-          "seasonal": bi("Seasonal analysis", "हंगामी विश्लेषण"), "outro": bi("Closing", "समारोप")}
-
 # the site presents the pipeline output as analysis, never as a forecast ("अंदाज")
 ANALYSIS_WORDS = [
     ("हा मॉडेल-आधारित अंदाज आहे", "हे मॉडेल-आधारित विश्लेषण आहे"),
@@ -492,7 +484,7 @@ def is_imd_figure(name):
 
 
 def hawaman(day=None):
-    """Turn the hawaman-vidnyan daily output (tweet, reel slides, discussion) into content/alerts/<date>-hawaman.md.
+    """Turn the hawaman-vidnyan daily output (tweet, map images, discussion) into content/alerts/<date>-hawaman.md.
     The pipeline writes Marathi only: labels are bilingual, the body stays Marathi (lang: mr)."""
     import json
     import os                                   # HAWAMAN_DIR is set by the GitHub Actions workflow
@@ -550,22 +542,7 @@ def hawaman(day=None):
             save(pkg / name, img_dir / name, (1200, 1200))
             imgs.append(name)
 
-    # reel slides (1080×1920) → 540×960 gallery images
-    slides = []
-    for f in sorted((run / "graphics" / "instagram").glob("*.jpg")) if run else []:
-        if is_imd_figure(f.name):
-            continue
-        save(f, img_dir / "reel" / f.name, (540, 960))
-        key = re.sub(r"^\d+_|(_slide)?$", "", f.stem)
-        slides.append({"src": f"{rel}/reel/{f.name}", "label": SLIDES.get(key, key.replace("_", " "))})
-
-    # the same slides as one slow, looping GIF (360×640, 4 s per slide; ~0.6 MB)
-    gif = None
-    if slides:
-        frames = [Image.open(img_dir / "reel" / Path(s["src"]).name).convert("RGB").resize((360, 640), Image.LANCZOS)
-                  .quantize(colors=160, method=Image.Quantize.MEDIANCUT) for s in slides]
-        frames[0].save(img_dir / "reel.gif", save_all=True, append_images=frames[1:], duration=4000, loop=0, optimize=True)
-        gif = f"{rel}/reel.gif"
+    # the reel slides and their GIF are not put on the site (user's choice, 2026-11-05)
 
     body = [f"**{horizon['mr']}** · वैयक्तिक विश्लेषणावर आधारित", "", lines("\n".join(first[1:])), ""]
     if imgs:
@@ -587,10 +564,10 @@ def hawaman(day=None):
     q = lambda v: json.dumps(v, ensure_ascii=False)
     valid = bi(en_date(d) + ", " + horizon["en"], mr_date(d) + ", " + horizon["mr"])
     front = [f"title: {q(title)}", f"date: {day}", f"level: {level}", "lang: mr", f"valid: {q(valid)}",
-             f"regions: {q(regions)}", f"hazards: {q(hazards)}", f"slides: {q(slides)}", f"gif: {q(gif)}", "source: hawaman-vidnyan"]
+             f"regions: {q(regions)}", f"hazards: {q(hazards)}", "source: hawaman-vidnyan"]
     dest = CONTENT / "alerts" / f"{day}-hawaman.md"
     dest.write_text("---\n" + "\n".join(front) + "\n---\n\n" + "\n".join(body).strip() + "\n", encoding="utf-8")
-    print(f"hawaman-vidnyan analysis ({level}, {len(slides)} slides): {dest}")
+    print(f"hawaman-vidnyan analysis ({level}): {dest}")
     return day
 
 
