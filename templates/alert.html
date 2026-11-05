@@ -18,14 +18,15 @@
     </dl>
   </div>
   {% if alert.slides %}
-  <section class="viewer" aria-roledescription="carousel" aria-label="{{ t("Today's visual analysis", "आजचे दृश्य विश्लेषण") | striptags }}">
+  {% set wide = (alert.slides[0].w or 0) > (alert.slides[0].h or 1) %}
+  <section class="viewer{% if wide %} wide{% endif %}" aria-roledescription="carousel" aria-label="{{ t("Today's visual analysis", "आजचे दृश्य विश्लेषण") | striptags }}">
     <h2>{{ t("Today's visual analysis", "आजचे दृश्य विश्लेषण") }}</h2>
     <div class="viewer-stage">
       <button class="viewer-btn prev" type="button" aria-label="Previous slide">&#8249;</button>
       <div class="viewer-track" tabindex="0">
         {% for s in alert.slides %}
         <figure class="viewer-slide" aria-label="{{ loop.index }} / {{ loop.length }}">
-          <a href="{{ root }}{{ s.src }}" target="_blank" rel="noopener"><img src="{{ root }}{{ s.src }}" alt="{{ s.label | en }}" {% if not loop.first %}loading="lazy" {% endif %}width="540" height="960"></a>
+          <a href="{{ root }}{{ s.src }}" target="_blank" rel="noopener"><img src="{{ root }}{{ s.src }}" alt="{{ s.label | en }}" {% if not loop.first %}loading="lazy" {% endif %}width="{{ s.w or 540 }}" height="{{ s.h or 960 }}"></a>
           <figcaption><span class="slide-n">{{ loop.index | num }}</span> {{ s.label | t }} <span class="muted">· {{ loop.index | num }}/{{ loop.length | num }}</span></figcaption>
         </figure>
         {% endfor %}

@@ -550,22 +550,22 @@ def hawaman(day=None):
             save(pkg / name, img_dir / name, (1200, 1200))
             imgs.append(name)
 
-    # reel slides (1080×1920) → 540×960 gallery images
+    # visual analysis: the pipeline's 16:9 website cards (graphics/web) → 1200×675; older runs only have
+    # the 9:16 reel slides (graphics/instagram) → 540×960. IMD figures are skipped.
     slides = []
-    for f in sorted((run / "graphics" / "instagram").glob("*.jpg")) if run else []:
+    web = sorted((run / "graphics" / "web").glob("[0-9]*.jpg")) if run else []
+    src_imgs, box, sub = (web, (1200, 675), "web") if web else         (sorted((run / "graphics" / "instagram").glob("*.jpg")) if run else [], (540, 960), "reel")
+    for f in src_imgs:
         if is_imd_figure(f.name):
             continue
-        save(f, img_dir / "reel" / f.name, (540, 960))
+        save(f, img_dir / sub / f.name, box)
         key = re.sub(r"^\d+_|(_slide)?$", "", f.stem)
-        slides.append({"src": f"{rel}/reel/{f.name}", "label": SLIDES.get(key, key.replace("_", " "))})
-
-    # the same slides as one slow, looping GIF (360×640, 4 s per slide; ~0.6 MB)
+        with Image.open(img_dir / sub / f.name) as im:
+            w, h = im.size
+        slides.append({"src": f"{rel}/{sub}/{f.name}", "label": SLIDES.get(key, key.replace("_", " ")), "w": w, "h": h})
     gif = None
-    if slides:
-        frames = [Image.open(img_dir / "reel" / Path(s["src"]).name).convert("RGB").resize((360, 640), Image.LANCZOS)
-                  .quantize(colors=160, method=Image.Quantize.MEDIANCUT) for s in slides]
-        frames[0].save(img_dir / "reel.gif", save_all=True, append_images=frames[1:], duration=4000, loop=0, optimize=True)
-        gif = f"{rel}/reel.gif"
+    if web:
+        imgs = []                     # the viewer already shows these cards; no repeat in the text
 
     body = [f"**{horizon['mr']}** · वैयक्तिक विश्लेषणावर आधारित", "", lines("\n".join(first[1:])), ""]
     if imgs:
