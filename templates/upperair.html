@@ -82,6 +82,7 @@
   </div>
 </section>
 
+{% macro earlier(s) %}{% if s.obs_time %} <span class="muted ua-small">({{ t("sounding of " ~ s.obs_time[8:10] ~ "/" ~ s.obs_time[5:7] ~ ", " ~ s.obs_time[11:13] ~ " UTC", s.obs_time[8:10] ~ "/" ~ s.obs_time[5:7] ~ ", " ~ s.obs_time[11:13] ~ " UTC चे निरीक्षण") }})</span>{% endif %}{% endmacro %}
 {% set mh_only = site.upperair_maharashtra_only %}{# switch in site.yaml #}
 {% set mh_skewt = [42867, 43003, 43014, 43063] %}{# Maharashtra: Nagpur, Mumbai, Chh. Sambhajinagar, Pune #}
 {% set ua_st = (ua.stations | selectattr("wmo", "in", mh_skewt) | list) if mh_only else ua.stations %}
@@ -99,7 +100,7 @@
       <tbody>
       {% for s in ua_st %}
       <tr>
-        <th><a href="#st-{{ s.wmo }}">{{ s.name | t }}</a></th>
+        <th><a href="#st-{{ s.wmo }}">{{ s.name | t }}</a>{{ earlier(s) }}</th>
         {% for p in ("850", "700", "500", "200") %}<td>{{ s.levels[p].wind if p in s.levels else "n/a" }}</td>{% endfor %}
         <td>{{ s.k if s.k is not none else "n/a" }}</td><td>{{ s.tt if s.tt is not none else "n/a" }}</td>
         <td>{{ s.cape | round | int if s.cape is not none else "n/a" }}</td><td>{{ s.pw | round | int if s.pw is not none else "n/a" }}</td>
@@ -121,7 +122,7 @@
   <div class="ua-stations">
   {% for s in ua_st %}
   <details class="card ua-st-card" id="st-{{ s.wmo }}">
-    <summary><strong>{{ s.name | t }}</strong> <span class="muted">· {{ s.wmo }} · {{ s.lat }}°N {{ s.lon }}°E</span>{% if s.pot_label %} <span class="ua-pot ua-pot{{ s.potential }}">{{ s.pot_label | t }}</span>{% endif %}</summary>
+    <summary><strong>{{ s.name | t }}</strong>{{ earlier(s) }} <span class="muted">· {{ s.wmo }} · {{ s.lat }}°N {{ s.lon }}°E</span>{% if s.pot_label %} <span class="ua-pot ua-pot{{ s.potential }}">{{ s.pot_label | t }}</span>{% endif %}</summary>
     <div class="ua-st-body">
       <img src="{{ root }}static/upperair/skewt_{{ s.wmo }}.svg?v={{ ua.key }}" loading="lazy" width="300" height="330" alt="Skew-T {{ s.name.en }}">
       <dl class="ua-dl">

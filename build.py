@@ -483,6 +483,14 @@ def undash(text):
     return re.sub(r"[–—]", "-", text)                                     # joined words: पूर्व–मध्य
 
 
+# IMD's own figures (ERF maps, INSAT satellite images) are never put on the site, as the user asked
+IMD_FIGURE = re.compile(r"imd|insat|satellite", re.I)
+
+
+def is_imd_figure(name):
+    return bool(IMD_FIGURE.search(name))
+
+
 def hawaman(day=None):
     """Turn the hawaman-vidnyan daily output (tweet, reel slides, discussion) into content/alerts/<date>-hawaman.md.
     The pipeline writes Marathi only: labels are bilingual, the body stays Marathi (lang: mr)."""
@@ -536,6 +544,8 @@ def hawaman(day=None):
 
     imgs = []
     for name in meta.get("media") or sorted(p.name for p in pkg.glob("[0-9]_*.jpg")):
+        if is_imd_figure(name):
+            continue
         if (pkg / name).exists():
             save(pkg / name, img_dir / name, (1200, 1200))
             imgs.append(name)
@@ -543,6 +553,8 @@ def hawaman(day=None):
     # reel slides (1080×1920) → 540×960 gallery images
     slides = []
     for f in sorted((run / "graphics" / "instagram").glob("*.jpg")) if run else []:
+        if is_imd_figure(f.name):
+            continue
         save(f, img_dir / "reel" / f.name, (540, 960))
         key = re.sub(r"^\d+_|(_slide)?$", "", f.stem)
         slides.append({"src": f"{rel}/reel/{f.name}", "label": SLIDES.get(key, key.replace("_", " "))})

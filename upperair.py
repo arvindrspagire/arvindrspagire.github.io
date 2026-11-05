@@ -60,6 +60,10 @@ STATIONS = [
     (43371, "Thiruvananthapuram", "तिरुवनंतपुरम", 8.48, 76.95),
 ]
 
+# Maharashtra stations: when one has no sounding for this ascent, its latest one from the previous 24 h is
+# shown instead (Skew-T and table only, marked with its own time; never used in the maps)
+MH_WMO = (42867, 43003, 43014, 43063)            # Nagpur, Mumbai, Chh. Sambhajinagar, Pune
+
 STD = [1000, 925, 850, 700, 600, 500, 400, 300, 250, 200, 150, 100]       # standard isobaric levels (hPa)
 MAP_LEVELS = [850, 700, 500, 200]
 # map box (plate carrée, cos-lat scaled)
@@ -850,7 +854,7 @@ def redraw():
     """Recompute maps, findings and tiles from the saved soundings in latest.json (no download)."""
     out = json.loads((DATA / "latest.json").read_text(encoding="utf-8"))
     coast = json.loads((DATA / "coast.json").read_text(encoding="utf-8"))["d"]
-    out.update(analyse(out["stations"], coast))
+    out.update(analyse([s for s in out["stations"] if not s.get("obs_time")], coast))
     save(out, datetime.strptime(out["time"], "%Y-%m-%dT%H:00Z"))
     print("Redrawn:", DATA / "latest.json")
     return out
@@ -881,17 +885,33 @@ def run(t=None):
         print(f"Only {len(stations)} soundings for {t:%Y-%m-%d %H} UTC; previous analysis kept")
         return None
 
+    earlier = []                              # Maharashtra stations missing now: latest sounding of the last 24 h
+    for st in STATIONS:
+        if st[0] not in MH_WMO or any(s["wmo"] == st[0] for s in stations):
+            continue
+        for back in (12, 24):
+            tb = t - timedelta(hours=back)
+            page = fetch(st[0], tb)
+            prof = parse(page) if page else None
+            if prof is not None and np.isfinite(prof["sped"]).sum() >= 3:
+                s = station_analysis(st, prof)
+                s["obs_time"] = tb.strftime("%Y-%m-%dT%H:00Z")
+                earlier.append(s)
+                missing = [m for m in missing if m["en"] != st[1]]
+                print(f"  {st[0]} {st[1]}: using the {tb:%Y-%m-%d %H} UTC sounding instead")
+                break
+
     SVG_DIR.mkdir(parents=True, exist_ok=True)
     for f in SVG_DIR.glob("skewt_*.svg"):
         f.unlink()
-    for s in stations:          # all stations; site.yaml upperair_maharashtra_only picks what the page shows
+    for s in stations + earlier:   # all stations; site.yaml upperair_maharashtra_only picks what the page shows
         (SVG_DIR / f"skewt_{s['wmo']}.svg").write_text(skewt_svg(s), encoding="utf-8")
-    for s in stations:
+    for s in stations + earlier:
         s.pop("_skew"); s.pop("_parcel")
 
     out = dict(time=t.strftime("%Y-%m-%dT%H:00Z"), fetched=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
                n_stations=len(stations), n_network=len(STATIONS), missing=missing,
-               stations=sorted(stations, key=lambda s: -s["lat"]))
+               stations=sorted(stations + earlier, key=lambda s: -s["lat"]))
     out.update(analyse(stations, coast))
     save(out, t)
     print(f"Upper-air analysis {t:%Y-%m-%d %H} UTC: {len(stations)} soundings -> {DATA / 'latest.json'}")
