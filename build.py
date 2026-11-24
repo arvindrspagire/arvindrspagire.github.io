@@ -25,6 +25,7 @@ from pathlib import Path
 import functools
 import hashlib
 import http.server
+import json
 import re
 import shutil
 import sys
@@ -327,7 +328,11 @@ def build(drafts=False):
     shutil.copytree(ROOT / "static", OUT / "static")
     (OUT / ".nojekyll").write_text("", encoding="utf-8")
 
+    paths = []      # every page's URL path, written to pages.json for the footer visit counter
+
     def page(template, rel_path, active, **ctx):
+        if rel_path.endswith("index.html"):
+            paths.append("/" + rel_path[: -len("index.html")])
         depth = rel_path.count("/")
         dest = OUT / rel_path
         dest.parent.mkdir(parents=True, exist_ok=True)
@@ -361,6 +366,7 @@ def build(drafts=False):
     page("404.html", "404.html", "")
 
     note = " (with drafts)" if drafts else ""
+    (OUT / "pages.json").write_text(json.dumps(sorted(set(paths))), encoding="utf-8")
     print(f"Built{note}: {len(blog)} posts, {len(alerts)} alerts -> {OUT}")
 
 

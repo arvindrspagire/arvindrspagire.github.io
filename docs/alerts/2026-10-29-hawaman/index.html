@@ -202,13 +202,34 @@
   </script>
   <script data-goatcounter="https://arvindpagire.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
   <script>
-  // total visits to the whole site, shown in the footer (hidden if GoatCounter cannot be reached)
-  fetch('https://arvindpagire.goatcounter.com/counter/TOTAL.json')
-    .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-    .then(function (d) {
-      document.getElementById('visit-count').textContent = d.count;
+  // total visits to the whole site, shown in the footer (hidden if GoatCounter cannot be reached).
+  // GoatCounter's own TOTAL lags behind, so add up the per-page counts (page list: pages.json from build.py)
+  // and keep the larger number; the sum is cached for 10 minutes so each visitor fetches it rarely.
+  (function () {
+    var gc = 'https://arvindpagire.goatcounter.com/counter/', key = 'gc-total', ttl = 600000;
+    function n(s) { return parseInt(String(s).replace(/[^0-9]/g, ''), 10) || 0; }
+    function get(path) {
+      return fetch(gc + encodeURIComponent(path) + '.json')
+        .then(function (r) { return r.ok ? r.json() : { count: 0 }; })
+        .then(function (d) { return n(d.count); }, function () { return 0; });
+    }
+    function show(total) {
+      document.getElementById('visit-count').textContent = total.toLocaleString('en-IN');
       document.getElementById('visits').hidden = false;
+    }
+    try {
+      var c = JSON.parse(sessionStorage.getItem(key) || 'null');
+      if (c && Date.now() - c.t < ttl) { show(c.n); return; }
+    } catch (e) {}
+    fetch('../../pages.json').then(function (r) { return r.json(); }).then(function (paths) {
+      return Promise.all([get('TOTAL')].concat(paths.map(get)));
+    }).then(function (counts) {
+      var sum = counts.slice(1).reduce(function (a, b) { return a + b; }, 0);
+      var total = Math.max(counts[0], sum);
+      try { sessionStorage.setItem(key, JSON.stringify({ t: Date.now(), n: total })); } catch (e) {}
+      show(total);
     }).catch(function () {});
+  })();
   </script>
 </body>
 </html>
