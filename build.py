@@ -197,6 +197,8 @@ def load_forecast():
                if r.get("group") and (m := re.search(r"\(([^()]+)\)$", r["id"]))}
     for c in cats:
         c["title"] = bi(CAT_TITLE_EN.get(c["id"], c.get("title_mr", c["id"])), c.get("title_mr", c["id"]))
+        for r in c["regions"]:      # no ECMWF rain on days its download failed; the page's JSON needs a null
+            r.setdefault("ecmwf_mm", None)
         for d in c["days"]:
             day = date.fromisoformat(d.get("start", d["date"]))   # IMD rain day: 08:30 IST start -> 08:30 next day
             d["date_str"] = day_bi(day)
