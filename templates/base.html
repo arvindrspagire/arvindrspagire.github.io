@@ -69,6 +69,7 @@
       <div>
         <p>© {{ year | num }} {{ t(site.name_en, site.name_mr) }} · {{ site.position | t }}, {{ site.organisation | t }}</p>
         <p class="muted">{{ t("For official weather warnings:", "अधिकृत हवामान इशाऱ्यांसाठी:") }} <a href="https://mausam.imd.gov.in" rel="noopener">{{ t("India Meteorological Department", "भारतीय हवामान विभाग") }}</a> · {{ t("Updated:", "अद्ययावत:") }} {{ built | t }}</p>
+        {% if site.goatcounter %}<p class="muted" id="visits" hidden>👁 {{ t("Visits:", "भेटी:") }} <span id="visit-count"></span></p>{% endif %}
       </div>
       {{ profile_links(site, "on-dark compact") }}
     </div>
@@ -97,5 +98,17 @@
     apply();
   })();
   </script>
+{% if site.goatcounter %}
+  <script data-goatcounter="https://{{ site.goatcounter }}.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+  <script>
+  // total visits to the whole site, shown in the footer (hidden if GoatCounter cannot be reached)
+  fetch('https://{{ site.goatcounter }}.goatcounter.com/counter/TOTAL.json')
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+    .then(function (d) {
+      document.getElementById('visit-count').textContent = d.count;
+      document.getElementById('visits').hidden = false;
+    }).catch(function () {});
+  </script>
+{% endif %}
 </body>
 </html>
